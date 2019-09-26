@@ -72,22 +72,23 @@ jQuery(document).ready(($) => {
         // Create elements through DR.js
         if ($('.credit-card-section').length) {
             const options = {
-            classes: {
-                base: 'DRElement',
-                complete: 'DRElement--complete',
-                empty: 'DRElement--empty',
-                invalid: 'DRElement--invalid'
-            },
-            style: {
-                base: getStyleOptionsFromClass('DRElement'),
-                complete: getStyleOptionsFromClass('DRElement--complete'),
-                empty: getStyleOptionsFromClass('DRElement--empty'),
-                invalid: getStyleOptionsFromClass('DRElement--invalid')
-            }
+                classes: {
+                    base: 'DRElement',
+                    complete: 'DRElement--complete',
+                    empty: 'DRElement--empty',
+                    invalid: 'DRElement--invalid'
+                },
+                style: {
+                    base: getStyleOptionsFromClass('DRElement'),
+                    complete: getStyleOptionsFromClass('DRElement--complete'),
+                    empty: getStyleOptionsFromClass('DRElement--empty'),
+                    invalid: getStyleOptionsFromClass('DRElement--invalid')
+                }
             };
+
             var cardNumber = digitalriverjs.createElement('cardnumber', options);
-            var cardExpiration = digitalriverjs.createElement('cardexpiration', options);
-            var cardCVV = digitalriverjs.createElement('cardcvv', options);
+            var cardExpiration = digitalriverjs.createElement('cardexpiration', Object.assign({}, options, { placeholderText: 'MM/YY' }));
+            var cardCVV = digitalriverjs.createElement('cardcvv', Object.assign({}, options, { placeholderText: 'CVV' }));
 
             cardNumber.mount('card-number');
             cardExpiration.mount('card-expiration');

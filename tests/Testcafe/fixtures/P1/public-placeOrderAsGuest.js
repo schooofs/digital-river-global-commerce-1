@@ -1,26 +1,27 @@
 import { Selector, ClientFunction } from 'testcafe';
-import config from '../../config';
+import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 import MinicartPage from '../../page-models/public/minicart-page-model';
 import CartPage from '../../page-models/public/cart-page-model';
 import CheckoutPage from '../../page-models/public/checkout-page-model';
 import TYPage from '../../page-models/public/ty-page-model';
 
-const env = config.env;
-const baseURL = config.baseUrl[env];
-const testEmail = config.testEmail;
+const env = Config.env;
+const baseURL = Config.baseUrl[env];
+const testEmail = Config.testEmail;
 const homePage = new HomePage();
 const minicartPage = new MinicartPage();
 const cartPage = new CartPage();
 const checkoutPage = new CheckoutPage();
 const tyPage = new TYPage();
 
-fixture `===== DRGC Automation Test =====`
+fixture `===== DRGC P1 Automation Test - Place Order As Guest =====`
   .httpAuth({
     username: 'gcwpdemo',
     password: '33a5b9f5',
   })
   .beforeEach(async t => {
+    console.log('Before Each: Click Menu -> Product to Enter Product Page');
     await t
       .navigateTo(baseURL)
       .maximizeWindow()
@@ -29,84 +30,112 @@ fixture `===== DRGC Automation Test =====`
 });
 
 test('Place order with physical product', async t => {
+  console.log('Test Case: Place Order with Physical Product');
+
+  // Add a physical product into cart
+  console.log('>> Add physical product into cart');
   await t
     .click(homePage.addPhyProduct)
     .takeScreenshot('BWC/minicart.jpg');
-  await minicartPage.clickViewCartBtn();
-  console.log('>>Directs to the Cart page');
 
+  // Click View Cart btn in miniCart to go to Cart page
+  console.log('>> Direct to cart page');
+  await minicartPage.clickViewCartBtn();
+
+  // Click Proceed to Checkout in View Cart page to proceed checkout
+  console.log('>> Direct to checkout page');
   await t
     .takeScreenshot('BWC/cart.jpg')
     .click(cartPage.proceedToCheckoutBtn)
     .expect(checkoutPage.primary.exists).ok();
-  console.log('>>Directs to the Checkout page');
 
-  await checkoutPage.checkoutEmail(testEmail);
+  // Enter Email and continue
+  console.log('>> Checkout page - Entering email');
+  await checkoutPage.completeFormEmail(testEmail);
+
+  // Enter shipping info
+  console.log('>> Checkout page - Entering shipping info.');
   await t.expect(checkoutPage.shippingBtn.exists).ok();
-  console.log('>>Checkout page - completes EMAIL');
+  await checkoutPage.completeFormShippingInfo();
 
-  await checkoutPage.checkoutShipping();
-  await t.expect(checkoutPage.billingCheckbox.exists).ok();
-  console.log('>>Checkout page - completes SHIPPING INFO.');
-
-  //Billing address is different from shipping
+  // Set billing info as diff from shipping info
+  console.log('>> Checkout page - Set billing info to diff from shipping info.');
   await t
-    .click(checkoutPage.billingCheckbox)
-    .expect(checkoutPage.billingBtn.exists).ok();
+	.expect(checkoutPage.billingDiffCheckbox.exists).ok()
+	.hover(checkoutPage.billingDiffCheckbox)
+	.click(checkoutPage.billingDiffCheckbox);
 
-  await checkoutPage.checkoutBilling();
-  await t.expect(checkoutPage.deliveryBtn.exists).ok();
-  console.log('>>Checkout page - completes BILLING INFO.');
+  // Enter Billing Info
+  console.log('>> Checkout page - Entering billing info.');
+  await t.expect(checkoutPage.billingInfoSubmitBtn.exists).ok();
+  await checkoutPage.completeFormBillingInfo();
 
-  await checkoutPage.checkoutDelivery('express');
+  // Set delivery option
+  console.log('>> Checkout page - Set delivery options as express');
+  await t.expect(checkoutPage.deliveryOptionSubmitBtn.exists).ok();
+  await checkoutPage.setDeliveryOption('express');
+
+  // Enter Payment Info
+  console.log('>> Checkout page - Entering payment info.');
   await t.expect(checkoutPage.submitPaymentBtn.exists).ok();
-  console.log('>>Checkout page - completes DELIVERY OPTIONS');
+  await checkoutPage.completeFormCreditCardInfo();
 
-  await checkoutPage.fillCreditCardInfo();
-  console.log('>>Checkout page - completes PAYMENT INFO.');
-
+  // Submit Order
+  console.log('>> Checkout page - Place order');
   await t
     .takeScreenshot('BWC/payment.jpg')
-    .click(checkoutPage.submitBtn)
+    .click(checkoutPage.submitOrderBtn)
     .expect(tyPage.tyMsg.innerText).eql('Your order was completed successfully.')
     .takeScreenshot('BWC/TY.jpg');
-
-  console.log('>>Directs to the TY page');
+  console.log('>> Direct to the TY page');
   const orderNum = await tyPage.orderNumber.textContent;
   console.log(orderNum.trim());
 });
 
 test('Place order with digital product', async t => {
+  console.log('Test Case: Place Order with Digital Product');
+
+  // Add a Digital product into cart
+  console.log('>> Add digital product into cart');
   await t
+    .setTestSpeed(0.7)
     .click(homePage.addDigiProduct)
     .takeScreenshot('BWC/minicart_d.jpg');
-  await minicartPage.clickViewCartBtn();
-  console.log('>>Directs to the Cart page');
 
+  // Click View Cart btn in miniCart to go to Cart page
+  console.log('>> Direct to cart page');
+  await minicartPage.clickViewCartBtn();
+
+  // Click Proceed to Checkout in View Cart page to proceed checkout
+  console.log('>> Direct to checkout page');
   await t
     .takeScreenshot('BWC/cart_d.jpg')
     .click(cartPage.proceedToCheckoutBtn)
     .expect(checkoutPage.primary.exists).ok();
-  console.log('>>Directs to the Checkout page');
 
-  await checkoutPage.checkoutEmail(testEmail);
-  await t.expect(checkoutPage.billingBtn.exists).ok();
-  console.log('>>Checkout page - completes EMAIL');
+  // Enter Email and continue
+  console.log('>> Checkout page - Entering email');
+  await checkoutPage.completeFormEmail(testEmail);
 
-  await checkoutPage.checkoutBilling();
+  // Enter Billing Info
+  console.log('>> Checkout page - Entering billing info.');
+  await t.expect(checkoutPage.billingInfoSubmitBtn.exists).ok();
+  await checkoutPage.completeFormBillingInfo();
+
+  // Enter Payment Info
+  console.log('>> Checkout page - Entering payment info.');
   await t.expect(checkoutPage.submitPaymentBtn.exists).ok();
-  console.log('>>Checkout page - completes BILLING INFO.');
+  await checkoutPage.completeFormCreditCardInfo();
 
-  await checkoutPage.fillCreditCardInfo();
-  console.log('>>Checkout page - completes PAYMENT INFO.');
-
+  // Submit Order
+  console.log('>> Checkout page - Place order');
   await t
     .takeScreenshot('BWC/payment_d.jpg')
-    .click(checkoutPage.submitBtn)
+    .click(checkoutPage.submitOrderBtn)
     .expect(tyPage.tyMsg.innerText).eql('Your order was completed successfully.')
     .takeScreenshot('BWC/TY_d.jpg');
 
-  console.log('>>Directs to the TY page');
+  console.log('>> Directs to the TY page');
   const orderNum = await tyPage.orderNumber.textContent;
   console.log(orderNum.trim());
 });

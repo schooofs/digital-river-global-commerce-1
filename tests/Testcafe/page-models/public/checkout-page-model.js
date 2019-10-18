@@ -1,21 +1,22 @@
 import { Selector, t } from 'testcafe';
+import DataUtils from '../../utils/dataUtils';
 
 export default class CheckoutPage {
   constructor() {
     this.primary = Selector('#primary');
 
-    this.email = Selector('#checkout-email-form > div > input');
+    this.email = Selector('#checkout-email-form').find('input');
     this.emailTexts = Selector('#dr-panel-email-result');
 
     this.emailBtn = Selector('#checkout-email-form > button');
     this.shippingBtn = Selector('#checkout-shipping-form > button');
-    this.billingBtn = Selector('#checkout-billing-form > button');
-    this.delOptionExpress = Selector('.field-radio:nth-child(1)');
-    this.delOptionStandard = Selector('.field-radio:nth-child(2)');
-    this.deliveryBtn = Selector('#checkout-delivery-form > button');
-    this.billingCheckbox = Selector('#checkbox-billing');
+    this.billingInfoSubmitBtn = Selector('#checkout-billing-form > button');
+    this.deliverByExpress = Selector('#shipping-option-8196700');
+    this.deliverByStandard = Selector('#shipping-option-167400');
+    this.deliveryOptionSubmitBtn = Selector('#checkout-delivery-form > button');
+    this.billingDiffCheckbox = Selector('#checkbox-billing');
     this.submitPaymentBtn = Selector('#dr-submit-payment');
-    this.submitBtn = Selector("#checkout-confirmation-form > button");
+    this.submitOrderBtn = Selector("#checkout-confirmation-form > button");
 
     this.shippingFirstName = Selector('#shipping-field-first-name');
     this.shippingLastName = Selector('#shipping-field-last-name');
@@ -46,77 +47,78 @@ export default class CheckoutPage {
     this.ccCVV = Selector('#ccCVV');
   }
 
-  async checkoutEmail(testEmail) {
+  async completeFormEmail(testEmail) {
     await t
       .typeText(this.email, testEmail)
       .click(this.emailBtn);
   }
 
-  async checkoutShipping() {
+  async completeFormShippingInfo() {
+	const shippingInfo = new DataUtils().getShippingUserData();
     const shippingStateOption = this.shippingState.find('option');
     const shippingCountryOption = this.shippingCountry.find('option');
 
     await t
-      .typeText(this.shippingFirstName, 'Helen', { replace: true })
-      .typeText(this.shippingLastName, 'Mcclinton', { replace: true })
-      .typeText(this.shippingAddress1, '10451 Gunpowder Falls St')
-      .typeText(this.shippingCity, 'Las Vegas')
+      .typeText(this.shippingFirstName, shippingInfo.firstName, { replace: true })
+      .typeText(this.shippingLastName, shippingInfo.lastName, { replace: true })
+      .typeText(this.shippingAddress1, shippingInfo.addrLine1)
+      .typeText(this.shippingCity, shippingInfo.city)
       .click(this.shippingCountry)
-      .click(shippingCountryOption.withText('United States of America'))
-      .expect(this.shippingCountry.value).eql('US')
+      .click(shippingCountryOption.withText(shippingInfo.country))
+      .expect(this.shippingCountry.value).eql(shippingInfo.countryValue)
       .click(this.shippingState)
-      .click(shippingStateOption.withText('Nevada'))
-      .expect(this.shippingState.value).eql('NV')
-      .typeText(this.shippingPostalCode, '89123')
-      .typeText(this.shippingPhoneNumber, '7028962624')
+      .click(shippingStateOption.withText(shippingInfo.state))
+      .expect(this.shippingState.value).eql(shippingInfo.stateValue)
+      .typeText(this.shippingPostalCode, shippingInfo.postCode)
+      .typeText(this.shippingPhoneNumber, shippingInfo.phoneNo)
       .click(this.shippingBtn);
   }
 
-  async checkoutBilling() {
+  async completeFormBillingInfo() {
+	const billingInfo = new DataUtils().getShippingUserData();
     const billingStateOption = this.billingState.find('option');
     const billingCountryOption = this.billingCountry.find('option');
 
     await t
-      .typeText(this.billingFirstName, 'John', { replace: true })
-      .typeText(this.billingLastName, 'Doe', { replace: true })
-      .typeText(this.billingAddress1, '10380 Bren Rd W')
-      .typeText(this.billingCity, 'Minnetonka')
+      .typeText(this.billingFirstName, billingInfo.firstName, { replace: true })
+      .typeText(this.billingLastName, billingInfo.lastName, { replace: true })
+      .typeText(this.billingAddress1, billingInfo.addrLine1)
+      .typeText(this.billingCity, billingInfo.city)
       .click(this.billingState)
-      .click(billingStateOption.withText('Minnesota'))
-      .expect(this.billingState.value).eql('MN')
-      .typeText(this.billingPostalCode, '55343')
+      .click(billingStateOption.withText(billingInfo.state))
+      .expect(this.billingState.value).eql(billingInfo.stateValue)
+      .typeText(this.billingPostalCode, billingInfo.postCode)
       .click(this.billingCountry)
-      .click(billingCountryOption.withText('United States of America'))
-      .expect(this.billingCountry.value).eql('US')
-      .typeText(this.billingPhoneNumber, '9522531234')
-      .click(this.billingBtn);
+      .click(billingCountryOption.withText(billingInfo.country))
+      .expect(this.billingCountry.value).eql(billingInfo.countryValue)
+      .typeText(this.billingPhoneNumber, billingInfo.phoneNo)
+      .click(this.billingInfoSubmitBtn);
   }
 
-  async checkoutDelivery(delOption) {
-    if (delOption === 'express') {
-      await t.click(this.delOptionExpress);
+  async setDeliveryOption(deliveryOption) {
+    if (deliveryOption === 'express') {
+      await t.click(this.deliverByExpress);
     }
-    else if (delOption === 'standard') {
-        await t.click(this.delOptionStandard);
+    else if (deliveryOption === 'standard') {
+        await t.click(this.deliverByStandard);
     }
 
-    await t.click(this.deliveryBtn);
+    await t.click(this.deliveryOptionSubmitBtn);
   }
 
-  async fillCreditCardInfo() {
-    const currentTime = new Date();
-    const year = (currentTime.getFullYear() + 3).toString();
+  async completeFormCreditCardInfo() {
+	const creditCardInfo = new DataUtils().getCreditCardInfo();
 
     await t
       .click(this.creditCard)
       .switchToIframe(this.cardNumberIframe)
-      .typeText(this.ccNumber, '4444222233331111')
+      .typeText(this.ccNumber, creditCardInfo.cardNo)
       .switchToMainWindow()
       .switchToIframe(this.cardExpIframe)
-      .typeText(this.ccExpiry, '01'+ year.slice(-2))
+      .typeText(this.ccExpiry, creditCardInfo.expiry)
       .switchToMainWindow()
       .switchToIframe(this.cardCVVIframe)
-      .typeText(this.ccCVV, '123')
+      .typeText(this.ccCVV, creditCardInfo.cvv)
       .switchToMainWindow()
       .click(this.submitPaymentBtn);
   }

@@ -3,19 +3,19 @@ let config = {
   apiEnv: 'PRD',
   testEmail: 'qa@dr.com',
   adminUserName: {
-    dev: 'username', //localhost admin username
+    dev: 'username', //Replace this to your localhost admin username
     sys: 'username',
     prod: 'username',
     demo: 'username',
   },
   adminPassword: {
-    dev: 'username', //localhost admin username
-    sys: 'username',
-    prod: 'username',
-    demo: 'username',
+    dev: 'password', //Replace this to your localhost admin password
+    sys: 'password',
+    prod: 'password',
+    demo: 'password',
   },
   baseUrl: {
-    dev: 'http://localhost/wordpress/',
+    dev: 'http://localhost/DRWPLocal/',  //Replace this to your localhost test site address
     sys: 'http://tpedevapp0264.d010.digitalriverws.net/',
     prod: 'http://wordpress.c141.digitalriverws.net/',
     demo: 'http://gcwpdemo.wpengine.com',

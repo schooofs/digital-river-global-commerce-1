@@ -9,12 +9,14 @@ export default class MinicartPage {
 
   async clickViewCartBtn() {
     await t
+      .wait(5000)
       .click(this.viewCartBtn)
       .expect(Selector('a').withText('PROCEED TO CHECKOUT').exists).ok();
   }
 
   async clickCheckoutBtn() {
     await t
+      .wait(5000)
       .click(this.checkoutBtn)
       .expect(Selector('.dr-btn').exists).ok();
   }

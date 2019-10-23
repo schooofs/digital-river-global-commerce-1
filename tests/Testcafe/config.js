@@ -2,22 +2,20 @@ let config = {
   env: 'dev', // local: dev; staging/systest: sys; production/demo: prod
   apiEnv: 'PRD',
   testEmail: 'qa@dr.com',
-  username: 'xxxx', //localhost admin username
-  password: 'xxxx', //localhost admin and testing password
-  testingProducts: [
-    {
-      productID: '5104521700',
-      productName: 'Digital River Gaming Headset',
-      permalink: 'digital-river-gaming-headset'
-    },
-    {
-      productID: '5104502000',
-      productName: 'Digital River Internet Security For Mac',
-      permalink: 'digital-river-internet-security-for-mac'
-    }
-  ],
+  adminUserName: {
+    dev: 'username', //Replace this to your localhost admin username
+    sys: 'username',
+    prod: 'username',
+    demo: 'username',
+  },
+  adminPassword: {
+    dev: 'password', //Replace this to your localhost admin password
+    sys: 'password',
+    prod: 'password',
+    demo: 'password',
+  },
   baseUrl: {
-    dev: 'http://localhost/BWC/',
+    dev: 'http://localhost/DRWPLocal/',  //Replace this to your localhost test site address
     sys: 'http://tpedevapp0264.d010.digitalriverws.net/',
     prod: 'http://wordpress.c141.digitalriverws.net/',
     demo: 'http://gcwpdemo.wpengine.com',

@@ -5,9 +5,13 @@ import MinicartPage from '../../page-models/public/minicart-page-model';
 import CartPage from '../../page-models/public/cart-page-model';
 import CheckoutPage from '../../page-models/public/checkout-page-model';
 import TYPage from '../../page-models/public/ty-page-model';
-import DataUtils from '../../utils/dataUtils';
+import GenericUtils from '../../utils/genericUtils';
 
-fixture `===== DRGC P1 Automation Test - Place Order Sign In =====`;
+fixture `===== DRGC P1 Automation Test - Place Order Sign In =====`
+  .httpAuth({
+    username: 'gcwpdemo',
+    password: '33a5b9f5',
+  });
 
 const env = Config.env;
 const baseURL = Config.baseUrl[env];
@@ -16,15 +20,15 @@ const minicartPage = new MinicartPage();
 const cartPage = new CartPage();
 const checkoutPage = new CheckoutPage();
 const tyPage = new TYPage();
-const newUser = new DataUtils().getNewUser();
+const newUser = new GenericUtils().getNewUser();
 
 test('Place order as a new customer', async t => {
   console.log('Test Case: Place Order as a New Customer');
 
   // Pre-set: Navigate to Target Testing Website
   await t
+	.setTestSpeed(0.9)
     .navigateTo(baseURL)
-	.expect(Selector('body').hasClass('hfeed')).ok()
 	.maximizeWindow();
 
   // Go to login page to create a new user
@@ -55,7 +59,7 @@ test('Place order as a new customer', async t => {
   // Go to Checkout page from Logged in Page, the logged in user's info should be displayed
   console.log('>> Go to Checkout Page from Logged in Page');
   await t
-    .click(homePage.signIn)
+    .navigateTo(baseURL + "/login/")
     .click(homePage.checkoutBtn)
     .expect(checkoutPage.emailTexts.textContent).eql(newUser.email)
     .expect(checkoutPage.shippingFirstName.value).eql(newUser.firstName)
@@ -65,14 +69,19 @@ test('Place order as a new customer', async t => {
   // Enter shipping info
   console.log('>> Checkout page - Entering Shipping Info.');
   await checkoutPage.completeFormShippingInfo();
-  await t.expect(checkoutPage.billingDiffCheckbox.exists).ok();
+  await t.expect(checkoutPage.useSameAddrCheckbox.exists).ok();
 
   // Set billing info as diff from shipping info
-  console.log('>> Checkout page - Set Billing Info to Diff from Shipping Info.');
-  await t
-	.expect(checkoutPage.billingDiffCheckbox.exists).ok()
-	.hover(checkoutPage.billingDiffCheckbox)
-	.click(checkoutPage.billingDiffCheckbox);
+  // If checkbox is checked, the billing info will be set to same as shipping infoo
+  var ischecked = await checkoutPage.useSameAddrCheckbox.checked;
+  while(ischecked) {
+    console.log('>> Checkout page - Set Billing Info to Diff from Shipping Info.');
+    await t
+	  .expect(checkoutPage.useSameAddrCheckbox.exists).ok()
+	  .hover(checkoutPage.useSameAddrCheckbox)
+	  .click(checkoutPage.useSameAddrCheckbox);
+    ischecked = await checkoutPage.useSameAddrCheckbox.checked;
+  }
 
   // Enter Billing Info
   console.log('>> Checkout page - Entering Billing Info.');

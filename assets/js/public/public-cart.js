@@ -1,6 +1,8 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
 
+const CartModule = {};
+
 jQuery(document).ready(($) => {
     const apiBaseUrl = 'https://' + drgc_params.domain + '/v1/shoppers';
     const productLabel = $("#dr-cart-page-wrapper div.product-sku span:first-child").html();
@@ -495,3 +497,5 @@ jQuery(document).ready(($) => {
       fetchFreshCart();
     }
 });
+
+export default CartModule;

@@ -1,3 +1,5 @@
+const ThankYouModule = {};
+
 jQuery(document).ready(($) => {
     if ($('.dr-thank-you-wrapper').length) {
         $(document).on('click', '#print-button', function() {
@@ -10,3 +12,5 @@ jQuery(document).ready(($) => {
         });
     }
 });
+
+export default ThankYouModule;

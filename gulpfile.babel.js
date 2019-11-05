@@ -32,6 +32,7 @@ const config = require('./wpgulp.config.js');
  * Load gulp plugins and passing them semantic names.
  */
 const gulp = require('gulp'); // Gulp of-course.
+const webpack = require('webpack-stream');
 
 // CSS related plugins.
 const sass = require('gulp-sass'); // Gulp plugin for Sass compilation.
@@ -206,31 +207,26 @@ gulp.task('stylesRTL', () => {
  */
 gulp.task('adminJS', () => {
   return gulp
-    .src(config.jsVendorSRC, { since: gulp.lastRun('adminJS') }) // Only run on changed files.
+    .src(config.jsVendorEntry) // Only run on changed files.
     .pipe(plumber(errorHandler))
-    .pipe(
-      babel({
-        presets: [
-          [
-            '@babel/preset-env', // Preset to compile your modern JS to ES5.
+    .pipe(webpack({
+      config: {
+        mode: 'production',
+        output: {
+          filename: config.jsVendorFile + '.min.js'
+        },
+        module: {
+          rules: [
             {
-              targets: { browsers: config.BROWSERS_LIST } // Target browser list to support.
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env']
+              }
             }
           ]
-        ]
-      })
-    )
-    .pipe(remember(config.jsVendorSRC)) // Bring all files back to stream.
-    .pipe(concat(config.jsVendorFile + '.js'))
-    .pipe(lineec()) // Consistent Line Endings for non UNIX systems.
-    .pipe(gulp.dest(config.jsVendorDestination))
-    .pipe(
-      rename({
-        basename: config.jsVendorFile,
-        suffix: '.min'
-      })
-    )
-    .pipe(uglify())
+        }
+      }
+    }))
     .pipe(lineec()) // Consistent Line Endings for non UNIX systems.
     .pipe(gulp.dest(config.jsVendorDestination))
     .pipe(notify({ message: '\n\n✅  ===> ADMIN JS — completed!\n', onLast: true }));
@@ -249,31 +245,26 @@ gulp.task('adminJS', () => {
  */
 gulp.task('publicJS', () => {
   return gulp
-    .src(config.jsCustomSRC, { since: gulp.lastRun('publicJS') }) // Only run on changed files.
+    .src(config.jsCustomEntry) // Only run on changed files.
     .pipe(plumber(errorHandler))
-    .pipe(
-      babel({
-        presets: [
-          [
-            '@babel/preset-env', // Preset to compile your modern JS to ES5.
+    .pipe(webpack({
+      config: {
+        mode: 'production',
+        output: {
+          filename: config.jsCustomFile + '.min.js'
+        },
+        module: {
+          rules: [
             {
-              targets: { browsers: config.BROWSERS_LIST } // Target browser list to support.
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env']
+              }
             }
           ]
-        ]
-      })
-    )
-    .pipe(remember(config.jsCustomSRC)) // Bring all files back to stream.
-    .pipe(concat(config.jsCustomFile + '.js'))
-    .pipe(lineec()) // Consistent Line Endings for non UNIX systems.
-    .pipe(gulp.dest(config.jsCustomDestination))
-    .pipe(
-      rename({
-        basename: config.jsCustomFile,
-        suffix: '.min'
-      })
-    )
-    .pipe(uglify())
+        }
+      }
+    }))
     .pipe(lineec()) // Consistent Line Endings for non UNIX systems.
     .pipe(gulp.dest(config.jsCustomDestination))
     .pipe(notify({ message: '\n\n✅  ===> PUBLIC JS — completed!\n', onLast: true }));
@@ -357,7 +348,7 @@ gulp.task('translate', () => {
  */
 gulp.task(
   'default',
-  gulp.parallel('styles', 'adminJS', 'publicJS', 'images', browsersync, () => {
+  gulp.parallel(gulp.series('adminJS', 'publicJS'), 'styles', 'images', browsersync, () => {
     gulp.watch(config.watchPhp, reload); // Reload on PHP file changes.
     gulp.watch(config.watchStyles, gulp.parallel('styles')); // Reload on SCSS file changes.
     gulp.watch(config.watchJsVendor, gulp.series('adminJS', reload)); // Reload on adminJS file changes.

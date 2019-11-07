@@ -24,16 +24,7 @@ $delivery_info = 'Delivery in 2-5 working days and extended 30 days return perio
 
 
 
-<div class="dr-summary">
-
-     <div class="dr-summary__shipping">
-
-        <p class="shipping-label"><?php echo __('Shipping') ?></p>
-
-        <p class="shipping-value"><?php echo $shipping_price; ?></p>
-
-    </div>
-
+<div class="dr-summary dr-summary--cart">
 
     <div class="dr-summary__discount" <?php if ( $discount === 0 ) echo 'style="display: none;"' ?>>
 
@@ -48,6 +39,14 @@ $delivery_info = 'Delivery in 2-5 working days and extended 30 days return perio
         <p class="discounted-subtotal-label"><?php echo __('Subtotal') ?></p>
 
         <p class="discounted-subtotal-value"><?php echo $subtotal_with_discount_value; ?></p>
+
+    </div>
+
+    <div class="dr-summary__shipping">
+
+        <p class="shipping-label"><?php echo __('Estimated Shipping') ?></p>
+
+        <p class="shipping-value"><?php echo $shipping_price; ?></p>
 
     </div>
 

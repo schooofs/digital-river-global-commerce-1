@@ -1,6 +1,8 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
 
+const PdpModule = {};
+
 jQuery(document).ready(($) => {
     class DRService {
 
@@ -328,3 +330,5 @@ jQuery(document).ready(($) => {
 
     $( "iframe[name^='controller-']" ).css('display', 'none');
 });
+
+export default PdpModule;

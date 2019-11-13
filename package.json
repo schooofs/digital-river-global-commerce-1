@@ -9,9 +9,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/register": "^7.0.0",
+    "@babel/core": "^7.6.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.6.2",
+    "babel-loader": "^8.0.6",
     "beepbeep": "^1.2.2",
     "browser-sync": "^2.11.1",
     "gulp": "^4.0.0",
@@ -34,7 +35,16 @@
     "gulp-sourcemaps": "^2.6.2",
     "gulp-uglify": "^3.0.0",
     "gulp-uglifycss": "^1.0.6",
-    "gulp-wp-pot": "^2.0.7"
+    "gulp-wp-pot": "^2.0.7",
+    "jest": "^24.9.0",
+    "jquery": "^3.4.1",
+    "webpack-stream": "^5.2.1"
+  },
+  "jest": {
+    "setupFiles": [
+      "./setup-jest.js"
+    ],
+    "collectCoverage": true
   },
   "scripts": {
     "start": "gulp",
@@ -44,6 +54,7 @@
     "customJS": "gulp customJS",
     "images": "gulp images",
     "clearCache": "gulp clearCache",
-    "translate": "gulp translate"
+    "translate": "gulp translate",
+    "test:jest": "jest --env=jsdom"
   }
 }

@@ -1,3 +1,5 @@
+const CommonModule = {};
+
 (function(w) {
   w.URLSearchParams = w.URLSearchParams || function (searchString) {
     var self = this;
@@ -32,3 +34,5 @@ jQuery(document).ready(($) => {
     }
   });
 });
+
+export default CommonModule;

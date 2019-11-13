@@ -23,14 +23,16 @@ module.exports = {
   precision: 10,
 
   // JS Admin (original is Vendor) options.
-  jsVendorSRC: './assets/js/admin/*.js', // Path to JS vendor folder.
-  jsVendorDestination: './assets/js/', // Path to place the compiled JS vendors file.
-  jsVendorFile: 'drgc-admin', // Compiled JS vendors file name. Default set to vendors i.e. vendors.js.
+  jsVendorSRC: './assets/js/admin/*.js', // Path to JS admin folder.
+  jsVendorEntry: './assets/js/admin/admin.js', // Path to JS admin scripts entry.
+  jsVendorDestination: './assets/js/', // Path to place the compiled JS admin file.
+  jsVendorFile: 'drgc-admin', // Compiled JS admin file name.
 
   // JS Public (original is Custom) options.
-  jsCustomSRC: './assets/js/public/*.js', // Path to JS custom scripts folder.
-  jsCustomDestination: './assets/js/', // Path to place the compiled JS custom scripts file.
-  jsCustomFile: 'drgc-public', // Compiled JS custom file name. Default set to custom i.e. custom.js.
+  jsCustomSRC: './assets/js/public/*.js', // Path to JS public scripts folder.
+  jsCustomEntry: './assets/js/public/public.js', // Path to JS public scripts entry.
+  jsCustomDestination: './assets/js/', // Path to place the compiled JS public scripts file.
+  jsCustomFile: 'drgc-public', // Compiled JS public file name.
 
   // Images options.
   imgSRC: './assets/img/raw/**/*', // Source folder of images which should be optimized and watched. You can also specify types e.g. raw/**.{png,jpg,gif} in the glob.

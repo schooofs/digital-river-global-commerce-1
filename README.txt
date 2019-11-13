@@ -35,7 +35,7 @@ Activate the free Digital River plugin and start selling anywhere in the world. 
 
 Our flexible API architecture allows you to customize your ecommerce solution. Digital River can be your complete solution or we can easily plug into your existing systems.
 
-Want a fast and easy way to sell into new markets? Activate the Digital River plugin and weâ€™ll work behind the scenes to process payments, fight fraud, fulfill orders, and shield your business from global tax and regulatory risk.
+Want a fast and easy way to sell into new markets? Activate the Digital River plugin and we'll work behind the scenes to process payments, fight fraud, fulfill orders, and shield your business from global tax and regulatory risk.
 
 == INSTALLATION ==
 *   A Digital River account is required for use of this plugin. To inquire contact <wordpress@digitalriver.com>.
@@ -56,14 +56,14 @@ Where most payment processors offer a suboptimal cross-border model, Digital Riv
 
 == GROW YOUR REVENUE ==
 
-By giving you the onshore advantage over cross-border processing, you can increase authorization rates by 8-12%. And beyond that, we further optimize your revenue by using machine learning to find the optimal route for transactions. By combining machine learning with the industryâ€™s most sophisticated billing technology and deep acquirer network, we can determine where and when to route a transaction for optimal success. And we retry billing attempts to further reduce your decline rates.
+By giving you the onshore advantage over cross-border processing, you can increase authorization rates by 8-12%. And beyond that, we further optimize your revenue by using machine learning to find the optimal route for transactions. By combining machine learning with the industry's most sophisticated billing technology and deep acquirer network, we can determine where and when to route a transaction for optimal success. And we retry billing attempts to further reduce your decline rates.
 
 == SHIELD YOUR BUSINESS FROM RISK ==
 
-Avoid fatal fines, litigation, and damage to your brandâ€™s reputation by staying compliant with ever-changing tax and data privacy regulations. Worried about filing VAT taxes to multiple tax authorities? We do that for you. Worried about staying compliant with GDPR, PSD2 and other consumer protection regulations? We manage that for you. And we do all this through our unique merchant and seller of record business model.
+Avoid fatal fines, litigation, and damage to your brand's reputation by staying compliant with ever-changing tax and data privacy regulations. Worried about filing VAT taxes to multiple tax authorities? We do that for you. Worried about staying compliant with GDPR, PSD2 and other consumer protection regulations? We manage that for you. And we do all this through our unique merchant and seller of record business model.
 
 == Frequently Asked Questions ==
-= Do I need to do a custom integration on my WordPress storefront in order to get Digital Riverâ€™s commerce features? =
+= Do I need to do a custom integration on my WordPress storefront in order to get Digital River's commerce features? =
 
 No, a full checkout flow is included as part of the plugin. Login, Cart, Checkout, and Thank You pages are all included and can be called by the storefront as needed.
 

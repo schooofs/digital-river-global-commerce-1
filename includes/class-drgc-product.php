@@ -157,6 +157,7 @@ class DRGC_Product {
 		}
 
 		$_product_meta['product_images'] = array();
+		$_product_images_path = $_product_meta['gc_product_images_url'] ? explode( '/product/detail/', $_product_meta['gc_product_images_url'] )[0] . '/product/detail/' : '';
 
 		if ( isset( $args['customAttributes']['attribute'] ) ) {
 			foreach ( $args['customAttributes']['attribute'] as $attribute ) {
@@ -164,7 +165,7 @@ class DRGC_Product {
 				//Store images
 				if ( preg_match( '/productImage/', $attribute['name'] ) ) {
 					$parts = parse_url( $_product_meta['gc_product_images_url'] );
-					$_product_meta['product_images'][] = $parts['scheme'] . '://' . $parts['host'] . preg_replace('#[^/]*$#', '', $parts['path'] ) . $attribute['value'];
+					$_product_meta['product_images'][] = $_product_images_path . $attribute['value'];
 				}
 
 				switch ( $attribute['name'] ) {

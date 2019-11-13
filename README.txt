@@ -10,7 +10,7 @@ A complete ecommerce plugin for WordPress, Digital River works behind the scenes
 
 == Description ==
 
-Activate the free Digital River plugin and start selling anywhere in the world. We have the technology to help you build your store quickly and the global infrastructure to accelerate global expansion, grow your revenue and protect your brand from risk.
+Activate the free Digital River plugin and start selling anywhere in the world. We have the technology to help you build your store quickly and the global infrastructure to accelerate global expansion, grow your revenue and protect your brand from risk. For a custom demo and more details, visit our [WordPress Connector](https://info.digitalriver.com/WordPress.html) resource center.
 
 
 == THE DIGITAL RIVER PLUGIN FEATURES ==
@@ -38,7 +38,7 @@ Our flexible API architecture allows you to customize your ecommerce solution. D
 Want a fast and easy way to sell into new markets? Activate the Digital River plugin and we’ll work behind the scenes to process payments, fight fraud, fulfill orders, and shield your business from global tax and regulatory risk.
 
 == INSTALLATION ==
-*   A Digital River account is required for use of this plugin. To inquire contact <info@digitalriver.com>.
+*   A Digital River account is required for use of this plugin. To inquire contact <wordpress@digitalriver.com>.
 
 Follow these steps to setup Digital River Global Commerce
 
@@ -75,9 +75,7 @@ Yes. The plugin offers commonly-used merchandising offer types.
 
 No, you are responsible for hosting your own site.
 
-= Does Digital River Plugin support IE ? =
 
-Digital River Plugin only support IE Edge.
 
 == Changelog ==
 = 1.0 =
@@ -91,3 +89,6 @@ Digital River Plugin only support IE Edge.
 * Fixed an issue where a product would show an additional reduced price value even when an offer was not applied. Now only the full price will appear if there are no offers applied.
 * Fixed an issue where you could reduce line item quantity to zero without removing the entire line item. You can no longer reduce quantity lower than one during checkout for a line item without removing the whole line.
 
+= 1.0.2 =
+* Hide locale selector when there is only one option available
+* Fixed wrong path of product image gallery

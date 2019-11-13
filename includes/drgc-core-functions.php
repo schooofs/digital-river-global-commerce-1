@@ -141,21 +141,23 @@ function drgc_currency_toggler() {
 	$locales = get_option( 'drgc_store_locales' );
 	$current_locale = DRGC()->shopper->get_locale();
 
-	$output = '<div class="dr-currency-toggler">';
-	$output .= sprintf("<span>%s</span>", __( 'Locale: ' ) );
-	$output .= '<select class="custom-select dr-currency-select">';
+	if ( ! empty( $locales['locales'] ) && count( $locales['locales'] ) > 1 ) {
+		$output = '<div class="dr-currency-toggler">';
+		$output .= sprintf("<span>%s</span>", __( 'Locale: ' ) );
+		$output .= '<select class="custom-select dr-currency-select">';
 
-	foreach ( $locales['locales'] as $locale => $currency ) {
-		$country = drgc_code_to_counry( $locale );
+		foreach ( $locales['locales'] as $locale => $currency ) {
+			$country = drgc_code_to_counry( $locale );
 
-		$output .= "<option ";
-		$output .= $current_locale === $locale ? 'selected ' : '';
-		$output .= "data-locale=\"{$locale}\" value=\"{$currency}\">";
-		$output .= "{$country} ({$currency})</option>";
+			$output .= "<option ";
+			$output .= $current_locale === $locale ? 'selected ' : '';
+			$output .= "data-locale=\"{$locale}\" value=\"{$currency}\">";
+			$output .= "{$country} ({$currency})</option>";
+		}
+
+		$output .= '</select></div>';
+		echo $output;
 	}
-
-	$output .= '</select></div>';
-	echo $output;
 }
 
 /**

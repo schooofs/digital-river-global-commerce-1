@@ -1,27 +1,28 @@
 import { RequestLogger, Selector } from 'testcafe';
-import config from '../../config';
+import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 
 const logger = new RequestLogger();
-const env = config.env;
-const baseURL = config.baseUrl[env];
+const env = Config.env;
+const baseURL = Config.baseUrl[env];
 const homePage = new HomePage();
-const apiURL = config.apiUrl[config.apiEnv];
+const apiURL = Config.apiUrl[Config.apiEnv];
 let apiCheck = false;
 
-fixture `API Environment TEST`
+fixture `===== DRGC P3 Automation Test - Admin: API Environment Test =====`
   .page(baseURL)
   .requestHooks(logger);
 
 test('Verify API Environment', async t => {
+  console.log('Test Case: Verify API Environment');
+  console.log('>> Add a product into cart and go to checkout page');
   await t
-    .expect(Selector('body').hasClass('page-home')).ok()
     .maximizeWindow()
-    .click(homePage.addProduct)
-    .click(homePage.minicartToggle)
-    .click(homePage.minicartCheckout);
+    .click(homePage.productsMenu)
+    .click(homePage.addPhyProduct)
+    .click(homePage.checkoutBtn);
 
-  console.log("API ENVIROMENT SET:" + config.apiEnv);
+  console.log("API ENVIROMENT SET:" + Config.apiEnv);
   console.log("API ENVIROMENT URL:" + apiURL);
   logger.requests.forEach(function (item, index, array) {
     if (item.request.url.includes(apiURL)) {

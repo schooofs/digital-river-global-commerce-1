@@ -25,14 +25,14 @@ iframe{width:1px;min-width:100%;border:0}
 #dr-minicart .dr-minicart-subtotal{font-size:16px;font-weight:600;text-align:right;margin-top:10px}
 #dr-minicart .dr-minicart-subtotal label{display:inline-block;margin-right:10px}
 #dr-minicart .dr-minicart-list{position:relative;margin:0;padding:0;border:0;top:initial;left:initial;opacity:initial;z-index:initial}
-#dr-minicart .dr-minicart-item{position:relative;display:-webkit-box;display:-ms-flexbox;display:flex;padding:10px 0;border-bottom:1px solid #eee}
+#dr-minicart .dr-minicart-item{position:relative;display:-webkit-box;display:-ms-flexbox;display:flex;padding:10px 0 20px;border-bottom:1px solid #eee}
 #dr-minicart .dr-minicart-item:hover{background:0}
 #dr-minicart .dr-minicart-item-thumbnail{width:100px;margin-right:10px}
 #dr-minicart .dr-minicart-item-thumbnail img{width:100%;height:auto}
 #dr-minicart .dr-minicart-item-info{-webkit-box-flex:1;-ms-flex:1;flex:1}
 #dr-minicart .dr-minicart-item-title{display:block}
 #dr-minicart .dr-minicart-item-price{margin-top:.5rem}
-#dr-minicart .dr-minicart-item-remove-btn{position:absolute;width:auto;right:5px;bottom:1.7rem;padding:0;text-decoration:underline;color:#303030;-webkit-transition:color .4s ease-in-out;transition:color .4s ease-in-out}
+#dr-minicart .dr-minicart-item-remove-btn{position:absolute;width:auto;right:5px;bottom:10px;padding:0;text-decoration:underline;color:#303030;-webkit-transition:color .4s ease-in-out;transition:color .4s ease-in-out}
 #dr-minicart .dr-minicart-item-remove-btn:hover{color:#a94442}
 body.page-cart #dr-minicart,body.page-checkout #dr-minicart,body.page-thank-you #dr-minicart{display:none}
 .dr-pd-price{font-weight:700}
@@ -233,6 +233,7 @@ input[type=radio]{position:relative;opacity:1;width:auto;height:auto}
 .drgc-wrapper select.custom-select{font-size:inherit;background-color:white;height:48px;border-radius:0;color:#000}
 .drgc-wrapper select.custom-select:focus{border:1px solid #d1d1d1;outline:0;-webkit-box-shadow:none;box-shadow:none}
 .drgc-wrapper p:empty{display:none}
+input[type=number]{-webkit-appearance:textfield;-moz-appearance:textfield;appearance:textfield}
 .drgc-wrapper form{margin:0 0 1.5em}
 .drgc-wrapper form:last-child{margin-bottom:0}
 .drgc-wrapper form p{margin-bottom:1.5em}

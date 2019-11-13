@@ -1057,8 +1057,12 @@ jQuery(document).ready(function ($) {
         }
       };
       var cardNumber = digitalriverjs.createElement('cardnumber', options);
-      var cardExpiration = digitalriverjs.createElement('cardexpiration', options);
-      var cardCVV = digitalriverjs.createElement('cardcvv', options);
+      var cardExpiration = digitalriverjs.createElement('cardexpiration', Object.assign({}, options, {
+        placeholderText: 'MM/YY'
+      }));
+      var cardCVV = digitalriverjs.createElement('cardcvv', Object.assign({}, options, {
+        placeholderText: 'CVV'
+      }));
       cardNumber.mount('card-number');
       cardExpiration.mount('card-expiration');
       cardCVV.mount('card-cvv');

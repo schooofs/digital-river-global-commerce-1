@@ -52,7 +52,7 @@ Enter new markets in months, not years. With pre-established local acquirers and
 
 == OPTIMIZE WITH GREAT LOCAL EXPERIENCES ==
 
-Where most payment processors offer a suboptimal cross-border model, Digital River gives you the onshore advantage of local acquiring. Unlike cross-border models, we help you offer the right local payment methods, language and currency, and ensure that your customers don’t get hit with foreign transaction fees. We do all this by leveraging the 20 local acquirers and 9 selling entities weâ€™ve established around the world. As a result, you see higher authorization rates, lower cart abandonment, and greater overall customer experiences.
+Where most payment processors offer a suboptimal cross-border model, Digital River gives you the onshore advantage of local acquiring. Unlike cross-border models, we help you offer the right local payment methods, language and currency, and ensure that your customers don’t get hit with foreign transaction fees. We do all this by leveraging the 20 local acquirers and 9 selling entities we’ve established around the world. As a result, you see higher authorization rates, lower cart abandonment, and greater overall customer experiences.
 
 == GROW YOUR REVENUE ==
 

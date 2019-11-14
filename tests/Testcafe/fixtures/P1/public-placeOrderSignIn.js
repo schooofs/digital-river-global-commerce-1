@@ -27,9 +27,9 @@ test('Place order as a new customer', async t => {
 
   // Pre-set: Navigate to Target Testing Website
   await t
-	.setTestSpeed(0.9)
+    .setTestSpeed(0.9)
     .navigateTo(baseURL)
-	.maximizeWindow();
+    .maximizeWindow();
 
   // Go to login page to create a new user
   console.log('>> Create a New User');
@@ -46,7 +46,7 @@ test('Place order as a new customer', async t => {
   console.log('>> Login with Existing User Account');
   await homePage.userSignIn(newUser);
   await t
-	.expect(homePage.cartBtn.exists).ok()
+    .expect(homePage.cartBtn.exists).ok()
     .expect(homePage.checkoutBtn.exists).ok();
 
   // Go to Cart page from Logged in Page
@@ -64,7 +64,7 @@ test('Place order as a new customer', async t => {
     .expect(checkoutPage.emailTexts.textContent).eql(newUser.email)
     .expect(checkoutPage.shippingFirstName.value).eql(newUser.firstName)
     .expect(checkoutPage.shippingLastName.value).eql(newUser.lastName)
-    .takeScreenshot('BWC/shipping_s.jpg');;
+    .takeScreenshot('BWC/shipping_s.jpg');
 
   // Enter shipping info
   console.log('>> Checkout page - Entering Shipping Info.');
@@ -77,10 +77,10 @@ test('Place order as a new customer', async t => {
   while(ischecked) {
     console.log('>> Checkout page - Set Billing Info to Diff from Shipping Info.');
     await t
-	  .expect(checkoutPage.useSameAddrCheckbox.exists).ok()
-	  .hover(checkoutPage.useSameAddrCheckbox)
-	  .click(checkoutPage.useSameAddrCheckbox);
-    ischecked = await checkoutPage.useSameAddrCheckbox.checked;
+      .expect(checkoutPage.useSameAddrCheckbox.exists).ok()
+      .hover(checkoutPage.useSameAddrCheckbox)
+      .click(checkoutPage.useSameAddrCheckbox);
+      ischecked = await checkoutPage.useSameAddrCheckbox.checked;
   }
 
   // Enter Billing Info

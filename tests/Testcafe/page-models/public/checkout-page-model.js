@@ -54,7 +54,7 @@ export default class CheckoutPage {
   }
 
   async completeFormShippingInfo() {
-	const shippingInfo = new GeneralUtils().getShippingUserData();
+    const shippingInfo = new GeneralUtils().getShippingUserData();
     const shippingStateOption = this.shippingState.find('option');
     const shippingCountryOption = this.shippingCountry.find('option');
 
@@ -75,7 +75,7 @@ export default class CheckoutPage {
   }
 
   async completeFormBillingInfo() {
-	const billingInfo = new GeneralUtils().getShippingUserData();
+    const billingInfo = new GeneralUtils().getShippingUserData();
     const billingStateOption = this.billingState.find('option');
     const billingCountryOption = this.billingCountry.find('option');
 
@@ -107,7 +107,7 @@ export default class CheckoutPage {
   }
 
   async completeFormCreditCardInfo() {
-	const creditCardInfo = new GeneralUtils().getCreditCardInfo();
+    const creditCardInfo = new GeneralUtils().getCreditCardInfo();
 
     await t
       .click(this.creditCard)

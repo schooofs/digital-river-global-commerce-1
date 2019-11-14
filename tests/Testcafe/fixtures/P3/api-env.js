@@ -21,20 +21,20 @@ fixture `===== DRGC P3 Automation Test - Admin: API Environment Test =====`
   .requestHooks(logger);
 
 test('Verify API Environment', async t => {
-	console.log('Test Case: Verify API Environment');
-	console.log('>> Add a product into cart and go to checkout page');
-	await t.maximizeWindow();
-	await utils.addProductsIntoCart(new ProductUtils().getTestingPhysicalProduct().productID);
-	await utils.clickItem(homePage.checkoutBtn);
+  console.log('Test Case: Verify API Environment');
+  console.log('>> Add a product into cart and go to checkout page');
+  await t.maximizeWindow();
+  await utils.addProductsIntoCart(new ProductUtils().getTestingPhysicalProduct().productID);
+  await utils.clickItem(homePage.checkoutBtn);
 
-	console.log("API ENVIROMENT SET:" + Config.apiEnv);
-	console.log("API ENVIROMENT URL:" + apiURL);
+  console.log("API ENVIROMENT SET:" + Config.apiEnv);
+  console.log("API ENVIROMENT URL:" + apiURL);
 
-	logger.requests.forEach(function (item, index, array) {
-		if (item.request.url.includes(apiURL)) {
-			apiCheck = true;
-		}
-	});
+  logger.requests.forEach(function (item, index, array) {
+    if (item.request.url.includes(apiURL)) {
+      apiCheck = true;
+    }
+  });
 
-	await t.expect(apiCheck).eql(true);
+  await t.expect(apiCheck).eql(true);
 });

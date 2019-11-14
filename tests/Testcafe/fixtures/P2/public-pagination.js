@@ -36,41 +36,41 @@ test('Product List - 10 Products per Page and Display Pagination Correctly', asy
   const lastPage = expectedPages;
   // If expectedPages <=1, there is no pagenation
   if (expectedPages <= 1) {
-	await onlyOnePageCheck(currentPage)
+    await onlyOnePageCheck(currentPage);
   } else {
-	var expectedCurrentPage = 1;
-	// else, click next page until reach last page.
-	do {
-		var currentPage = parseInt(await Selector('.page-link.current').innerText);
-		pagiMsg = Selector('.c-category-actions.c-category-actions--bottom').find('span');
-		pagiMsgText = await pagiMsg().innerText;
-		displayingPosts = parseInt(pagiMsgText.match(/\d+/g)[0]) || 0;
-		var expectedPostsPerPage = POSTSPERPAGE;
-		var isLastPage = false;
-		// if not last page, it should display Maximum number of a posts which a page can display
-		if (currentPage == lastPage) {
-			expectedPostsPerPage = totalPosts - POSTSPERPAGE * (currentPage - 1);
-			isLastPage = true;
-		}
+    var expectedCurrentPage = 1;
+    // else, click next page until reach last page.
+    do {
+      var currentPage = parseInt(await Selector('.page-link.current').innerText);
+      pagiMsg = Selector('.c-category-actions.c-category-actions--bottom').find('span');
+      pagiMsgText = await pagiMsg().innerText;
+      displayingPosts = parseInt(pagiMsgText.match(/\d+/g)[0]) || 0;
+      var expectedPostsPerPage = POSTSPERPAGE;
+      var isLastPage = false;
+      // if not last page, it should display Maximum number of a posts which a page can display
+      if (currentPage == lastPage) {
+        expectedPostsPerPage = totalPosts - POSTSPERPAGE * (currentPage - 1);
+        isLastPage = true;
+      }
 
-		console.log("  -> CurrentPage: " + currentPage.toString() );
-		console.log("  -> Last page should be: " + lastPage.toString() );
+      console.log("  -> CurrentPage: " + currentPage.toString() );
+      console.log("  -> Last page should be: " + lastPage.toString() );
 
-		// All page should have: fistPageBtn, lastPageBtn, correct # of displayed items
-		await t
-			.expect(firstPageBtn.exists).ok()
-			.expect(lastPageBtn.exists).ok()
-			.expect(displayingPosts).eql(expectedPostsPerPage);
+      // All page should have: fistPageBtn, lastPageBtn, correct # of displayed items
+      await t
+        .expect(firstPageBtn.exists).ok()
+        .expect(lastPageBtn.exists).ok()
+        .expect(displayingPosts).eql(expectedPostsPerPage);
 
-		expectedCurrentPage = await checkCurrentPageDisplay(currentPage, expectedCurrentPage, lastPage, isLastPage);
-	} while(!isLastPage)
- }
+      expectedCurrentPage = await checkCurrentPageDisplay(currentPage, expectedCurrentPage, lastPage, isLastPage);
+    } while(!isLastPage)
+  }
 });
 
 test('Search page should have 2 paginations, at most 10 posts per page with correct message and buttons', async t => {
- console.log('Test Case: Search Page, Pagination & Switch Page Button');
- console.log(">> Navigate to target testing website's search page");
- await t
+  console.log('Test Case: Search Page, Pagination & Switch Page Button');
+  console.log(">> Navigate to target testing website's search page");
+  await t
     .navigateTo(`${baseURL}/?s=digital&post_type=dr_product`)
     .maximizeWindow();
 
@@ -78,81 +78,81 @@ test('Search page should have 2 paginations, at most 10 posts per page with corr
   const pageCount = await Selector('.page-item').count;
   const lastPage = pageCount - 1;
   if (pageCount == 1) {
-	await onlyOnePageCheck(currentPage);
+  await onlyOnePageCheck(currentPage);
   } else {
-  var expectedCurrentPage = 1;
-  // else, click next page until reach last page.
-	do {
-		currentPage = parseInt(await Selector('.page-link.current').innerText);
-		await t.expect(currentPage).eql(expectedCurrentPage);
+    var expectedCurrentPage = 1;
+    // else, click next page until reach last page.
+    do {
+      currentPage = parseInt(await Selector('.page-link.current').innerText);
+      await t.expect(currentPage).eql(expectedCurrentPage);
 
-		var isLastPage = false;
-		if (currentPage == lastPage) { isLastPage = true; }
+      var isLastPage = false;
+      if (currentPage == lastPage) { isLastPage = true; }
 
-		console.log("  -> CurrentPage: " + currentPage);
-		console.log("  -> Last page should be: " + lastPage.toString() );
+      console.log("  -> CurrentPage: " + currentPage);
+      console.log("  -> Last page should be: " + lastPage.toString() );
 
-		expectedCurrentPage = await checkCurrentPageDisplay(currentPage, expectedCurrentPage, lastPage, isLastPage);
-	} while(!isLastPage)
+      expectedCurrentPage = await checkCurrentPageDisplay(currentPage, expectedCurrentPage, lastPage, isLastPage);
+    } while(!isLastPage)
   }
 });
 
 async function onlyOnePageCheck(currentPage) {
-	console.log(">> Page number == 1, no pagenation.");
-	await t
-	  .expect(homePage.paginationNextBtn.exists).notOk()
-	  .expect(homePage.paginationPrevBtn.exists).notOk()
-	  .expect(currentPage).eql(1);
+  console.log(">> Page number == 1, no pagenation.");
+  await t
+    .expect(homePage.paginationNextBtn.exists).notOk()
+    .expect(homePage.paginationPrevBtn.exists).notOk()
+    .expect(currentPage).eql(1);
 }
 /*
 * Check each page's display from first page -> last page
 */
 async function checkCurrentPageDisplay(currentPage, expectedCurrentPage, lastPage, isLastPage) {
-	const prevBtnText = '<';
-	const nextBtnText = '>';
-	currentPage = parseInt(await Selector('.page-link.current').innerText);
-	await t.expect(currentPage).eql(expectedCurrentPage);
+  const prevBtnText = '<';
+  const nextBtnText = '>';
+  currentPage = parseInt(await Selector('.page-link.current').innerText);
+  await t.expect(currentPage).eql(expectedCurrentPage);
 
-	switch (currentPage){
-		case 1:
-		// First page.
-		// Display: nextBtn
-		// Dont display: prevBtn
-			console.log("  -> 1st Page -- Checking...");
-			await t
-			    .expect(homePage.paginationPrevBtn.exists).notOk()
-				.expect(homePage.paginationNextBtn.exists).ok()
-				.expect(homePage.paginationNextBtn.innerText).eql(nextBtnText);
-			break;
-		case lastPage:
-		// Last page.
-		// Display: prevBtn, address should have page number
-		// Dont display: nextBtn
-			console.log("  -> Last Page -- Checking...");
-			await t
-				.expect(homePage.paginationNextBtn.exists).notOk()
-				.expect(homePage.paginationPrevBtn.exists).ok()
-				.expect(homePage.paginationPrevBtn.innerText).eql(prevBtnText)
-				.expect(getLocation()).contains(`/page/${lastPage}`);
-			break;
-		default:
-		// Not First and Not last
-		// Display: prevBtn, nextBtn, address should have page number
-			console.log("  -> Mid Page -- Checking...");
-			await t
-				.expect(homePage.paginationPrevBtn.exists).ok()
-				.expect(homePage.paginationPrevBtn.innerText).eql(prevBtnText)
-				.expect(homePage.paginationNextBtn.exists).ok()
-				.expect(homePage.paginationNextBtn.innerText).eql(nextBtnText)
-				.expect(getLocation()).contains(`/page/${expectedPages}`);
-			break;
-	}
+  switch (currentPage){
+    case 1:
+    // First page.
+    // Display: nextBtn
+    // Dont display: prevBtn
+      console.log("  -> 1st Page -- Checking...");
+      await t
+        .expect(homePage.paginationPrevBtn.exists).notOk()
+        .expect(homePage.paginationNextBtn.exists).ok()
+        .expect(homePage.paginationNextBtn.innerText).eql(nextBtnText);
+      break;
+    case lastPage:
+    // Last page.
+    // Display: prevBtn, address should have page number
+    // Dont display: nextBtn
+      console.log("  -> Last Page -- Checking...");
+      await t
+        .expect(homePage.paginationNextBtn.exists).notOk()
+        .expect(homePage.paginationPrevBtn.exists).ok()
+        .expect(homePage.paginationPrevBtn.innerText).eql(prevBtnText)
+        .expect(getLocation()).contains(`/page/${lastPage}`);
+      break;
+    default:
+    // Not First and Not last
+    // Display: prevBtn, nextBtn, address should have page number
+      console.log("  -> Mid Page -- Checking...");
+      await t
+        .expect(homePage.paginationPrevBtn.exists).ok()
+        .expect(homePage.paginationPrevBtn.innerText).eql(prevBtnText)
+        .expect(homePage.paginationNextBtn.exists).ok()
+        .expect(homePage.paginationNextBtn.innerText).eql(nextBtnText)
+        .expect(getLocation()).contains(`/page/${expectedPages}`);
+      break;
+  }
 
-	//If there is more pages, go to next page
-	if (!isLastPage) {
-		console.log(">> Go to next page");
-		await t.click(homePage.paginationNextBtn);
-		expectedCurrentPage += 1;
-	}
-	return expectedCurrentPage;
+  //If there is more pages, go to next page
+  if (!isLastPage) {
+    console.log(">> Go to next page");
+    await t.click(homePage.paginationNextBtn);
+    expectedCurrentPage += 1;
+  }
+  return expectedCurrentPage;
 }

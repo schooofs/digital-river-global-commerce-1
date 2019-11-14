@@ -1,4 +1,4 @@
-import { Selector, ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
 import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 import MinicartPage from '../../page-models/public/minicart-page-model';
@@ -35,7 +35,7 @@ test('Place order with physical product', async t => {
   // Add a physical product into cart
   console.log('>> Add physical product into cart');
   await t
-	.setTestSpeed(0.9)
+    .setTestSpeed(0.9)
     .click(homePage.addPhyProduct)
     .takeScreenshot('BWC/minicart.jpg');
 
@@ -65,10 +65,10 @@ test('Place order with physical product', async t => {
   while(ischecked) {
     console.log('>> Checkout page - Set billing info to diff from shipping info.');
     await t
-		.expect(checkoutPage.useSameAddrCheckbox.exists).ok()
-		.hover(checkoutPage.useSameAddrCheckbox)
-		.click(checkoutPage.useSameAddrCheckbox);
-	ischecked = await checkoutPage.useSameAddrCheckbox.checked;
+      .expect(checkoutPage.useSameAddrCheckbox.exists).ok()
+      .hover(checkoutPage.useSameAddrCheckbox)
+      .click(checkoutPage.useSameAddrCheckbox);
+    ischecked = await checkoutPage.useSameAddrCheckbox.checked;
   }
 
   // Enter Billing Info
@@ -104,7 +104,7 @@ test('Place order with digital product', async t => {
   // Add a Digital product into cart
   console.log('>> Add digital product into cart');
   await t
-	.setTestSpeed(0.9)
+    .setTestSpeed(0.9)
     .click(homePage.addDigiProduct)
     .takeScreenshot('BWC/minicart_d.jpg');
 

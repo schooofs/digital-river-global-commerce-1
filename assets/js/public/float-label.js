@@ -1,3 +1,8 @@
+/*
+ * floating-label.js
+ * https://gist.github.com/Steamforge/849e47be507ca0a9080a2b473b74f57e
+ */
+
 const FloatLabel = (() => {
 
     // add active class
@@ -42,3 +47,5 @@ const FloatLabel = (() => {
         init: init
     };
 })();
+
+export default FloatLabel;

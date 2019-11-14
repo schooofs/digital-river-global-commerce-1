@@ -1,3 +1,7 @@
+import FloatLabel from './float-label'; // 3rd-party plugin
+
+const CheckoutModule = {};
+
 jQuery(document).ready(($) => {
     if ($('#checkout-payment-form').length) {
         const domain = drgc_params.domain;
@@ -768,3 +772,5 @@ jQuery(document).ready(($) => {
         }
     }
 });
+
+export default CheckoutModule;

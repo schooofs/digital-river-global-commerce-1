@@ -1,6 +1,44 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
 
+const LoginModule = {
+    validatePassword($, e) {
+        const elem = e.target;
+        const customMsgArr = [];
+        let customMsg = '';
+
+        if (elem.value.length < 8 || elem.value.length > 32) {
+            customMsgArr.push(drgc_params.translations.password_length_error_msg);
+        }
+        if (!/[A-Z]/.test(elem.value)) {
+            customMsgArr.push(drgc_params.translations.password_uppercase_error_msg);
+        }
+        if (!/[a-z]/.test(elem.value)) {
+            customMsgArr.push(drgc_params.translations.password_lowercase_error_msg);
+        }
+        if (!/[0-9]/.test(elem.value)) {
+            customMsgArr.push(drgc_params.translations.password_number_error_msg);
+        }
+        if (!/[!_@]/.test(elem.value)) {
+            customMsgArr.push(drgc_params.translations.password_char_error_msg);
+        }
+        if (!/^[a-zA-Z0-9!_@]+$/.test(elem.value)) {
+            customMsgArr.push(drgc_params.translations.password_banned_char_error_msg);
+        }
+
+        customMsg = customMsgArr.join(' ');
+        elem.setCustomValidity(customMsg);
+
+        if (elem.validity.valueMissing) {
+            $(elem).next('.invalid-feedback').text(drgc_params.translations.required_field_msg);
+        } else if (elem.validity.customError) {
+            $(elem).next('.invalid-feedback').text(elem.validationMessage);
+        } else {
+            $(elem).next('.invalid-feedback').text('');
+        }
+    }
+};
+
 jQuery(document).ready(($) => {
     const ajaxUrl = drgc_params.ajaxUrl;
 
@@ -82,37 +120,7 @@ jQuery(document).ready(($) => {
     });
 
     $('#dr-signup-form input[name=upw], #dr-confirm-password-reset-form input[name=password]').on('input', (e) => {
-        const elem = e.target;
-        const customMsgArr = [];
-        let customMsg = '';
-
-        if (elem.value.length < 8 || elem.value.length > 32) {
-            customMsgArr.push(drgc_params.translations.password_length_error_msg);
-        }
-        if (!/[A-Z]/.test(elem.value)) {
-            customMsgArr.push(drgc_params.translations.password_uppercase_error_msg);
-        }
-        if (!/[a-z]/.test(elem.value)) {
-            customMsgArr.push(drgc_params.translations.password_lowercase_error_msg);
-        }
-        if (!/[0-9]/.test(elem.value)) {
-            customMsgArr.push(drgc_params.translations.password_number_error_msg);
-        }
-        if (!/[!_@]/.test(elem.value)) {
-            customMsgArr.push(drgc_params.translations.password_char_error_msg);
-        }
-        if (!/^[a-zA-Z0-9!_@]+$/.test(elem.value)) {
-            customMsgArr.push(drgc_params.translations.password_banned_char_error_msg);
-        }
-
-        customMsg = customMsgArr.join(' ');
-        elem.setCustomValidity(customMsg);
-
-        if (elem.validity.valueMissing) {
-            $(elem).next('.invalid-feedback').text(drgc_params.translations.required_field_msg);
-        } else if (elem.validity.customError) {
-            $(elem).next('.invalid-feedback').text(elem.validationMessage);
-        }
+        LoginModule.validatePassword($, e);
     });
 
     $('#dr-signup-form input[type=password], #dr-confirm-password-reset-form input[type=password]').on('input', (e) => {
@@ -276,3 +284,5 @@ jQuery(document).ready(($) => {
         }
     }
 });
+
+export default LoginModule;

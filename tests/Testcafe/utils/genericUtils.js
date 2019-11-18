@@ -14,7 +14,7 @@ export default class GenericUtils {
   }
 
   async checkCheckBox(checkbox) {
-    var ischecked = await checkbox.checked;
+    let ischecked = await checkbox.checked;
     while(!ischecked) {
       await t
         .hover(checkbox)

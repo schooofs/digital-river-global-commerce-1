@@ -61,7 +61,7 @@ test('Place order with physical product', async t => {
 
   // Set billing info as diff from shipping info
   // If checkbox is checked, the billing info will be set to same as shipping info
-  var ischecked = await checkoutPage.useSameAddrCheckbox.checked;
+  let ischecked = await checkoutPage.useSameAddrCheckbox.checked;
   while(ischecked) {
     console.log('>> Checkout page - Set billing info to diff from shipping info.');
     await t

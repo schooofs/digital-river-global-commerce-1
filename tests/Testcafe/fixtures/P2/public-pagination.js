@@ -10,8 +10,6 @@ const homePage = new HomePage();
 const POSTSPERPAGE = 10;
 const utils = new GeneralUtils();
 
-var pagiMsg = ()  => Selector('.c-category-actions.c-category-actions--bottom').find('span');
-
 fixture `===== DRGC P2 Automation Test - Pagination on Product Category, Product List & Search Page =====`
   .httpAuth({
     username: 'gcwpdemo',
@@ -27,9 +25,10 @@ test('Product List - 10 Products per Page and Display Pagination Correctly', asy
 
   await utils.clickItem(homePage.productsMenu);
 
-  var pagiMsgText = await pagiMsg().innerText;
+  let pagiMsg = ()  => Selector('.c-category-actions.c-category-actions--bottom').find('span');
+  let pagiMsgText = await pagiMsg().innerText;
   const totalPosts = parseInt(pagiMsgText.match(/\d+/g)[1]) || 0;
-  var displayingPosts = parseInt(pagiMsgText.match(/\d+/g)[0]) || 0;
+  let displayingPosts = parseInt(pagiMsgText.match(/\d+/g)[0]) || 0;
   const expectedPages = Math.ceil(totalPosts / POSTSPERPAGE);
   const lastPageBtn = Selector(".page-link").withText(expectedPages.toString());
   const firstPageBtn = Selector(".page-link").withText('1');
@@ -38,15 +37,15 @@ test('Product List - 10 Products per Page and Display Pagination Correctly', asy
   if (expectedPages <= 1) {
     await onlyOnePageCheck(currentPage);
   } else {
-    var expectedCurrentPage = 1;
+    let expectedCurrentPage = 1;
+    let isLastPage = false;
     // else, click next page until reach last page.
     do {
-      var currentPage = parseInt(await Selector('.page-link.current').innerText);
+      let currentPage = parseInt(await Selector('.page-link.current').innerText);
       pagiMsg = Selector('.c-category-actions.c-category-actions--bottom').find('span');
       pagiMsgText = await pagiMsg().innerText;
       displayingPosts = parseInt(pagiMsgText.match(/\d+/g)[0]) || 0;
-      var expectedPostsPerPage = POSTSPERPAGE;
-      var isLastPage = false;
+      let expectedPostsPerPage = POSTSPERPAGE;
       // if not last page, it should display Maximum number of a posts which a page can display
       if (currentPage == lastPage) {
         expectedPostsPerPage = totalPosts - POSTSPERPAGE * (currentPage - 1);
@@ -74,19 +73,19 @@ test('Search page should have 2 paginations, at most 10 posts per page with corr
     .navigateTo(`${baseURL}/?s=digital&post_type=dr_product`)
     .maximizeWindow();
 
-  var currentPage = parseInt(await Selector('.page-link.current').innerText);
+  let currentPage = parseInt(await Selector('.page-link.current').innerText);
   const pageCount = await Selector('.page-item').count;
   const lastPage = pageCount - 1;
   if (pageCount == 1) {
   await onlyOnePageCheck(currentPage);
   } else {
-    var expectedCurrentPage = 1;
+    let expectedCurrentPage = 1;
+    let isLastPage = false;
     // else, click next page until reach last page.
     do {
       currentPage = parseInt(await Selector('.page-link.current').innerText);
       await t.expect(currentPage).eql(expectedCurrentPage);
 
-      var isLastPage = false;
       if (currentPage == lastPage) { isLastPage = true; }
 
       console.log("  -> CurrentPage: " + currentPage);

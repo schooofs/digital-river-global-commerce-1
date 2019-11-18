@@ -72,15 +72,15 @@ test('Place order as a new customer', async t => {
   await t.expect(checkoutPage.useSameAddrCheckbox.exists).ok();
 
   // Set billing info as diff from shipping info
-  // If checkbox is checked, the billing info will be set to same as shipping infoo
-  var ischecked = await checkoutPage.useSameAddrCheckbox.checked;
+  // If checkbox is checked, the billing info will be set to same as shipping info
+  let ischecked = await checkoutPage.useSameAddrCheckbox.checked;
   while(ischecked) {
     console.log('>> Checkout page - Set Billing Info to Diff from Shipping Info.');
     await t
       .expect(checkoutPage.useSameAddrCheckbox.exists).ok()
       .hover(checkoutPage.useSameAddrCheckbox)
       .click(checkoutPage.useSameAddrCheckbox);
-      ischecked = await checkoutPage.useSameAddrCheckbox.checked;
+    ischecked = await checkoutPage.useSameAddrCheckbox.checked;
   }
 
   // Enter Billing Info

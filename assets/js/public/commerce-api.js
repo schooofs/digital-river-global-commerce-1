@@ -109,3 +109,5 @@ const DRCommerceApi = (($, params) => {
   };
 
 })(jQuery, drgc_params);
+
+export default DRCommerceApi;

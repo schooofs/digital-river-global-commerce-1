@@ -1,4 +1,5 @@
 import FloatLabel from './float-label'; // 3rd-party plugin
+import DRGooglePay from './payment-googlepay';
 
 const CheckoutModule = {};
 

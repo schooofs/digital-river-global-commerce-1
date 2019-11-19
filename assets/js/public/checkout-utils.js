@@ -1,5 +1,5 @@
 const CheckoutUtils = (($, params) => {
-  const createDisplayItemsObj = (cartData) => {
+  const createDisplayItems = (cartData) => {
     const displayItems = [{
       label: params.translations.subtotal_label,
       amount: cartData.pricing.subtotal.value
@@ -8,14 +8,14 @@ const CheckoutUtils = (($, params) => {
       amount: cartData.pricing.tax.value
     }];
 
-    if (cartData.pricing.shippingAndHandling.value) {
+    if (cartData.pricing.shippingAndHandling) {
       displayItems.push({
         label: params.translations.shipping_and_handling_label,
         amount: cartData.pricing.shippingAndHandling.value
       });
     }
 
-    if (cartData.pricing.discount.value) {
+    if (cartData.pricing.discount) {
       displayItems.push({
         label: params.translations.discount_label,
         amount: cartData.pricing.discount.value
@@ -25,7 +25,7 @@ const CheckoutUtils = (($, params) => {
     return displayItems;
   };
 
-  const createShippingOptionsObj = (cartData) => {
+  const createShippingOptions = (cartData) => {
     let shippingOptions = [];
 
     cartData.shippingOptions.shippingOption.forEach((option) => {
@@ -55,14 +55,13 @@ const CheckoutUtils = (($, params) => {
   };
 
   const getBaseRequestData = (cartData, requestShipping, buttonStyle) => {
-    const displayItems = createDisplayItemsObj(cartData);
+    const displayItems = createDisplayItems(cartData);
     let shippingOptions = [];
 
     if (requestShipping) {
-      shippingOptions = createShippingOptionsObj(cartData);
+      shippingOptions = createShippingOptions(cartData);
+      updateShippingOptions(shippingOptions, cartData.shippingMethod.code);
     }
-
-    updateShippingOptions(shippingOptions, cartData.shippingMethod.code);
 
     const requestData = {
       country: params.drLocale.split('_')[1],
@@ -114,8 +113,8 @@ const CheckoutUtils = (($, params) => {
   }
 
   return {
-    createDisplayItemsObj: createDisplayItemsObj,
-    createShippingOptionsObj: createShippingOptionsObj,
+    createDisplayItems: createDisplayItems,
+    createShippingOptions: createShippingOptions,
     updateShippingOptions: updateShippingOptions,
     getBaseRequestData: getBaseRequestData,
     updateDeliverySection: updateDeliverySection,
@@ -123,3 +122,5 @@ const CheckoutUtils = (($, params) => {
     updateSummaryPricing: updateSummaryPricing
   };
 })(jQuery, drgc_params);
+
+export default CheckoutUtils;

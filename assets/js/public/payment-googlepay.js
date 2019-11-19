@@ -1,8 +1,9 @@
+import CheckoutUtils from './checkout-utils';
+import DRCommerceApi from './commerce-api';
+
 const DRGooglePay = (($, translations) => {
   const initGooglePayEvents = (googlepay) => {
     googlepay.on('shippingaddresschange', (event) => {
-      console.log("Received Shipping Address Change Event", event);
-
       const shippingAddress = event.shippingAddress;
 
       if (shippingAddress.address.postalCode === '') {
@@ -49,8 +50,8 @@ const DRGooglePay = (($, translations) => {
         };
 
         DRCommerceApi.updateCart({expand: 'all'}, {shippingAddress: shippingAddressObj}).then((data) => {
-          const displayItems = CheckoutUtils.createDisplayItemsObj(data.cart);
-          const shippingOptions = CheckoutUtils.createShippingOptionsObj(data.cart);
+          const displayItems = CheckoutUtils.createDisplayItems(data.cart);
+          const shippingOptions = CheckoutUtils.createShippingOptions(data.cart);
           const requestUpdateObject = {
             total: {
               label: translations.order_total_label,
@@ -68,12 +69,11 @@ const DRGooglePay = (($, translations) => {
     });
 
     googlepay.on('shippingoptionchange', (event) => {
-      console.log("Received Shipping Option Change Event", event);
       const shippingOption = event.shippingOption;
 
       DRCommerceApi.applyShippingOption(shippingOption.id).then((data) => {
-        const displayItems = CheckoutUtils.createDisplayItemsObj(data.cart);
-        const shippingOptions = CheckoutUtils.createShippingOptionsObj(data.cart);
+        const displayItems = CheckoutUtils.createDisplayItems(data.cart);
+        const shippingOptions = CheckoutUtils.createShippingOptions(data.cart);
 
         CheckoutUtils.updateShippingOptions(shippingOptions, shippingOption.id);
 
@@ -151,3 +151,5 @@ const DRGooglePay = (($, translations) => {
     init: init
   };
 })(jQuery, drgc_params.translations);
+
+export default DRGooglePay;

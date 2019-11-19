@@ -1,3 +1,6 @@
+import CheckoutUtils from './checkout-utils';
+import DRCommerceApi from './commerce-api';
+
 const DRApplePay = (($, translations) => {
   const initApplePayEvents = (applepay) => {
     applepay.on('shippingaddresschange', (event) => {
@@ -49,8 +52,8 @@ const DRApplePay = (($, translations) => {
         };
 
         DRCommerceApi.updateCart({expand: 'all'}, {shippingAddress: shippingAddressObj}).then((data) => {
-          const displayItems = CheckoutUtils.createDisplayItemsObj(data.cart);
-          const shippingOptions = CheckoutUtils.createShippingOptionsObj(data.cart);
+          const displayItems = CheckoutUtils.createDisplayItems(data.cart);
+          const shippingOptions = CheckoutUtils.createShippingOptions(data.cart);
           const requestUpdateObject = {
             total: {
               label: translations.order_total_label,
@@ -72,8 +75,8 @@ const DRApplePay = (($, translations) => {
       const shippingOption = event.shippingOption;
 
       DRCommerceApi.applyShippingOption(shippingOption.id).then((data) => {
-        const displayItems = CheckoutUtils.createDisplayItemsObj(data.cart);
-        const shippingOptions = CheckoutUtils.createShippingOptionsObj(data.cart);
+        const displayItems = CheckoutUtils.createDisplayItems(data.cart);
+        const shippingOptions = CheckoutUtils.createShippingOptions(data.cart);
 
         CheckoutUtils.updateShippingOptions(shippingOptions, shippingOption.id);
 
@@ -151,3 +154,5 @@ const DRApplePay = (($, translations) => {
     init: init
   };
 })(jQuery, drgc_params.translations);
+
+export default DRApplePay;

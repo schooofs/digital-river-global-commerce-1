@@ -16,10 +16,12 @@ const CheckoutUtils = (($, params) => {
     }
 
     if (cartData.pricing.discount) {
-      displayItems.push({
-        label: params.translations.discount_label,
-        amount: cartData.pricing.discount.value
-      });
+      if (parseFloat(cartData.pricing.discount.value) > 0) {
+        displayItems.push({
+          label: params.translations.discount_label,
+          amount: cartData.pricing.discount.value
+        });
+      }
     }
 
     return displayItems;

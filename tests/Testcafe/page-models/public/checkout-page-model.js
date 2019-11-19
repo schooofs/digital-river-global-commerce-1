@@ -75,7 +75,7 @@ export default class CheckoutPage {
   }
 
   async completeFormBillingInfo() {
-    const billingInfo = new GeneralUtils().getShippingUserData();
+    const billingInfo = new GeneralUtils().getBillingUserData();
     const billingStateOption = this.billingState.find('option');
     const billingCountryOption = this.billingCountry.find('option');
 

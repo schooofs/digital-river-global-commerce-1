@@ -23,67 +23,6 @@ export default class GenericUtils {
     }
   }
 
-  async loginGCSystest() {
-    const username = Selector("#j_username");
-    const password = Selector("#j_password");
-    const loginBtn = Selector('.ra_Button__primary');
-    const user = {
-      id: "stuller",
-      pw: "orange,1"
-    };
-
-    await t
-      .typeText(username, user.id, { replace: true })
-      .typeText(password, user.pw, { replace: true })
-      .click(loginBtn)
-      .switchToMainWindow();
-  }
-
-  async inputCreditInfo(cardInfo) {
-    const creditNo = Selector('#dr_ccNumEntry').find('[name="cardNumber"]');
-    const creditExpMonth = Selector('#expirationDateMonth');
-    const creditExpMonthOption = creditExpMonth.find('option');
-    const creditExpYear = Selector('#expirationDateYear');
-    const creditExpYearOption = creditExpYear.find('option');
-    const creditCCV = Selector('#dr_ccSecurityCodeEntry').find('[name="cardSecurityCode"]');
-
-    await t
-      .typeText(creditNo, cardInfo.cardNumber, { replace: true })
-      .click(creditExpMonth)
-      .click(creditExpMonthOption.withText(cardInfo.cardMonth))
-      .click(creditExpYear)
-      .click(creditExpYearOption.withText(cardInfo.cardYear))
-      .typeText(creditCCV, cardInfo.cardCcv, { replace: true });
-  }
-
-  async inputBillingInfo(billInfo) {
-    const firstName = Selector('#dr_AddressEntryFields').find('[name="name1"]');
-    const lastName = Selector('#dr_AddressEntryFields').find('[name="name2"]');
-    const street = Selector('#dr_AddressEntryFields').find('[name="line1"]');
-    const zipCode = Selector('#dr_AddressEntryFields').find('[name="postalCode"]');
-    const city = Selector('#dr_AddressEntryFields').find('[name="city"]');
-
-    const countryOption = Selector('#country').find('option');
-    const country = Selector('#dr_AddressEntryFields').find('[name="country"]');
-    const phoneNo = Selector('#dr_AddressEntryFields').find('[name="phoneNumber"]');
-    const email = Selector('#dr_AddressEntryFields').find('[name="EMAILemail"]');
-    const password = Selector('#dr_AddressEntryFields').find('[name="PASSWORDpassword"]');
-    const confirmPassword = Selector('#dr_AddressEntryFields').find('[name="PASSWORDconfirmPassword"]');
-
-    await t
-      .typeText(firstName, billInfo.firstName, { replace: true })
-      .typeText(lastName, billInfo.lastName, { replace: true })
-      .typeText(street, billInfo.addrLine1)
-      .typeText(zipCode, billInfo.zipCode)
-      .typeText(city, billInfo.city)
-      .click(country)
-      .click(countryOption.withText(billInfo.country))
-      .typeText(phoneNo, billInfo.phoneNo)
-      .typeText(email, billInfo.email)
-      .typeText(password, billInfo.password)
-      .typeText(confirmPassword, billInfo.password);
-  }
-
   async addProductsIntoCart(pID){
     const product = Selector('.dr-buy-btn[data-product-id="' + pID + '"]');
 

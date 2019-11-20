@@ -112,7 +112,7 @@ const CheckoutUtils = (($, params) => {
 
     $('div.dr-summary__tax > .item-value').text(formattedTax);
     $('div.dr-summary__total > .total-value').text(formattedOrderTotal);
-  }
+  };
 
   return {
     createDisplayItems: createDisplayItems,

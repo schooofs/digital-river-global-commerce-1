@@ -3,6 +3,14 @@
     width: 100%;
     height: 100%;
 
+    &--cart {
+        .dr-summary__shipping {
+            padding: 20px 0;
+            border-top: 1px dashed $gray-lighter;
+            border-bottom: 1px solid $gray-lighter;
+        }
+    }
+
     &--checkout,
     &--thank-you {
         width: 100%;

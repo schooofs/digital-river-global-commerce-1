@@ -103,6 +103,8 @@ class DRGC_Public {
 			'free_label'                  => __('FREE', 'digital-river-global-commerce'),
 			'tax_label'              	    => __('Tax', 'digital-river-global-commerce'),
 			'estimated_tax_label'         => __('Estimated Tax', 'digital-river-global-commerce'),
+			'shipping_label'              => __('Shipping', 'digital-river-global-commerce'),
+			'estimated_shipping_label'    => __('Estimated Shipping', 'digital-river-global-commerce'),
 			'credit_card_ending_label'    => __('Credit card ending in', 'digital-river-global-commerce'),
 			'pay_with_card_label'         => __('pay with card', 'digital-river-global-commerce'),
 			'pay_with_paypal_label'       => __('pay with paypal', 'digital-river-global-commerce'),

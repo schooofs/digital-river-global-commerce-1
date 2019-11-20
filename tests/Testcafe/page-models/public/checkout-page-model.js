@@ -1,5 +1,5 @@
 import { Selector, t } from 'testcafe';
-import DataUtils from '../../utils/dataUtils';
+import GeneralUtils from '../../utils/genericUtils';
 
 export default class CheckoutPage {
   constructor() {
@@ -14,7 +14,7 @@ export default class CheckoutPage {
     this.deliverByExpress = Selector('#shipping-option-8196700');
     this.deliverByStandard = Selector('#shipping-option-167400');
     this.deliveryOptionSubmitBtn = Selector('#checkout-delivery-form > button');
-    this.billingDiffCheckbox = Selector('#checkbox-billing');
+    this.useSameAddrCheckbox = Selector('#checkbox-billing');
     this.submitPaymentBtn = Selector('#dr-submit-payment');
     this.submitOrderBtn = Selector("#checkout-confirmation-form > button");
 
@@ -54,7 +54,7 @@ export default class CheckoutPage {
   }
 
   async completeFormShippingInfo() {
-	const shippingInfo = new DataUtils().getShippingUserData();
+    const shippingInfo = new GeneralUtils().getShippingUserData();
     const shippingStateOption = this.shippingState.find('option');
     const shippingCountryOption = this.shippingCountry.find('option');
 
@@ -75,7 +75,7 @@ export default class CheckoutPage {
   }
 
   async completeFormBillingInfo() {
-	const billingInfo = new DataUtils().getShippingUserData();
+    const billingInfo = new GeneralUtils().getBillingUserData();
     const billingStateOption = this.billingState.find('option');
     const billingCountryOption = this.billingCountry.find('option');
 
@@ -107,7 +107,7 @@ export default class CheckoutPage {
   }
 
   async completeFormCreditCardInfo() {
-	const creditCardInfo = new DataUtils().getCreditCardInfo();
+    const creditCardInfo = new GeneralUtils().getCreditCardInfo();
 
     await t
       .click(this.creditCard)

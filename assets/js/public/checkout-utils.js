@@ -8,7 +8,7 @@ const CheckoutUtils = (($, params) => {
       amount: cartData.pricing.tax.value
     }];
 
-    if (cartData.pricing.shippingAndHandling) {
+    if (cartData.shippingOptions.shippingOption) {
       displayItems.push({
         label: params.translations.shipping_and_handling_label,
         amount: cartData.pricing.shippingAndHandling.value

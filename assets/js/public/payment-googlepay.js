@@ -63,7 +63,6 @@ const DRGooglePay = (($, translations) => {
 
           requestUpdateObject.status = 'success';
           event.updateWith(requestUpdateObject);
-          CheckoutUtils.updateAddressSection(data.cart.shippingAddress, $('.dr-checkout__shipping').find('.dr-panel-result__text'));
         });
       }
     });
@@ -88,7 +87,6 @@ const DRGooglePay = (($, translations) => {
         };
 
         event.updateWith(requestUpdateObject);
-        CheckoutUtils.updateDeliverySection(shippingOption);
         CheckoutUtils.updateSummaryPricing(data.cart);
       });
     });
@@ -113,7 +111,6 @@ const DRGooglePay = (($, translations) => {
       $('body').css({'pointer-events': 'none', 'opacity': 0.5});
 
       DRCommerceApi.updateCart({expand: 'all'}, {shippingAddress: shippingAddressObj}).then((data) => {
-        CheckoutUtils.updateAddressSection(data.cart.shippingAddress, $('.dr-checkout__shipping').find('.dr-panel-result__text'));
         DRCommerceApi.applyPaymentAndSubmitCart(sourceId);
       });
 

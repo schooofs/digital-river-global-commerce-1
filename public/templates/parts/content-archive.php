@@ -54,16 +54,12 @@ if ( $variations && isset( $variations[0] ) ) {
 
         <?php if ( (int) $list_price > (int) $sale_price ) : ?>
             <p class="dr-pd-price dr-pd-item-price">
-                <del class="dr-strike-price">
-                    <?php echo $list_price; ?>
-                </del>
-                <span class="dr-sale-price">
-                    <?php echo $price; ?>
-                </span>
+                <del class="dr-strike-price"><?php echo $list_price; ?></del>
+                <strong class="dr-sale-price"><?php echo $price; ?></strong>
             </p>
         <?php else: ?>
             <p class="dr-pd-price dr-pd-item-price">
-                <?php echo $price; ?>
+                <strong class="dr-sale-price"><?php echo $price; ?></strong>
             </p>
         <?php endif; ?>
 

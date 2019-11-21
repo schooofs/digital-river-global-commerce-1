@@ -1,7 +1,12 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
+import DRCommerceModule from './public-dr-commerce'; // Commerce API
 
-const PdpModule = {};
+const PdpModule = {
+    displayPrice() {
+
+    }
+};
 
 jQuery(document).ready(($) => {
     class DRService {
@@ -315,20 +320,144 @@ jQuery(document).ready(($) => {
         e.preventDefault();
 
         var varId = $(this).val();
-        var price = $(this).children("option:selected").data('price');
-        var regularPrice = $(this).children("option:selected").data('regular-price');
-        var salePriceValue = $(this).children("option:selected").data('sale-price-value');
-        var listPriceValue = $(this).children("option:selected").data('list-price-value');
+        var price = $(this).children('option:selected').data('price');
+        var listPriceValue = $(this).children('option:selected').data('old-price');
         var $prodPrice = $('.single-dr_product .dr-pd-content .dr-pd-price');
         var $buyBtn = $('.dr-buy-btn');
-        var prodPriceHtml ="";
+        var prodPriceHtml = '';
         $buyBtn.attr('data-product-id', varId);
-        if(listPriceValue > salePriceValue)prodPriceHtml ='<del class="dr-strike-price">'+regularPrice+'</del>';
-        prodPriceHtml +='<strong>' + price + '</strong>';
+        if (listPriceValue) prodPriceHtml = '<del class="dr-strike-price">' + listPriceValue + '</del>';
+        prodPriceHtml += '<strong class="dr-sale-price">' + price + '</strong>';
         $prodPrice.html(prodPriceHtml);
     });
 
     $( "iframe[name^='controller-']" ).css('display', 'none');
+
+    // Real-time pricing for PD card (category page & recommended products)
+    let pdCardOption = {};
+    if ($('.c-product-card').length) { // DR theme
+        pdCardOption = {
+            $card: $('.c-product-card'),
+            priceDivSelector: '.c-product-card__bottom__price',
+            listPriceDiv: 'span',
+            listPriceClass: 'old-price',
+            salePriceDiv: 'span',
+            salePriceClass: 'new-price',
+            priceDiv: 'span',
+            priceClass: 'price'
+        };
+    } else if ($('.dr-pd-item').length) { // non-DR theme
+        pdCardOption = {
+            $card: $('.dr-pd-item'),
+            priceDivSelector: '.dr-pd-item-price',
+            listPriceDiv: 'del',
+            listPriceClass: 'dr-strike-price',
+            salePriceDiv: 'strong',
+            salePriceClass: 'dr-sale-price',
+            priceDiv: 'strong',
+            priceClass: 'dr-sale-price'
+        };
+    }
+
+    if ($('.c-product-card, .dr-pd-item').length) {
+        pdCardOption.$card.each((idx, elem) => {
+            const o = pdCardOption;
+            const productID = $(elem).find('.dr-buy-btn').data('product-id');
+            const $priceDiv = $(elem).find(o.priceDivSelector);
+            $priceDiv.text('Loading...');
+            DRCommerceModule.getProductPricing(productID).then((productPricing) => {
+                const pricing = productPricing.pricing;
+                if (pricing.listPrice && pricing.salePriceWithQuantity) {
+                    if (pricing.listPrice.value > pricing.salePriceWithQuantity.value) {
+                        $priceDiv.html(`
+                            <${o.listPriceDiv} class="${o.listPriceClass}">${pricing.listPrice.value}</${o.listPriceDiv}>
+                            <${o.salePriceDiv} class="${o.salePriceClass}">${pricing.formattedSalePriceWithQuantity}</${o.salePriceDiv}>
+                        `);
+                    } else {
+                        $priceDiv.html(`
+                            <${o.priceDiv} class="${o.priceClass}">${pricing.formattedSalePriceWithQuantity}</${o.priceDiv}>
+                        `);
+                    }
+                } else {
+                    $priceDiv.text(''); // no pricing data
+                }
+            });
+        });
+    }
+
+    // Real-time pricing for single PD page (including variation/base products)
+    if ($('.single-dr_product').length) {
+        let pdOption = {};
+        if ($('.product-price').length) { // DR theme
+            pdOption = {
+                $variationOption: $('input[type=radio][name=variation]'),
+                priceDivSelector: '.product-pricing',
+                listPriceDiv: 'span',
+                listPriceClass: 'product-price-old',
+                salePriceDiv: 'span',
+                salePriceClass: 'product-price',
+                priceDiv: 'span',
+                priceClass: 'product-price'
+            };
+        } else { // non-DR theme
+            pdOption = {
+                $variationOption: $('select[name=dr-variation] option'),
+                priceDivSelector: '.dr-pd-price',
+                listPriceDiv: 'del',
+                listPriceClass: 'dr-strike-price',
+                salePriceDiv: 'strong',
+                salePriceClass: 'dr-sale-price',
+                priceDiv: 'strong',
+                priceClass: 'dr-sale-price'
+            };
+        }
+
+        if (pdOption.$variationOption.length) { // variation product
+            pdOption.$variationOption.each((idx, elem) => {
+                const productID = $(elem).val();
+                const $priceDiv = $(pdCardOption.priceDivSelector);
+                $priceDiv.text('Loading...');
+                DRCommerceModule.getProductPricing(productID).then((productPricing) => {
+                    const pricing = productPricing.pricing;
+                    if (pricing.listPrice && pricing.salePriceWithQuantity) {
+                        if (pricing.listPrice.value > pricing.salePriceWithQuantity.value) {
+                            $(elem).data('old-price', pricing.listPrice.value);
+                            $(elem).data('price', pricing.formattedSalePriceWithQuantity);
+                        } else {
+                            $(elem).data('price', pricing.formattedSalePriceWithQuantity);
+                        }
+                    }
+
+                    if (idx === 0) {
+                        if ($(elem).is('input[type=radio]')) $(elem).prop('checked', true).trigger('click');
+                        else $(elem).prop('selected', true).trigger('change');
+                    }
+                });
+            });
+        } else { // base product
+            const o = pdOption;
+            const productID = $('.dr-buy-btn').data('product-id');
+            const $priceDiv = $(o.priceDivSelector);
+            $priceDiv.text('Loading...');
+            DRCommerceModule.getProductPricing(productID).then((productPricing) => {
+                const pricing = productPricing.pricing;
+                if (pricing.listPrice && pricing.salePriceWithQuantity) {
+                    if (pricing.listPrice.value > pricing.salePriceWithQuantity.value) {
+                        $priceDiv.html(`
+                            <${o.listPriceDiv} class="${o.listPriceClass}">${pricing.listPrice.value}</${o.listPriceDiv}>
+                            <${o.salePriceDiv} class="${o.salePriceClass}">${pricing.formattedSalePriceWithQuantity}</${o.salePriceDiv}>
+                        `);
+                    } else {
+                        $priceDiv.html(`
+                            <${o.priceDiv} class="${o.priceClass}">${pricing.formattedSalePriceWithQuantity}</${o.priceDiv}>
+                        `);
+                    }
+                } else {
+                    $priceDiv.text(''); // no pricing data
+                }
+            });
+        }
+    }
 });
 
 export default PdpModule;

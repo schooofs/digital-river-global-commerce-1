@@ -1,9 +1,9 @@
 const $ = global.jQuery;
 
 const DRCommerceModule = {
-	apiBaseUrl: `https://${drgc_params.domain}/v1/shoppers`,
+  apiBaseUrl: `https://${drgc_params.domain}/v1/shoppers`,
 
-	getProductPricing(productID) {
+  getProductPricing(productID) {
     return new Promise((resolve, reject) => {
       $.ajax({
         type: 'GET',
@@ -13,7 +13,6 @@ const DRCommerceModule = {
         url: `${this.apiBaseUrl}/me/products/${productID}/pricing?format=json`,
         success: (data) => {
           resolve(data);
-          console.log('getProductPricing', data);
         },
         error: (jqXHR) => {
           reject(jqXHR);

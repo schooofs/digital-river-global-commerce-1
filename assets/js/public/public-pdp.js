@@ -392,6 +392,7 @@ jQuery(document).ready(($) => {
 
     // Real-time pricing for single PD page (including variation/base products)
     if ($('.single-dr_product').length) {
+        isPdCard = false;
         if (pdPriceOption.$variationOption && pdPriceOption.$variationOption.length) { // variation product
             pdPriceOption.$variationOption.each((idx, elem) => {
                 const $target = $(elem);
@@ -400,7 +401,7 @@ jQuery(document).ready(($) => {
 
                 if (!productID) return;
                 DRCommerceModule.getProductPricing(productID).then((productPricing) => {
-                    isPdCard = false;
+                    isPdCard = false; // to avoid being overwritten by concurrency
                     PdpModule.fetchVariationPrice($, productPricing.pricing, $target, idx);
                 });
             });
@@ -410,7 +411,7 @@ jQuery(document).ready(($) => {
 
             if (!productID) return;
             DRCommerceModule.getProductPricing(productID).then((productPricing) => {
-                isPdCard = false;
+                isPdCard = false; // to avoid being overwritten by concurrency
                 PdpModule.displayRealTimePricing($, productPricing.pricing, pdPriceOption, $target);
             });
         }
@@ -418,13 +419,14 @@ jQuery(document).ready(($) => {
 
     // Real-time pricing for PD card (category page & recommended products)
     if (pdPriceOption.$card && pdPriceOption.$card.length) {
+        isPdCard = true;
         pdPriceOption.$card.each((idx, elem) => {
             const productID = $(elem).find('.dr-buy-btn').data('product-id');
             const $target = $(elem).find(pdPriceOption.priceDivSelector()).text(drgc_params.translations.loading_msg);
 
             if (!productID) return;
             DRCommerceModule.getProductPricing(productID).then((productPricing) => {
-                isPdCard = true;
+                isPdCard = true; // to avoid being overwritten by concurrency
                 PdpModule.displayRealTimePricing($, productPricing.pricing, pdPriceOption, $target);
             });
         });

@@ -1,6 +1,7 @@
 import FloatLabel from './float-label'; // 3rd-party plugin
 import CheckoutUtils from './checkout-utils';
 import DRGooglePay from './payment-googlepay';
+import DRApplePay from './payment-applepay';
 
 const CheckoutModule = {
     updateSummaryLabels($) {
@@ -772,6 +773,14 @@ jQuery(document).ready(($) => {
 
         if ($('#dr-googlepay-button').length) {
             DRGooglePay.init({
+                digitalriverJs: digitalriverjs,
+                paymentDataRequest: paymentDataRequest,
+                requestShipping: requestShipping
+            });
+        }
+
+        if ($('#dr-applepay-button').length) {
+            DRApplePay.init({
                 digitalriverJs: digitalriverjs,
                 paymentDataRequest: paymentDataRequest,
                 requestShipping: requestShipping

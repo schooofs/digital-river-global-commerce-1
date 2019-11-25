@@ -39,6 +39,8 @@
             
             <?php include_once DRGC_PLUGIN_DIR . 'public/templates/checkout/checkout-googlepay.php'; ?>
 
+            <?php include_once DRGC_PLUGIN_DIR . 'public/templates/checkout/checkout-applepay.php'; ?>
+
             <?php include_once DRGC_PLUGIN_DIR . 'public/templates/checkout/checkout-email.php'; ?>
 
             <?php if( $cart['cart']['hasPhysicalProduct'] ) :

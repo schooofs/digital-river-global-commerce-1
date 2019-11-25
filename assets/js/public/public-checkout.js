@@ -1,7 +1,17 @@
 import FloatLabel from './float-label'; // 3rd-party plugin
 import DRGooglePay from './payment-googlepay';
 
-const CheckoutModule = {};
+const CheckoutModule = {
+    updateSummaryLabels($) {
+        if ($('.dr-checkout__payment').hasClass('active') || $('.dr-checkout__confirmation').hasClass('active')) {
+            $('.dr-summary__tax .item-label').text(drgc_params.translations.tax_label);
+            $('.dr-summary__shipping .item-label').text(drgc_params.translations.shipping_label);
+        } else {
+            $('.dr-summary__tax .item-label').text(drgc_params.translations.estimated_tax_label);
+            $('.dr-summary__shipping .item-label').text(drgc_params.translations.estimated_shipping_label);
+        }
+    }
+};
 
 jQuery(document).ready(($) => {
     if ($('#checkout-payment-form').length) {
@@ -237,7 +247,7 @@ jQuery(document).ready(($) => {
             }
 
             adjustColumns($section);
-            updateTaxLabel();
+            CheckoutModule.updateSummaryLabels($);
             $('html, body').animate({
                 scrollTop: ($nextSection.first().offset().top - 80)
             }, 500);
@@ -276,14 +286,6 @@ jQuery(document).ready(($) => {
             } else {
                 $paymentSection.removeClass('small-closed-left');
                 $confirmSection.removeClass('small-closed-right').addClass('d-none');
-            }
-        }
-
-        function updateTaxLabel() {
-            if ($('.dr-checkout__el.active').hasClass('dr-checkout__payment') || $('.dr-checkout__el.active').hasClass('dr-checkout__confirmation')) {
-                $('.dr-summary__tax > .item-label').text(drgc_params.translations.tax_label);
-            } else {
-                $('.dr-summary__tax > .item-label').text(drgc_params.translations.estimated_tax_label);
             }
         }
 
@@ -638,7 +640,7 @@ jQuery(document).ready(($) => {
             $section.removeClass('closed').addClass('active');
 
             adjustColumns();
-            updateTaxLabel();
+            CheckoutModule.updateSummaryLabels($);
         });
 
         if ($('#radio-credit-card').is(':checked')) {

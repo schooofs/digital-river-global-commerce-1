@@ -1,4 +1,5 @@
 import FloatLabel from './float-label'; // 3rd-party plugin
+import DRGooglePay from './payment-googlepay';
 
 const CheckoutModule = {
     updateSummaryLabels($) {
@@ -18,6 +19,8 @@ jQuery(document).ready(($) => {
         const isLogin = drgc_params.isLogin;
         const apiBaseUrl = 'https://' + domain + '/v1/shoppers';
         const drLocale = drgc_params.drLocale || 'en_US';
+        let cartData = drgc_params.cart.cart;
+        const requestShipping = (cartData.shippingOptions.shippingOption) ? true : false;
 
         function getAddress(addressType) {
             const address = {
@@ -346,7 +349,6 @@ jQuery(document).ready(($) => {
             const $button = $form.find('button[type="submit"]');
             const billingSameAsShipping = $('[name="checkbox-billing"]').is(':visible:checked');
             const isFormValid = prepareAddress($form);
-            const requestShipping = $('.dr-checkout__shipping').length ? true : false;
 
             if (!isFormValid) return;
             if (billingSameAsShipping) payload.billing = Object.assign({}, payload.shipping);
@@ -448,8 +450,6 @@ jQuery(document).ready(($) => {
         $('form#checkout-delivery-form').on('change', 'input[type="radio"]', function() {
             applyShippingOption();
         });
-
-
 
         $('form#checkout-payment-form').on('submit', function(e) {
             e.preventDefault();
@@ -704,7 +704,6 @@ jQuery(document).ready(($) => {
                 },
                 payment: function() {
                     const cart = drgc_params.cart.cart;
-                    const requestShipping = $('.dr-checkout__shipping').length ? true : false;
                     let payPalItems = [];
 
                     $.each(cart.lineItems.lineItem, function( index, item ) {
@@ -760,6 +759,19 @@ jQuery(document).ready(($) => {
                     applyPaymentToCart(sourceId);
                 }
             }, '#dr-paypal-button');
+        }
+
+        if ($('#dr-googlepay-button').length) {
+            DRGooglePay.init({
+                digitalriverJs: digitalriverjs,
+                cartData: cartData,
+                requestShipping: requestShipping,
+                buttonStyle: {
+                    buttonType: 'long',
+                    buttonColor: 'dark',
+                    buttonLanguage: drLocale.split('_')[0]
+                }
+            });
         }
     }
 });

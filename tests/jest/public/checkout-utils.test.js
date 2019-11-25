@@ -1,18 +1,25 @@
 import CheckoutUtils from '../../../assets/js/public/checkout-utils';
 
 const cartData = {
+  shippingOptions: {
+    uri: 'https://api.digitalriver.com/v1/shoppers/me/carts/active/shipping-options'
+  },
   pricing: {
     orderTotal: {
       currency: 'USD',
-      value: '21.98'
+      value: 21.98
     },
     subtotal: {
       currency: 'USD',
-      value: '19.99'
+      value: 19.99
     },
     tax: {
       currency: 'USD',
-      value: '1.99'
+      value: 1.99
+    },
+    shippingAndHandling: {
+      currency: 'USD',
+      value: 9.99
     }
   },
   shippingMethod: {
@@ -24,10 +31,10 @@ describe('Checkout Utils', () => {
   test('Create the display items without shipping and discount', () => {
     const stubItems = [{
       label: 'Sub-total',
-      amount: '19.99'
+      amount: 19.99
     }, {
       label: 'Tax',
-      amount: '1.99'
+      amount: 1.99
     }];
 
     const displayItems = CheckoutUtils.createDisplayItems(cartData);
@@ -36,20 +43,25 @@ describe('Checkout Utils', () => {
   });
 
   test('Create the display items without discount', () => {
-    cartData.pricing.shippingAndHandling = {
-      currency: 'USD',
-      value: '9.99'
-    }
+    cartData.shippingOptions = {
+      shippingOption: [{
+        id: 12345,
+        description: 'shipping option #1',
+        cost: {
+          value: 999
+        }
+      }]
+    };
 
     const stubItems = [{
       label: 'Sub-total',
-      amount: '19.99'
+      amount: 19.99
     }, {
       label: 'Tax',
-      amount: '1.99'
+      amount: 1.99
     }, {
       label: 'Shipping and Handling',
-      amount: '9.99'
+      amount: 9.99
     }];
 
     const displayItems = CheckoutUtils.createDisplayItems(cartData);
@@ -60,21 +72,21 @@ describe('Checkout Utils', () => {
   test('Create the display items', () => {
     cartData.pricing.discount = {
       currency: 'USD',
-      value: '3.99'
+      value: 3.99
     }
 
     const stubItems = [{
       label: 'Sub-total',
-      amount: '19.99'
+      amount: 19.99
     }, {
       label: 'Tax',
-      amount: '1.99'
+      amount: 1.99
     }, {
       label: 'Shipping and Handling',
-      amount: '9.99'
+      amount: 9.99
     }, {
       label: 'Discount',
-      amount: '3.99'
+      amount: 3.99
     }];
 
     const displayItems = CheckoutUtils.createDisplayItems(cartData);
@@ -161,20 +173,20 @@ describe('Checkout Utils', () => {
       currency: 'USD',
       total: {
         label: 'Order Total',
-        amount: '21.98'
+        amount: 21.98
       },
       displayItems: [{
         label: 'Sub-total',
-        amount: '19.99'
+        amount: 19.99
       }, {
         label: 'Tax',
-        amount: '1.99'
+        amount: 1.99
       }, {
         label: 'Shipping and Handling',
-        amount: '9.99'
+        amount: 9.99
       }, {
         label: 'Discount',
-        amount: '3.99'
+        amount: 3.99
       }],
       shippingOptions: [{
         id: '12345',
@@ -206,7 +218,7 @@ describe('Checkout Utils', () => {
   });
 
   test('Get the request data without shipping', () => {
-    delete cartData.pricing.shippingAndHandling;    
+    delete cartData.shippingOptions.shippingOption;
     const requestShipping = false;
     const buttonStyle = {
       buttonType: 'long',
@@ -221,17 +233,17 @@ describe('Checkout Utils', () => {
       currency: 'USD',
       total: {
         label: 'Order Total',
-        amount: '21.98'
+        amount: 21.98
       },
       displayItems: [{
         label: 'Sub-total',
-        amount: '19.99'
+        amount: 19.99
       }, {
         label: 'Tax',
-        amount: '1.99'
+        amount: 1.99
       }, {
         label: 'Discount',
-        amount: '3.99'
+        amount: 3.99
       }],
       shippingOptions: [],
       requestShipping: false,

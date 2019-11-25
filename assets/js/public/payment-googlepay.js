@@ -140,19 +140,17 @@ const DRGooglePay = (($, translations) => {
   };
 
   const init = (params) => {
-    const {digitalriverJs, cartData = {}, requestShipping = false, buttonStyle = {}} = params || {};
+    const {digitalriverJs, paymentDataRequest, requestShipping = false} = params || {};
 
     if (typeof digitalriverJs !== 'object') {
       throw new Error('Please pass an instance of the DigitalRiver object.');
     }
 
-    if (Object.keys(cartData).length === 0) {
-      throw new Error('Please pass the cart data object.');
+    if (typeof paymentDataRequest !== 'object') {
+      throw new Error('Please pass a PaymentDataRequest object.');
     }
 
-    const paymentRequestData = CheckoutUtils.getBaseRequestData(cartData, requestShipping, buttonStyle);
-    const googlePayRequestData = digitalriverJs.paymentRequest(paymentRequestData);
-    const googlepay = digitalriverJs.createElement('googlepay', googlePayRequestData);
+    const googlepay = digitalriverJs.createElement('googlepay', paymentDataRequest);
 
     if (googlepay.canMakePayment()) {
       initGooglePayEvents(googlepay, requestShipping);

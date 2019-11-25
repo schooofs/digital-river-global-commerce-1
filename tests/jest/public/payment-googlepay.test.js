@@ -3,68 +3,26 @@ import DRCommerceApi from '../../../assets/js/public/commerce-api';
 
 const setupDocumentBody = () => {
   document.body.innerHTML =
-    '<div id="dr-googlepay-button"></div>' +
-    '<div class="dr-checkout__delivery>' +
-    ' <form id="checkout-delivery-form" class="dr-panel-edit dr-panel-edit--delivery">' +
-    '   <div class="dr-panel-edit__el">' +
-    '     <div class="field-radio">' +
-    '       <input type="radio" name="selector" id="shipping-option-12345" data-cost="999USD" data-id="12345" data-desc="shipping option #1" />' +
-    '       <label for="shipping-option-12345">' +
-    '         <span>shipping option #1</span>' +
-    '         <span class="black">999USD</span>' +
-    '       </label>' +
-    '     </div>' +
-    '     <div class="field-radio">' +
-    '       <input type="radio" name="selector" id="shipping-option-67890" data-cost="1000USD" data-id="67890" data-desc="shipping option #2" />' +
-    '       <label for="shipping-option-67890">' +
-    '         <span>shipping option #2</span>' +
-    '         <span class="black">1000USD</span>' +
-    '       </label>' +
-    '     </div>' +
-    '     <div class="field-radio">' +
-    '       <input type="radio" name="selector" id="shipping-option-13579" data-cost="2000USD" data-id="13579" data-desc="shipping option #3" />' +
-    '       <label for="shipping-option-12345">' +
-    '         <span>shipping option #3</span>' +
-    '         <span class="black">2000USD</span>' +
-    '       </label>' +
-    '     </div>' +
-    '   </div>' + 
-    ' </form>' +
-    ' <div class="dr-panel-result">' +
-    '   <p class="dr-panel-result__text">Standard $0.00</p>' +
-    ' </div>' +
-    '</div>' +
-    '<div class="dr-summary__shipping">' +
-    ' <p class="item-label">Shipping</p>' +
-    ' <p class="item-value">7.49USD</p>' +
-    '</div>' +
-    '<div class="dr-summary__tax">' +
-    ' <p class="item-label">Estimated Tax</p>' +
-    ' <p class="item-value">0.00USD</p>' +
-    '</div>' +
-    '<div class="dr-summary__total">' +
-    ' <p class="total-label">Total</p>' +
-    ' <p class="total-value">104.98USD</p>' +
-    '</div>';
+    '<div id="dr-googlepay-button"></div>';
 };
 
 const cartData = {
   pricing: {
     orderTotal: {
       currency: 'USD',
-      value: '21.98'
+      value: 21.98
     },
     subtotal: {
       currency: 'USD',
-      value: '19.99'
+      value: 19.99
     },
     tax: {
       currency: 'USD',
-      value: '1.99'
+      value: 1.99
     },
     shippingAndHandling: {
       currency: 'USD',
-      value: '3.99'
+      value: 3.99
     },
     formattedTax: '$1.99',
     formattedOrderTotal: '$21.98'
@@ -138,9 +96,10 @@ describe('Google Pay tests', () => {
   test('canMakePayment returns false', () => {
     canMakePayment.mockReturnValueOnce(false);
 
+    const paymentDataRequest = DigitalRiver.paymentRequest();
     const googlepay = DRGooglePay.init({
       digitalriverJs: DigitalRiver,
-      cartData: cartData
+      paymentDataRequest: paymentDataRequest
     });
 
     expect(googlepay).toBe(false);
@@ -148,6 +107,12 @@ describe('Google Pay tests', () => {
 
   test('init successfully', () => {
     const event = {
+      billingAddress: {
+        firstName: 'xyz',
+        address: {
+          country: 'US'
+        }
+      },
       shippingAddress: {
         firstName: 'abc',
         address: {
@@ -178,15 +143,11 @@ describe('Google Pay tests', () => {
         cart: cartData
     }));
 
+    const paymentDataRequest = DigitalRiver.paymentRequest();
     const googlepay = DRGooglePay.init({
       digitalriverJs: DigitalRiver,
-      cartData: cartData,
-      requestShipping: false,
-      buttonStyle: {
-        buttonType: 'long',
-        buttonColor: 'dark',
-        buttonLanguage: 'US'
-      }
+      paymentDataRequest: paymentDataRequest,
+      requestShipping: false
     });
 
     expect(typeof googlepay).toBe('object');

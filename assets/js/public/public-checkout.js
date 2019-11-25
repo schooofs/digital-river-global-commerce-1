@@ -1,4 +1,5 @@
 import FloatLabel from './float-label'; // 3rd-party plugin
+import CheckoutUtils from './checkout-utils';
 import DRGooglePay from './payment-googlepay';
 
 const CheckoutModule = {
@@ -761,16 +762,19 @@ jQuery(document).ready(($) => {
             }, '#dr-paypal-button');
         }
 
+        const buttonStyle = {
+            buttonType: 'long',
+            buttonColor: 'dark',
+            buttonLanguage: drLocale.split('_')[0]
+        };
+        const baseRequest = CheckoutUtils.getBaseRequestData(cartData, requestShipping, buttonStyle);
+        const paymentDataRequest = digitalriverjs.paymentRequest(baseRequest);
+
         if ($('#dr-googlepay-button').length) {
             DRGooglePay.init({
                 digitalriverJs: digitalriverjs,
-                cartData: cartData,
-                requestShipping: requestShipping,
-                buttonStyle: {
-                    buttonType: 'long',
-                    buttonColor: 'dark',
-                    buttonLanguage: drLocale.split('_')[0]
-                }
+                paymentDataRequest: paymentDataRequest,
+                requestShipping: requestShipping
             });
         }
     }

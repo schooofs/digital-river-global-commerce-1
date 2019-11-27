@@ -2,6 +2,25 @@ import CheckoutUtils from './checkout-utils';
 import DRCommerceApi from './commerce-api';
 
 const DRGooglePay = (($, translations) => {
+  const isConnectionSecure = async () => {
+    let canPay = false;
+    const details = {
+      total: {
+        label: 'Total',
+        amount: {
+          currency: 'USD',
+          value: '0.00'
+        }
+      }
+    };
+
+    if (window.PaymentRequest) {
+      canPay = await new PaymentRequest([{supportedMethods: 'basic-card'}], details).canMakePayment();
+    };
+    
+    return canPay;
+  };
+
   const initGooglePayEvents = (googlepay, requestShipping) => {
     googlepay.on('shippingaddresschange', (event) => {
       const shippingAddress = event.shippingAddress;
@@ -63,7 +82,10 @@ const DRGooglePay = (($, translations) => {
 
           requestUpdateObject.status = 'success';
           event.updateWith(requestUpdateObject);
-        });
+        }).catch((jqXHR) => {
+          CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
+          CheckoutUtils.resetBodyOpacity();
+        });;
       }
     });
 
@@ -88,7 +110,10 @@ const DRGooglePay = (($, translations) => {
 
         event.updateWith(requestUpdateObject);
         CheckoutUtils.updateSummaryPricing(data.cart);
-      });
+      }).catch((jqXHR) => {
+        CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
+        CheckoutUtils.resetBodyOpacity();
+      });;
     });
 
     googlepay.on('source', (event) => {
@@ -133,6 +158,9 @@ const DRGooglePay = (($, translations) => {
 
       DRCommerceApi.updateCart({expand: 'all'}, cartRequest).then((data) => {
         DRCommerceApi.applyPaymentAndSubmitCart(sourceId);
+      }).catch((jqXHR) => {
+        CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
+        CheckoutUtils.resetBodyOpacity();
       });
 
       event.complete('success');
@@ -152,7 +180,7 @@ const DRGooglePay = (($, translations) => {
 
     const googlepay = digitalriverJs.createElement('googlepay', paymentDataRequest);
 
-    if (googlepay.canMakePayment()) {
+    if (googlepay.canMakePayment() && isConnectionSecure()) {
       initGooglePayEvents(googlepay, requestShipping);
       googlepay.mount('dr-googlepay-button');
       document.getElementById('dr-googlepay-button').style.border = 'none';

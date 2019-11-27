@@ -114,6 +114,14 @@ const CheckoutUtils = (($, params) => {
     $('div.dr-summary__total > .total-value').text(formattedOrderTotal);
   };
 
+  const displayAlertMessage = (message) => {
+    alert('ERROR! ' + message);
+  }
+
+  const resetBodyOpacity = () => {
+    $('body').css({'pointer-events': 'auto', 'opacity': 1});
+  };
+
   return {
     createDisplayItems: createDisplayItems,
     createShippingOptions: createShippingOptions,
@@ -121,7 +129,9 @@ const CheckoutUtils = (($, params) => {
     getBaseRequestData: getBaseRequestData,
     updateDeliverySection: updateDeliverySection,
     updateAddressSection: updateAddressSection,
-    updateSummaryPricing: updateSummaryPricing
+    updateSummaryPricing: updateSummaryPricing,
+    displayAlertMessage: displayAlertMessage,
+    resetBodyOpacity: resetBodyOpacity
   };
 })(jQuery, drgc_params);
 

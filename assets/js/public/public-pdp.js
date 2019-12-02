@@ -1,9 +1,9 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
-import DRCommerceModule from './public-dr-commerce'; // Commerce API
+import DRCommerceApi from './commerce-api';
 
-const PdpModule = {
-    fetchVariationPrice($, pricing, $target, idx) {
+const PdpModule = (($) => {
+    const fetchVariationPrice = (pricing, $target, idx) => {
         if (!pricing.listPrice || !pricing.salePriceWithQuantity) return;
         if (pricing.listPrice.value > pricing.salePriceWithQuantity.value) {
             $target.data('old-price', pricing.listPrice.value);
@@ -16,9 +16,9 @@ const PdpModule = {
             if ($target.is('input[type=radio]')) $target.prop('checked', true).trigger('click');
             else $target.prop('selected', true).trigger('change');
         }
-    },
+    };
 
-    displayRealTimePricing($, pricing, option, $target) {
+    const displayRealTimePricing = (pricing, option, $target) => {
         if (!pricing.listPrice || !pricing.salePriceWithQuantity) {
             $target.text(''); // no pricing data
             return;
@@ -33,8 +33,13 @@ const PdpModule = {
                 <${option.priceDiv} class="${option.priceClass()}">${pricing.formattedSalePriceWithQuantity}</${option.priceDiv}>
             `);
         }
-    }
-};
+    };
+
+    return {
+        fetchVariationPrice,
+        displayRealTimePricing
+    };
+})(jQuery);
 
 jQuery(document).ready(($) => {
     class DRService {
@@ -400,9 +405,9 @@ jQuery(document).ready(($) => {
                 $(pdPriceOption.priceDivSelector()).text(drgc_params.translations.loading_msg);
 
                 if (!productID) return;
-                DRCommerceModule.getProductPricing(productID).then((productPricing) => {
+                DRCommerceApi.getProductPricing(productID).then((productPricing) => {
                     isPdCard = false; // to avoid being overwritten by concurrency
-                    PdpModule.fetchVariationPrice($, productPricing.pricing, $target, idx);
+                    PdpModule.fetchVariationPrice(productPricing.pricing, $target, idx);
                 });
             });
         } else { // base product
@@ -410,9 +415,9 @@ jQuery(document).ready(($) => {
             const $target = $(pdPriceOption.priceDivSelector()).text(drgc_params.translations.loading_msg);
 
             if (!productID) return;
-            DRCommerceModule.getProductPricing(productID).then((productPricing) => {
+            DRCommerceApi.getProductPricing(productID).then((productPricing) => {
                 isPdCard = false; // to avoid being overwritten by concurrency
-                PdpModule.displayRealTimePricing($, productPricing.pricing, pdPriceOption, $target);
+                PdpModule.displayRealTimePricing(productPricing.pricing, pdPriceOption, $target);
             });
         }
     }
@@ -425,9 +430,9 @@ jQuery(document).ready(($) => {
             const $target = $(elem).find(pdPriceOption.priceDivSelector()).text(drgc_params.translations.loading_msg);
 
             if (!productID) return;
-            DRCommerceModule.getProductPricing(productID).then((productPricing) => {
+            DRCommerceApi.getProductPricing(productID).then((productPricing) => {
                 isPdCard = true; // to avoid being overwritten by concurrency
-                PdpModule.displayRealTimePricing($, productPricing.pricing, pdPriceOption, $target);
+                PdpModule.displayRealTimePricing(productPricing.pricing, pdPriceOption, $target);
             });
         });
     }

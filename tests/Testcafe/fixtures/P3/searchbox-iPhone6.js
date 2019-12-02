@@ -3,7 +3,11 @@ import { Selector } from 'testcafe';
 import config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 
-fixture `===== DRGC P3 Automation Test - Search Box for iPhone6 =====`;
+fixture `===== DRGC P3 Automation Test - Search Box for iPhone6 =====`
+  .httpAuth({
+    username: 'gcwpdemo',
+    password: '33a5b9f5',
+  });
 
 const env = config.env;
 const baseURL = config.baseUrl[env];

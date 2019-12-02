@@ -88,7 +88,7 @@ const DRGooglePay = (($, translations) => {
         }).catch((jqXHR) => {
           CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
           CheckoutUtils.resetBodyOpacity();
-        });;
+        });
       }
     });
 
@@ -116,7 +116,7 @@ const DRGooglePay = (($, translations) => {
       }).catch((jqXHR) => {
         CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
         CheckoutUtils.resetBodyOpacity();
-      });;
+      });
     });
 
     googlepay.on('source', (event) => {

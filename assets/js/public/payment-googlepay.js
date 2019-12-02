@@ -71,6 +71,9 @@ const DRGooglePay = (($, translations) => {
         DRCommerceApi.updateCart({expand: 'all'}, {shippingAddress: shippingAddressObj}).then((data) => {
           const displayItems = CheckoutUtils.createDisplayItems(data.cart);
           const shippingOptions = CheckoutUtils.createShippingOptions(data.cart);
+
+          CheckoutUtils.updateShippingOptions(shippingOptions, data.cart.shippingMethod.code);
+
           const requestUpdateObject = {
             total: {
               label: translations.order_total_label,

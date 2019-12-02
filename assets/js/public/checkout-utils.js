@@ -31,7 +31,7 @@ const CheckoutUtils = (($, params) => {
     const isFreeShipping = (cartData.pricing.shippingAndHandling.value === 0);
     let shippingOptions = [];
 
-    cartData.shippingOptions.shippingOption.forEach((option) => {      
+    cartData.shippingOptions.shippingOption.forEach((option) => {
       let shippingOption = {
         id: option.id.toString(),
         label: option.description,

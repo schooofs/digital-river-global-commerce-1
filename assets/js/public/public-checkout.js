@@ -3,8 +3,8 @@ import CheckoutUtils from './checkout-utils';
 import DRGooglePay from './payment-googlepay';
 import DRApplePay from './payment-applepay';
 
-const CheckoutModule = {
-    updateSummaryLabels($) {
+const CheckoutModule = (($) => {
+    const updateSummaryLabels = () => {
         if ($('.dr-checkout__payment').hasClass('active') || $('.dr-checkout__confirmation').hasClass('active')) {
             $('.dr-summary__tax .item-label').text(drgc_params.translations.tax_label);
             $('.dr-summary__shipping .item-label').text(drgc_params.translations.shipping_label);
@@ -12,8 +12,12 @@ const CheckoutModule = {
             $('.dr-summary__tax .item-label').text(drgc_params.translations.estimated_tax_label);
             $('.dr-summary__shipping .item-label').text(drgc_params.translations.estimated_shipping_label);
         }
-    }
-};
+    };
+
+    return {
+        updateSummaryLabels
+    };
+})(jQuery);
 
 jQuery(document).ready(($) => {
     if ($('#checkout-payment-form').length) {
@@ -249,7 +253,7 @@ jQuery(document).ready(($) => {
             }
 
             adjustColumns($section);
-            CheckoutModule.updateSummaryLabels($);
+            CheckoutModule.updateSummaryLabels();
             $('html, body').animate({
                 scrollTop: ($nextSection.first().offset().top - 80)
             }, 500);
@@ -642,7 +646,7 @@ jQuery(document).ready(($) => {
             $section.removeClass('closed').addClass('active');
 
             adjustColumns();
-            CheckoutModule.updateSummaryLabels($);
+            CheckoutModule.updateSummaryLabels();
         });
 
         if ($('#radio-credit-card').is(':checked')) {

@@ -77,17 +77,17 @@ $regular_price = isset( $pricing['regular_price'] ) ? $pricing['regular_price'] 
                     <div class="dr_prod-variations">
 
                         <select name="dr-variation" >
-                <?php foreach ( $variations as $variation ) :
-							    $var_gc_id = get_post_meta( $variation->ID, 'gc_product_id', true );
-							    $variation_type = get_post_meta( $variation->ID, $var_type, true );
-                  $var_pricing = drgc_get_product_pricing( $variation->ID );
-							    ?>
-                                <option value="<?php echo $var_gc_id; ?>"
-                                        data-price="<?php echo isset( $var_pricing['price'] ) ? $var_pricing['price'] : ''; ?>"
-                                        data-regular-price="<?php echo isset( $var_pricing['regular_price'] ) ? $var_pricing['regular_price'] : $var_pricing['price']; ?>"
-                                        data-sale-price-value="<?php echo isset( $var_pricing['sale_price_value'] ) ? $var_pricing['sale_price_value'] : ''; ?>"
-                                        data-list-price-value="<?php echo isset( $var_pricing['list_price_value'] ) ? $var_pricing['list_price_value'] : ''; ?>"
-                                >
+                        <?php foreach ( $variations as $variation ) :
+        					$var_gc_id = get_post_meta( $variation->ID, 'gc_product_id', true );
+        					$variation_type = get_post_meta( $variation->ID, $var_type, true );
+                            $var_pricing = drgc_get_product_pricing( $variation->ID );
+                            $list_price = isset( $var_pricing['list_price_value'] ) ? $var_pricing['list_price_value'] : '';
+                            $sale_price = isset( $var_pricing['sale_price_value'] ) ? $var_pricing['sale_price_value'] : '';
+        				?>
+                            <option value="<?php echo $var_gc_id; ?>"
+                                    data-price="<?php echo isset( $var_pricing['price'] ) ? $var_pricing['price'] : ''; ?>"
+                                    <?php echo ( (int) $list_price > (int) $sale_price ) ? 'data-old-price="' . $list_price . '"' : ''; ?>
+                            >
                     <?php
                       if(ucwords( $variation_type) != ""){
                         echo ucwords( $variation_type);
@@ -107,16 +107,12 @@ $regular_price = isset( $pricing['regular_price'] ) ? $pricing['regular_price'] 
 
 					    <?php if ( (float) $list_price_value > (float) $sale_price_value ) : ?>
                             <p class="dr-pd-price">
-                                <del class="dr-strike-price">
-								    <?php echo $regular_price; ?>
-                                </del>
-                                <span class="dr-sale-price">
-                                <strong><?php echo $price; ?></strong>
-                            </span>
+                                <del class="dr-strike-price"><?php echo $list_price_value; ?></del>
+                                <strong class="dr-sale-price"><?php echo $price; ?></strong>
                             </p>
 					    <?php else: ?>
                             <p class="dr-pd-price">
-                                <strong><?php echo $price; ?></strong>
+                                <strong class="dr-sale-price"><?php echo $price; ?></strong>
                             </p>
 					    <?php endif; ?>
 

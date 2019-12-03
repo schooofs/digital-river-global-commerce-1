@@ -134,7 +134,8 @@ class DRGC_Public {
 			'password_char_error_msg'        => __('Must use at least one special character (! _ @).', 'digital-river-global-commerce'),
 			'password_banned_char_error_msg' => __('Contains non-allowable special characters (only ! _ @ are allowed).', 'digital-river-global-commerce'),
 			'password_confirm_error_msg'     => __('Passwords do not match.', 'digital-river-global-commerce'),
-			'undefined_error_msg'            => __('Something went wrong.', 'digital-river-global-commerce')
+			'undefined_error_msg'            => __('Something went wrong.', 'digital-river-global-commerce'),
+			'loading_msg'                    => __('Loading...', 'digital-river-global-commerce')
 		);
 
 		// transfer drgc options from PHP to JS

@@ -1,7 +1,45 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
+import DRCommerceApi from './commerce-api';
 
-const PdpModule = {};
+const PdpModule = (($) => {
+    const fetchVariationPrice = (pricing, $target, idx) => {
+        if (!pricing.listPrice || !pricing.salePriceWithQuantity) return;
+        if (pricing.listPrice.value > pricing.salePriceWithQuantity.value) {
+            $target.data('old-price', pricing.listPrice.value);
+            $target.data('price', pricing.formattedSalePriceWithQuantity);
+        } else {
+            $target.data('price', pricing.formattedSalePriceWithQuantity);
+        }
+
+        if (idx === 0) {
+            if ($target.is('input[type=radio]')) $target.prop('checked', true).trigger('click');
+            else $target.prop('selected', true).trigger('change');
+        }
+    };
+
+    const displayRealTimePricing = (pricing, option, $target) => {
+        if (!pricing.listPrice || !pricing.salePriceWithQuantity) {
+            $target.text(''); // no pricing data
+            return;
+        }
+        if (pricing.listPrice.value > pricing.salePriceWithQuantity.value) {
+            $target.html(`
+                <${option.listPriceDiv} class="${option.listPriceClass()}">${pricing.listPrice.value}</${option.listPriceDiv}>
+                <${option.salePriceDiv} class="${option.salePriceClass()}">${pricing.formattedSalePriceWithQuantity}</${option.salePriceDiv}>
+            `);
+        } else {
+            $target.html(`
+                <${option.priceDiv} class="${option.priceClass()}">${pricing.formattedSalePriceWithQuantity}</${option.priceDiv}>
+            `);
+        }
+    };
+
+    return {
+        fetchVariationPrice,
+        displayRealTimePricing
+    };
+})(jQuery);
 
 jQuery(document).ready(($) => {
     class DRService {
@@ -315,20 +353,89 @@ jQuery(document).ready(($) => {
         e.preventDefault();
 
         var varId = $(this).val();
-        var price = $(this).children("option:selected").data('price');
-        var regularPrice = $(this).children("option:selected").data('regular-price');
-        var salePriceValue = $(this).children("option:selected").data('sale-price-value');
-        var listPriceValue = $(this).children("option:selected").data('list-price-value');
+        var price = $(this).children('option:selected').data('price');
+        var listPriceValue = $(this).children('option:selected').data('old-price');
         var $prodPrice = $('.single-dr_product .dr-pd-content .dr-pd-price');
         var $buyBtn = $('.dr-buy-btn');
-        var prodPriceHtml ="";
+        var prodPriceHtml = '';
         $buyBtn.attr('data-product-id', varId);
-        if(listPriceValue > salePriceValue)prodPriceHtml ='<del class="dr-strike-price">'+regularPrice+'</del>';
-        prodPriceHtml +='<strong>' + price + '</strong>';
+        if (listPriceValue) prodPriceHtml = '<del class="dr-strike-price">' + listPriceValue + '</del>';
+        prodPriceHtml += '<strong class="dr-sale-price">' + price + '</strong>';
         $prodPrice.html(prodPriceHtml);
     });
 
     $( "iframe[name^='controller-']" ).css('display', 'none');
+
+    // Real-time pricing option (for DR child/non-DR child themes)
+    let pdPriceOption = {};
+    let isPdCard = false;
+    if ($('#digital-river-child-css').length) { // DR child theme
+        pdPriceOption = {
+            $card: $('.c-product-card'),
+            $variationOption: $('input[type=radio][name=variation]'),
+            priceDivSelector: () => { return isPdCard ? '.c-product-card__bottom__price' : '.product-pricing'; },
+            listPriceDiv: 'span',
+            listPriceClass: () => { return isPdCard ? 'old-price' : 'product-price-old'; },
+            salePriceDiv: 'span',
+            salePriceClass: () => { return isPdCard ? 'new-price' : 'product-price'; },
+            priceDiv: 'span',
+            priceClass: () => { return isPdCard ? 'price' : 'product-price'; }
+        };
+    } else { // non-DR child theme
+        pdPriceOption = {
+            $card: $('.dr-pd-item'),
+            $variationOption: $('select[name=dr-variation] option'),
+            priceDivSelector: () => { return isPdCard ? '.dr-pd-item-price' : '.dr-pd-price'; },
+            listPriceDiv: 'del',
+            listPriceClass: () => { return 'dr-strike-price'; },
+            salePriceDiv: 'strong',
+            salePriceClass: () => { return 'dr-sale-price'; },
+            priceDiv: 'strong',
+            priceClass: () => { return 'dr-sale-price'; }
+        };
+    }
+
+    // Real-time pricing for single PD page (including variation/base products)
+    if ($('.single-dr_product').length) {
+        isPdCard = false;
+        if (pdPriceOption.$variationOption && pdPriceOption.$variationOption.length) { // variation product
+            pdPriceOption.$variationOption.each((idx, elem) => {
+                const $target = $(elem);
+                const productID = $target.val();
+                $(pdPriceOption.priceDivSelector()).text(drgc_params.translations.loading_msg);
+
+                if (!productID) return;
+                DRCommerceApi.getProductPricing(productID).then((productPricing) => {
+                    isPdCard = false; // to avoid being overwritten by concurrency
+                    PdpModule.fetchVariationPrice(productPricing.pricing, $target, idx);
+                });
+            });
+        } else { // base product
+            const productID = $('.dr-buy-btn').data('product-id');
+            const $target = $(pdPriceOption.priceDivSelector()).text(drgc_params.translations.loading_msg);
+
+            if (!productID) return;
+            DRCommerceApi.getProductPricing(productID).then((productPricing) => {
+                isPdCard = false; // to avoid being overwritten by concurrency
+                PdpModule.displayRealTimePricing(productPricing.pricing, pdPriceOption, $target);
+            });
+        }
+    }
+
+    // Real-time pricing for PD card (category page & recommended products)
+    if (pdPriceOption.$card && pdPriceOption.$card.length) {
+        isPdCard = true;
+        pdPriceOption.$card.each((idx, elem) => {
+            const productID = $(elem).find('.dr-buy-btn').data('product-id');
+            const $target = $(elem).find(pdPriceOption.priceDivSelector()).text(drgc_params.translations.loading_msg);
+
+            if (!productID) return;
+            DRCommerceApi.getProductPricing(productID).then((productPricing) => {
+                isPdCard = true; // to avoid being overwritten by concurrency
+                PdpModule.displayRealTimePricing(productPricing.pricing, pdPriceOption, $target);
+            });
+        });
+    }
 });
 
 export default PdpModule;

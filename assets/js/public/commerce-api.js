@@ -101,11 +101,30 @@ const DRCommerceApi = (($, params) => {
     });
   };
 
+  const getProductPricing = (productID) => {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        url: `${apiBaseUrl}/me/products/${productID}/pricing?format=json`,
+        success: (data) => {
+          resolve(data);
+        },
+        error: (jqXHR) => {
+          reject(jqXHR);
+        }
+      });
+    });
+  };
+
   return {
-    updateCart: updateCart,
-    submitCart: submitCart,
-    applyShippingOption: applyShippingOption,
-    applyPaymentAndSubmitCart: applyPaymentAndSubmitCart
+    updateCart,
+    submitCart,
+    applyShippingOption,
+    applyPaymentAndSubmitCart,
+    getProductPricing
   };
 
 })(jQuery, drgc_params);

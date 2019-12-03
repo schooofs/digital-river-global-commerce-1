@@ -35,6 +35,7 @@ class DRGC_Deactivator {
         delete_option("drgc_db_version");
 
         //delete cache
-		wp_cache_delete( 'dr_products' );
+    wp_cache_delete( 'dr_products' );
+    unset($_COOKIE['wordpress_cache_off']);
 	}
 }

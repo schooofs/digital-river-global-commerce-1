@@ -1,17 +1,8 @@
 import CheckoutModule from '../../../assets/js/public/public-checkout';
 
-window.drgc_params = {
-  translations: {
-    tax_label: 'Tax',
-    estimated_tax_label: 'Estimated Tax',
-    shipping_label: 'Shipping',
-    estimated_shipping_label: 'Estimated Shipping'
-  }
-};
+describe('Test updateSummaryLabels', () => {
 
-describe('Public Checkout Module', () => {
-
-  it('updateSummaryLabels', () => {
+  test('It should display "Estimated" at tax/shipping label when the section is unfinished', () => {
     document.body.innerHTML = `
       <div class="dr-checkout-wrapper__content">
         <div class="dr-checkout">
@@ -40,13 +31,13 @@ describe('Public Checkout Module', () => {
     const shippingLabel = document.querySelector('.dr-summary__shipping .item-label');
 
     deliverySection.classList.add('active');
-    CheckoutModule.updateSummaryLabels(jQuery);
+    CheckoutModule.updateSummaryLabels();
     expect(taxLabel.innerHTML).toEqual('Estimated Tax');
     expect(shippingLabel.innerHTML).toEqual('Estimated Shipping');
 
     deliverySection.classList.remove('active');
     paymentSection.classList.add('active');
-    CheckoutModule.updateSummaryLabels(jQuery);
+    CheckoutModule.updateSummaryLabels();
     expect(taxLabel.innerHTML).toEqual('Tax');
     expect(shippingLabel.innerHTML).toEqual('Shipping');
   });

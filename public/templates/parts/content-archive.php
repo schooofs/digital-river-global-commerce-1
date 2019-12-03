@@ -13,35 +13,40 @@
 ?>
 
 <?php
-$pricing = drgc_get_product_pricing( get_the_ID() );
+$purchasable = get_post_meta( get_the_ID(), 'purchasable', true );
+$variations = drgc_get_product_variations( get_the_ID() );
 
-$product_image = get_post_meta( get_the_ID(), 'gc_product_images_url', true );
+if ( $variations && isset( $variations[0] ) ) {
+    //sort variation array by sale price here!
+    $variations_sort = array();
+  
+    foreach ( $variations as $variation ) {
+        $var_pricing = drgc_get_product_pricing( $variation->ID );
+        $variation->sort_pricing = $var_pricing['sale_price_value'];
+        array_push( $variations_sort, $variation );
+    }
+
+    usort( $variations_sort, function( $a, $b ) {
+        if ( $a == $b ) {
+            return 0;
+        }
+
+        return ( $a->sort_pricing < $b->sort_pricing ) ? -1 : 1;
+    });
+
+    $variations = $variations_sort;
+    $gc_id = get_post_meta( $variations[0]->ID, 'gc_product_id', true );
+    $pricing = drgc_get_product_pricing( $variations[0]->ID );
+    $product_image = get_post_meta( $variations[0]->ID, 'gc_product_images_url', true );
+} else {
+    $gc_id = get_post_meta( get_the_ID(), 'gc_product_id', true );
+    $pricing = drgc_get_product_pricing( get_the_ID() );
+    $product_image = get_post_meta( get_the_ID(), 'gc_product_images_url', true );
+}
+
 $list_price = isset( $pricing['list_price_value'] ) ? $pricing['list_price_value'] : '';
 $sale_price = isset( $pricing['sale_price_value'] ) ? $pricing['sale_price_value'] : '';
 $price = isset( $pricing['price'] ) ? $pricing['price'] : '';
-
-$gc_id = get_post_meta( get_the_ID(), 'gc_product_id', true );
-$purchasable = get_post_meta( get_the_ID(), 'purchasable', true );
-
-$variations = drgc_get_product_variations( get_the_ID() );
-if ( $variations && isset( $variations[0] ) ) {
-  //sort variation array  by sale price here!
-  $variations_sort = array();
-  foreach ( $variations as $variation ){
-    $var_pricing = drgc_get_product_pricing( $variation->ID );
-    $variation->sort_pricing = $var_pricing['sale_price_value'];
-    array_push($variations_sort,$variation);
-  }
-  usort( $variations_sort, function( $a, $b ) {
-    if ( $a == $b ) {
-        return 0;
-    }
-    return ( $a->sort_pricing < $b->sort_pricing ) ? -1 : 1;
-  });
-  $variations = $variations_sort;
-	$gc_id = get_post_meta( $variations[0]->ID, 'gc_product_id', true );
-}
-
 ?>
 
 <div class="dr-pd-item">
@@ -54,16 +59,12 @@ if ( $variations && isset( $variations[0] ) ) {
 
         <?php if ( (int) $list_price > (int) $sale_price ) : ?>
             <p class="dr-pd-price dr-pd-item-price">
-                <del class="dr-strike-price">
-                    <?php echo $list_price; ?>
-                </del>
-                <span class="dr-sale-price">
-                    <?php echo $price; ?>
-                </span>
+                <del class="dr-strike-price"><?php echo $list_price; ?></del>
+                <strong class="dr-sale-price"><?php echo $price; ?></strong>
             </p>
         <?php else: ?>
             <p class="dr-pd-price dr-pd-item-price">
-                <?php echo $price; ?>
+                <strong class="dr-sale-price"><?php echo $price; ?></strong>
             </p>
         <?php endif; ?>
 

@@ -1,8 +1,8 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
 
-const LoginModule = {
-    validatePassword($, e) {
+const LoginModule = (($) => {
+    const validatePassword = (e) => {
         const elem = e.target;
         const customMsgArr = [];
         let customMsg = '';
@@ -36,8 +36,12 @@ const LoginModule = {
         } else {
             $(elem).next('.invalid-feedback').text('');
         }
-    }
-};
+    };
+
+    return {
+        validatePassword
+    };
+})(jQuery);
 
 jQuery(document).ready(($) => {
     const ajaxUrl = drgc_params.ajaxUrl;
@@ -120,7 +124,7 @@ jQuery(document).ready(($) => {
     });
 
     $('#dr-signup-form input[name=upw], #dr-confirm-password-reset-form input[name=password]').on('input', (e) => {
-        LoginModule.validatePassword($, e);
+        LoginModule.validatePassword(e);
     });
 
     $('#dr-signup-form input[type=password], #dr-confirm-password-reset-form input[type=password]').on('input', (e) => {

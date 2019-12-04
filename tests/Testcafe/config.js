@@ -3,30 +3,30 @@ let config = {
   apiEnv: 'PRD',
   testEmail: 'qa@dr.com',
   adminUserName: {
-    dev: 'username', //Replace this to your localhost admin username
+    dev: 'tracy', //Replace this to your localhost admin username
     sys: 'username',
     prod: 'username',
     demo: 'username',
   },
   adminPassword: {
-    dev: 'password', //Replace this to your localhost admin password
+    dev: 'tracyadmin', //Replace this to your localhost admin password
     sys: 'password',
     prod: 'password',
     demo: 'password',
   },
   baseUrl: {
-    dev: 'Dev Site Web Address',  //Replace this to your localhost test site address
-    sys: 'Systest Site Web Address',
-    prod: 'Prod Site Web Address',
-    demo: 'Demo Site Web Address',
+    dev: 'http://10.70.10.35/wordpress/',  //Replace this to your localhost test site address
+    sys: 'http://tpedevapp0264.d010.digitalriverws.net/',
+    prod: 'http://wordpress.c141.digitalriverws.net/',
+    demo: 'http://gcwpdemo.wpengine.com/',
   },
   apiUrl: {
-    PRD: 'Prod API URL',
-    NONPRD: 'NonProd API URL',
+    PRD: 'https://api.digitalriver.com',
+    NONPRD: 'https://dispatch-test.digitalriver.com',
   },
   websiteAuth: {
-	username: 'username',
-	password: 'password'
+    username: 'gcwpdemo',
+    password: '33a5b9f5',
   }
 };
 

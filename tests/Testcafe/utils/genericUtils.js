@@ -2,17 +2,19 @@ import { Selector, t } from 'testcafe';
 import HomePage from '../page-models/public/home-page-model';
 import CartPage from '../page-models/public/cart-page-model';
 import CheckoutPage from '../page-models/public/checkout-page-model';
+import LoginPage from '../page-models/public/login-page-model';
+import MiniCartPage from '../page-models/public/minicart-page-model';
+import TYPage from '../page-models/public/ty-page-model';
 
 export default class GenericUtils {
   constructor() {
-    this.homePage = new HomePage();
-    this.cartPage = new CartPage();
   }
 
   async checkEstShippingInfo(title, value) {
+	const cartPage = new CartPage();
     await t
-      .expect(this.cartPage.estimatedShippingTitle.innerText).eql(title)
-      .expect(this.cartPage.estimatedShippingValue.innerText).eql(value);
+      .expect(cartPage.estimatedShippingTitle.innerText).eql(title)
+      .expect(cartPage.estimatedShippingValue.innerText).eql(value);
   }
 
   async checkShippingSummaryInfo(title, value) {
@@ -28,9 +30,10 @@ export default class GenericUtils {
       .click(target);
   }
 
-  async checkCheckBox(checkbox) {
+  async checkCheckBox(checkbox, checked) {
+	console.log(">> CheckCheckBox")
     let ischecked = await checkbox.checked;
-    while(!ischecked) {
+    while(ischecked != checked) {
       await t
         .hover(checkbox)
         .click(checkbox);
@@ -38,22 +41,24 @@ export default class GenericUtils {
     }
   }
 
-  async addProductsIntoCart(pID){
-    const product = Selector('.dr-buy-btn[data-product-id="' + pID + '"]');
-
-    await this.clickItem(this.homePage.productsMenu);
+  async addProductsIntoCart(product){
+    const homePage = new HomePage();
+    const minicartPage = new MiniCartPage();
+    await this.clickItem(homePage.productsMenu);
     await this.clickItem(product);
+    await t.expect(minicartPage.viewCartBtn.exists).ok();
   }
-
 
   async testShippingFee(estShippingFee, shippingMethod, finalShippingFee) {
     const checkoutPage = new CheckoutPage();
+    const cartPage = new CartPage();
     const estimatedShipping = 'Estimated Shipping';
     const testEmail = "qa@test.com";
     const fixedShipping = 'Shipping';
     // Click Proceed to Checkout in View Cart page to proceed checkout
     console.log('>> Direct to checkout page, still show Estimated Shipping');
-    await this.clickItem(this.cartPage.proceedToCheckoutBtn);
+    await this.clickItem(cartPage.proceedToCheckoutBtn);
+    await this.clickItem(new LoginPage().continueAsGuestBtn);
     await this.checkShippingSummaryInfo(estimatedShipping, estShippingFee);
 
     // Enter Email and continue
@@ -77,7 +82,70 @@ export default class GenericUtils {
     await t.expect(checkoutPage.deliveryOptionSubmitBtn.exists).ok();
     await checkoutPage.setDeliveryOption(shippingMethod);
     await this.checkShippingSummaryInfo(fixedShipping, finalShippingFee);
-}
+  }
+
+  async fillOrderInfoAndSubmitOrder(isPhysical) {
+    const tyPage = new TYPage();
+	const checkoutPage = new CheckoutPage();
+	if (isPhysical) {
+      // Enter shipping info
+      console.log('>> Checkout page - Entering Shipping Info.');
+      await checkoutPage.completeFormShippingInfo();
+      await t.expect(checkoutPage.useSameAddrCheckbox.exists).ok();
+
+      // Set billing info as diff from shipping info
+      // If checkbox is checked, the billing info will be set to same as shipping info
+      await this.checkCheckBox(checkoutPage.useSameAddrCheckbox, false);
+    }
+
+    // Enter Billing Info
+    console.log('>> Checkout page - Entering Billing Info.');
+    await checkoutPage.completeFormBillingInfo();
+
+    if (isPhysical) {
+      await t.expect(checkoutPage.deliveryOptionSubmitBtn.exists).ok();
+      // Set delivery option
+      console.log('>> Checkout page - Set Delivery Options as Standard');
+      await checkoutPage.setDeliveryOption('standard');
+      await t.expect(checkoutPage.submitPaymentBtn.exists).ok();
+    }
+
+    // Enter Payment Info
+    console.log('>> Checkout page - Entering Payment Info.');
+    await checkoutPage.completeFormCreditCardInfo();
+
+    // Submit Order
+    console.log('>> Checkout page - Place order');
+    await t
+      .takeScreenshot('BWC/payment_s.jpg')
+      .click(checkoutPage.submitOrderBtn)
+      .expect(tyPage.tyMsg.innerText).eql('Your order was completed successfully.')
+      .takeScreenshot('BWC/TY_s.jpg');
+
+    console.log('>> Directs to the TY page');
+    const orderNum = await tyPage.orderNumber.textContent;
+    console.log(orderNum.trim());
+  }
+
+
+  async addProductAndProceedToCheckout(product) {
+    const minicartPage = new MiniCartPage();
+    const cartPage = new CartPage();
+	const checkoutPage = new CheckoutPage();
+    // Add a physical product into cart
+    console.log('>> Add Product into Cart');
+    await this.addProductsIntoCart(product);
+
+    // Click View Cart btn in miniCart to go to Cart page
+    console.log('>> Direct to cart page');
+    await minicartPage.clickViewCartBtn();
+
+    // Click Proceed to Checkout in View Cart page to proceed checkout
+    console.log('>> Direct to checkout page');
+    await t
+      .click(cartPage.proceedToCheckoutBtn)
+      .expect(checkoutPage.primary.exists).ok();
+  }
 
   getNewUser() {
     const timestamp = Date.now();
@@ -91,6 +159,7 @@ export default class GenericUtils {
       firstName: firstName,
       lastName: lastName,
       password: password,
+      confirmPassword: password,
       email: email
     };
 

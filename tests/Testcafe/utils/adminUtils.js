@@ -25,10 +25,10 @@ export default class AdminUtils {
       .typeText(this.adminPage.pluginKey, site['pluginKey'], { replace: true });
 
     console.log('  -> Enable schedule import option');
-    await this.utils.checkCheckBox(this.adminPage.scheduledImport);
+    await this.utils.checkCheckBox(this.adminPage.scheduledImport, true);
 
     console.log('  -> Enable test order option');
-    await this.utils.checkCheckBox(this.adminPage.testOrder);
+    await this.utils.checkCheckBox(this.adminPage.testOrder, true);
 
     console.log('  -> Save site settings changes');
     await this.utils.clickItem(this.adminPage.saveBtn);

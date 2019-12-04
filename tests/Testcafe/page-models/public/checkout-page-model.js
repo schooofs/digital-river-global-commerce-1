@@ -50,6 +50,7 @@ export default class CheckoutPage {
     // Shipping Summary
     this.shippingSummaryTitle = Selector('.dr-summary__shipping').find('p').nth(0);
     this.shippingSummaryValue = Selector('.dr-summary__shipping').find('p').nth(1);
+
   }
 
   async completeFormEmail(testEmail) {
@@ -126,5 +127,49 @@ export default class CheckoutPage {
       .typeText(this.ccCVV, creditCardInfo.cvv)
       .switchToMainWindow()
       .click(this.submitPaymentBtn);
+  }
+
+  async checkLoginFormDisplayItems() {
+	const drLoginForm = Selector('#dr_login_form');
+	const loginTitle = Selector('.entry-title').innerText;
+	const expectedLoginTitle = 'Login';
+	const returningUserTitle = Selector('.dr-login-sections__section.section-returning').find('div').nth(0).find('h2').innerText;
+	const expectedRturningUserTitle = 'RETURNING CUSTOMER';
+    const formEmail = drLoginForm.find('[name="username"]');
+    const formPassword = drLoginForm.find('[name="password"]');
+    const loginSubmitBtn = Selector('#dr-auth-submit');
+
+    await t
+      .expect(drLoginForm.exists).ok()
+      .expect(loginTitle).eql(expectedLoginTitle)
+      .expect(returningUserTitle).eql(expectedRturningUserTitle)
+      .expect(drLoginForm.exists).ok()
+      .expect(formEmail.exists).ok()
+      .expect(formPassword.exists).ok()
+      .expect(loginSubmitBtn.exists).ok();
+  }
+
+  async checSingupFormDisplayItems() {
+    const drSignupForm = Selector('#dr-signup-form');
+    const signUpTitle = Selector('.dr-login-sections__section.section-new').find('div').nth(0).find('h2').innerText;
+	const expectedSinUpTitle = 'NEW CUSTOMER';
+    const formFirstName = drSignupForm.find('[name="first_name"]');
+    const formLastName = drSignupForm.find('[name="last_name"]');
+    const formEmail = drSignupForm.find('[name="uemail"]');
+    const formPassword = drSignupForm.find('[name="upw"]');
+    const formConfirmPassword = drSignupForm.find('[name="upw2"]');
+    const singUpBtn = Selector('.dr-btn.dr-signup');
+    const continueAsGuestBtn = Selector('#dr-auth-submit');
+
+    await t
+      .expect(drSignupForm.exists).ok()
+      .expect(signUpTitle).eql(expectedSinUpTitle)
+      .expect(formFirstName.exists).ok()
+      .expect(formLastName.exists).ok()
+      .expect(formEmail.exists).ok()
+      .expect(formPassword.exists).ok()
+      .expect(formConfirmPassword.exists).ok()
+      .expect(singUpBtn.exists).ok()
+      .expect(continueAsGuestBtn.exists).ok();
   }
 }

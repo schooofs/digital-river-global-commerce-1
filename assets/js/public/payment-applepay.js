@@ -66,6 +66,9 @@ const DRApplePay = (($, translations) => {
 
           requestUpdateObject.status = 'success';
           event.updateWith(requestUpdateObject);
+        }).catch((jqXHR) => {
+          CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
+          CheckoutUtils.resetBodyOpacity();
         });
       }
     });
@@ -91,6 +94,9 @@ const DRApplePay = (($, translations) => {
 
         event.updateWith(requestUpdateObject);
         CheckoutUtils.updateSummaryPricing(data.cart);
+      }).catch((jqXHR) => {
+        CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
+        CheckoutUtils.resetBodyOpacity();
       });
     });
 
@@ -134,8 +140,11 @@ const DRApplePay = (($, translations) => {
       sessionStorage.setItem('paymentSourceId', sourceId);
       $('body').css({'pointer-events': 'none', 'opacity': 0.5});
 
-      DRCommerceApi.updateCart({expand: 'all'}, cartRequest).then((data) => {
+      DRCommerceApi.updateCart({expand: 'all'}, cartRequest).then(() => {
         DRCommerceApi.applyPaymentAndSubmitCart(sourceId);
+      }).catch((jqXHR) => {
+        CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
+        CheckoutUtils.resetBodyOpacity();
       });
 
       event.complete('success');

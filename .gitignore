@@ -77,3 +77,8 @@ coverage/
 ##########
 /assets/js/drgc-public.min.js
 /assets/js/drgc-admin.min.js
+
+# Wordpress Config Files #
+##########
+tests/Testcafe/config.js
+tests/Testcafe/siteConfig.js

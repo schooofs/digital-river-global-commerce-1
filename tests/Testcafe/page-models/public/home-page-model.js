@@ -12,7 +12,7 @@ const onSaleProdID = dataUtils.getOnSaleProduct().productID;
 export default class HomePage {
   constructor() {
     // the 2nd menu of the main-menu, if the menu is rearranged, need to change this index.
-    this.productsMenu = Selector('#main-menu').find('li').nth(1);
+    this.productsMenu = Selector('a[title="Products"]');
     this.addPhyProduct = Selector('.dr-buy-btn[data-product-id="' + physicalProdID + '"]');
     this.addDigiProduct = Selector('.dr-buy-btn[data-product-id="' + digitalProdID + '"]');
     this.firstName = Selector('#dr-signup-form').find('[name="first_name"]');

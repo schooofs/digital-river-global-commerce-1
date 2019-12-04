@@ -12,8 +12,8 @@ const utils = new GeneralUtils();
 
 fixture `===== DRGC P2 Automation Test - Pagination on Product Category, Product List & Search Page =====`
   .httpAuth({
-    username: 'gcwpdemo',
-    password: '33a5b9f5',
+    username: Config.websiteAuth['username'],
+    password: Config.websiteAuth['password'],
   });
 
 test('Product List - 10 Products per Page and Display Pagination Correctly', async t => {

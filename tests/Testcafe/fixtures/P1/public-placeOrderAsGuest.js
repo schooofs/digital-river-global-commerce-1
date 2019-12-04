@@ -17,8 +17,8 @@ const tyPage = new TYPage();
 
 fixture `===== DRGC P1 Automation Test - Place Order As Guest =====`
   .httpAuth({
-    username: 'gcwpdemo',
-    password: '33a5b9f5',
+    username: Config.websiteAuth['username'],
+    password: Config.websiteAuth['password'],
   })
   .beforeEach(async t => {
     console.log('Before Each: Click Menu -> Product to Enter Product Page');

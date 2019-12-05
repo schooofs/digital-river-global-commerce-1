@@ -68,7 +68,7 @@ export default class GenericUtils {
     await this.checkShippingSummaryInfo(estimatedShipping, estShippingFee);
 
     // Skip Billing info
-    console.log('>> Checkout page - Skip Billing info and continue, still show Estimated Shippinge');
+    console.log('>> Checkout page - Skip Billing info and continue, still show Estimated Shipping');
     await this.clickItem(checkoutPage.billingInfoSubmitBtn);
     await this.checkShippingSummaryInfo(estimatedShipping, estShippingFee);
 

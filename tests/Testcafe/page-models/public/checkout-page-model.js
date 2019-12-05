@@ -3,7 +3,7 @@ import GeneralUtils from '../../utils/genericUtils';
 
 export default class CheckoutPage {
   constructor() {
-	this.utils = new GeneralUtils();
+    this.utils = new GeneralUtils();
     this.primary = Selector('#primary');
 
     this.email = Selector('#checkout-email-form').find('input');

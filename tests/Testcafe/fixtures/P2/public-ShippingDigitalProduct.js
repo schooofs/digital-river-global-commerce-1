@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector, t } from 'testcafe';
 import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 import MinicartPage from '../../page-models/public/minicart-page-model';
@@ -29,7 +29,7 @@ fixture `===== DRGC P1 Automation Test - No Shipping for Digital Products =====`
 });
 
 test('Estimated Shipping Fee - Standard free Shipping', async t => {
-  console.log('Test Case: Check there is no No shipping info for Digital Product');
+  console.log('Test Case: Check there is no shipping info for Digital Product');
 
   // Add a physical product into cart
   console.log('>> Add Digital product into cart');

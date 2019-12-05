@@ -3,17 +3,15 @@ import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 import MinicartPage from '../../page-models/public/minicart-page-model';
 import CartPage from '../../page-models/public/cart-page-model';
-import CheckoutPage from '../../page-models/public/checkout-page-model';
 import GeneralUtils from '../../utils/genericUtils';
 
 const env = Config.env;
 const baseURL = Config.baseUrl[env];
-const testEmail = Config.testEmail;
 const homePage = new HomePage();
 const minicartPage = new MinicartPage();
 const cartPage = new CartPage();
-const checkoutPage = new CheckoutPage();
 const utils = new GeneralUtils();
+const freeShipping = 'FREE';
 
 fixture `===== DRGC P1 Automation Test - Free Shipping =====`
   .httpAuth({
@@ -32,22 +30,29 @@ fixture `===== DRGC P1 Automation Test - Free Shipping =====`
 test('Estimated Shipping Fee - Standard free Shipping', async t => {
   console.log('Test Case: Check the standard shipping fee for free shipping');
 
-  await testShippingFee('standard');
+  // Add a physical product into cart
+  console.log('>> Add physical product into cart');
+  const shippingMethod = 'standard';
+
+  await setProductQuatityToFreeShipping();
+  await utils.testShippingFee(freeShipping, shippingMethod, freeShipping);
 });
 
 test('Estimated Shipping Fee - Express free Shipping', async t => {
   console.log('Test Case: Check the express shipping fee for free shipping');
 
-  await testShippingFee('express');
-});
-
-async function testShippingFee(shippingMethod) {
   // Add a physical product into cart
   console.log('>> Add physical product into cart');
-  const standardFee = '5.00USD';
-  const freeShipping = 'FREE';
+  const shippingMethod = 'express';
+
+  await setProductQuatityToFreeShipping();
+  await utils.testShippingFee(freeShipping, shippingMethod, freeShipping);
+});
+
+async function setProductQuatityToFreeShipping() {
   const estimatedShipping = 'Estimated Shipping';
-  const fixedShipping = 'Shipping';
+  const standardFee = '5.00USD';
+
   await t
     .setTestSpeed(0.9)
     .click(homePage.addPhyProduct)
@@ -59,48 +64,11 @@ async function testShippingFee(shippingMethod) {
 
   // Change quantity to make the total purchase exceed the free shipping total
   console.log('>> Only 1 product, not reach free shipping, shipping fee 5.00USD');
-  await checkEstShippingInfo(estimatedShipping, standardFee);
+  await utils.checkEstShippingInfo(estimatedShipping, standardFee);
   await utils.clickItem(cartPage.increaseQuantity); //add 1, total 2
   console.log('>> 2 product, not reach free shipping, shipping fee 5.00USD');
-  await checkEstShippingInfo(estimatedShipping, standardFee);
+  await utils.checkEstShippingInfo(estimatedShipping, standardFee);
   await utils.clickItem(cartPage.increaseQuantity); //add 1, total 3
   console.log('>> 3 product, reach free shipping, shipping fee FREE');
-  await checkEstShippingInfo(estimatedShipping, freeShipping);
-
-  // Click Proceed to Checkout in View Cart page to proceed checkout
-  console.log('>> Direct to checkout page, still show Estimated Shipping');
-  await utils.clickItem(cartPage.proceedToCheckoutBtn);
-  await checkShippingSummaryInfo(estimatedShipping, freeShipping);
-
-  // Enter Email and continue
-  console.log('>> Checkout page - Entering email, still show Estimated Shipping');
-  await checkoutPage.completeFormEmail(testEmail);
-  await checkShippingSummaryInfo(estimatedShipping, freeShipping);
-
-  // Enter shipping info
-  console.log('>> Checkout page - Entering shipping info, still show Estimated Shipping');
-  await t.expect(checkoutPage.shippingBtn.exists).ok();
-  await checkoutPage.completeFormShippingInfo();
-  await checkShippingSummaryInfo(estimatedShipping, freeShipping);
-
-  // Skip Billing info
-  console.log('>> Checkout page - Skip Billing info and continue, still show Estimated Shippinge');
-  await utils.clickItem(checkoutPage.billingInfoSubmitBtn);
-  await checkShippingSummaryInfo(estimatedShipping, freeShipping);
-
-  // Set delivery option
-  console.log('>> Checkout page - Set delivery, Estimated Shipping label changes to Shipping');
-  await t.expect(checkoutPage.deliveryOptionSubmitBtn.exists).ok();
-  await checkoutPage.setDeliveryOption(shippingMethod);
-  await checkShippingSummaryInfo(fixedShipping, freeShipping);
-}
-
-async function checkEstShippingInfo(title, value) {
-  await t.expect(cartPage.estimatedShippingTitle.innerText).eql(title);
-  await t.expect(cartPage.estimatedShippingValue.innerText).eql(value);
-}
-
-async function checkShippingSummaryInfo(title, value) {
-  await t.expect(checkoutPage.shippingSummaryTitle.innerText).eql(title);
-  await t.expect(checkoutPage.shippingSummaryValue.innerText).eql(value);
+  await utils.checkEstShippingInfo(estimatedShipping, freeShipping);
 }

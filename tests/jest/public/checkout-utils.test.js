@@ -117,7 +117,32 @@ describe('Checkout Utils', () => {
     expect(shippingOptions).toEqual(stubOptions);
   });
 
+  test('Create the shipping options as the shipping is free', () => {
+    cartData.pricing.shippingAndHandling.value = 0;
+    cartData.shippingOptions = {
+      shippingOption: [{
+        id: 12345,
+        description: 'shipping option #1',
+        cost: {
+          value: 999
+        }
+      }]
+    };
+    
+    const stubOptions = [{
+      id: '12345',
+      label: 'shipping option #1',
+      amount: 0,
+      detail: ''
+    }];
+
+    const shippingOptions = CheckoutUtils.createShippingOptions(cartData);
+
+    expect(shippingOptions).toEqual(stubOptions);
+  });
+
   test('Update the shipping options', () => {
+    cartData.pricing.shippingAndHandling.value = 9.99;
     cartData.shippingOptions.shippingOption.push({
       id: 67890,
       description: 'shipping option #2',

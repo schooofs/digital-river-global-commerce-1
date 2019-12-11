@@ -190,6 +190,7 @@ class DRGC_Public {
 		}
 
 		if ( array_key_exists( 'access_token', $attempt ) ) {
+			$plugin->session->set_guest_flag_cookie( 'false' );
 			$plugin->session->dirty_set_session( $_COOKIE['drgc_session'] );
 
 			wp_send_json_success( $attempt );
@@ -289,6 +290,7 @@ class DRGC_Public {
 					wp_send_json_error( $user );
 				}
 
+				$plugin->session->set_guest_flag_cookie( 'false' );
 				$attempt = $plugin->shopper->generate_access_token_by_ref_id( $externalReferenceId );
 				wp_send_json_success( $attempt );
 			}
@@ -297,10 +299,18 @@ class DRGC_Public {
 		}
 	}
 
+	public function checkout_as_guest_ajax() {
+		check_ajax_referer( 'drgc_ajax', 'nonce' );
+		$plugin = DRGC();
+		$plugin->session->set_guest_flag_cookie( 'true' );
+		wp_send_json_success();
+	}
+
 	public function dr_logout_ajax() {
 		check_ajax_referer( 'drgc_ajax', 'nonce' );
 		$plugin = DRGC();
 		$plugin->shopper = null;
+		$plugin->session->set_guest_flag_cookie( 'false' );
 		$plugin->session->dirty_set_session( $_COOKIE['drgc_session'] );
 		$plugin->session->clear_session();
 		wp_send_json_success();
@@ -467,6 +477,40 @@ class DRGC_Public {
 	}
 
 	/**
+	 * Insert login link at menu.
+	 *
+	 * @since  1.3.0
+	 */
+	public function insert_login_menu_items( $items, $args ) {
+		$customer = DRGC()->shopper->retrieve_shopper();
+		$is_logged_in = $customer && 'Anonymous' !== $customer['id'];
+
+		$new_item = array(
+			'title'            => $is_logged_in ? __( 'Hi, ', 'digital-river-global-commerce' ) . $customer['firstName'] : __( 'Login' ),
+			'menu_item_parent' => 0,
+			'ID'               => 'login',
+			'db_id'            => 'login',
+			'url'              => get_site_url() . '/login',
+			'classes'          => $is_logged_in ? array( 'menu-item', 'menu-item-has-children' ) : array( 'menu-item' )
+		);
+		$items[] = (object) $new_item;
+
+		if ( $is_logged_in ) {
+			$new_sub_item = array(
+				'title'            => __( 'Logout', 'digital-river-global-commerce' ),
+				'menu_item_parent' => 'login',
+				'ID'               => 'logout',
+				'db_id'            => 'logout',
+				'url'              => '#',
+				'classes'          => array( 'menu-item' )
+			);
+			$items[] = (object) $new_sub_item;
+		}
+
+		return $items;
+	}
+
+	/**
 	 * Render minicart on header.
 	 *
 	 * @since  1.0.0
@@ -474,7 +518,7 @@ class DRGC_Public {
 	public function minicart_in_header( $content ) {
 		if ( !is_page( 'cart' ) && !is_page( 'checkout' ) && !is_page( 'thank-you' ) ) {
 			ob_start();
-			include_once 'partials/minicart.php';
+			include_once 'partials/drgc-minicart.php';
 			$append = ob_get_clean();
 			return $content . $append;
 		}
@@ -501,6 +545,24 @@ class DRGC_Public {
 	public function add_legal_link() {
 		if ( is_page( 'cart' ) || is_page( 'checkout' ) || is_page( 'thank-you' ) ) {
 			include_once 'partials/drgc-legal-footer.php';
-    }
+		}
+	}
+
+	/**
+	 * Redirect on page load.
+	 *
+	 * @since  1.3.0
+	 */
+	public function redirect_on_page_load() {
+		if ( is_page( 'checkout' ) ) {
+			$customer = DRGC()->shopper->retrieve_shopper();
+			$is_logged_in = $customer && 'Anonymous' !== $customer['id'];
+			$is_guest = 'true' === $_COOKIE['drgc_guest_flag'];
+
+			if ( ! $is_logged_in && ! $is_guest ) {
+				wp_redirect( get_permalink( get_page_by_path( 'login' ) ) );
+				exit;
+			}
+		}
 	}
 }

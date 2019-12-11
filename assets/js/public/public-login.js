@@ -38,8 +38,43 @@ const LoginModule = (($) => {
         }
     };
 
+    const checkoutAsGuest = (e) => {
+        e.preventDefault();
+        const data = {
+            action: 'drgc_checkout_as_guest',
+            nonce: drgc_params.ajaxNonce,
+        };
+        $.ajax({
+            type: 'POST',
+            url: drgc_params.ajaxUrl,
+            data,
+            success: () => {
+                window.location.href = drgc_params.checkoutUrl;
+            }
+        });
+    };
+
+    const logout = (e) => {
+        e.preventDefault();
+
+        if ($(e.target).data('processing')) return;
+
+        $(e.target).toggleClass('sending').data('processing', true).blur();
+
+        const data = {
+            action: 'drgc_logout',
+            nonce: drgc_params.ajaxNonce
+        };
+        $('body').css({ 'pointer-events': 'none', 'opacity': 0.5 });
+        $.post(drgc_params.ajaxUrl, data, function(response) {
+            location.reload();
+        });
+    };
+
     return {
-        validatePassword
+        validatePassword,
+        checkoutAsGuest,
+        logout
     };
 })(jQuery);
 
@@ -74,7 +109,7 @@ jQuery(document).ready(($) => {
 
         $.post(ajaxUrl, data, function(response) {
             if ( response.success ) {
-                location.reload();
+                window.location.href = drgc_params.checkoutUrl;
             } else {
                 $form.data('processing', false);
                 but.removeClass('sending').blur();
@@ -94,24 +129,11 @@ jQuery(document).ready(($) => {
     });
 
     $('.drgc-wrapper').on('click', '.dr-logout', function(e) {
-        e.preventDefault();
+        LoginModule.logout(e);
+    });
 
-        if ($(this).data('processing')) {
-            return;
-        }
-
-        var but = $(this).toggleClass('sending').blur();
-
-        $(this).data('processing', true);
-
-        const data = {
-            action: 'drgc_logout',
-            nonce: drgc_params.ajaxNonce
-        };
-
-        $.post(ajaxUrl, data, function(response) {
-            location.reload();
-        });
+    $('#menu-item-logout a').on('click', function(e) {
+        LoginModule.logout(e);
     });
 
     $('#dr_login_form, #dr-signup-form, #dr-pass-reset-form, #checkout-email-form').find('input[type=email]').on('input', (e) => {
@@ -172,7 +194,7 @@ jQuery(document).ready(($) => {
 
         $.post(ajaxUrl, data, function(response) {
             if (response.success) {
-                location.reload();
+                window.location.href = drgc_params.checkoutUrl;
             } else {
                 $form.data('processing', false);
                 $button.removeClass('sending').blur();
@@ -189,6 +211,10 @@ jQuery(document).ready(($) => {
             }
         });
 
+    });
+
+    $('#dr-guest-btn').click((e) => {
+        LoginModule.checkoutAsGuest(e);
     });
 
     $('#dr-pass-reset-form').on('submit', function(e) {

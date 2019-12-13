@@ -79,7 +79,7 @@ class DRGC_Public {
 		wp_enqueue_script( $this->drgc, DRGC_PLUGIN_URL . 'assets/js/drgc-public' . $suffix . '.js', array( 'jquery' ), $this->version, false );
 
 		if ( is_page( 'checkout' ) ) {
-			wp_enqueue_script( 'digital-river-js', 'https://js.digitalriver.com/v1/DigitalRiver.js', array( $this->drgc ), null, true );
+			wp_enqueue_script( 'digital-river-js', 'https://js.digitalriverws.com/v1/DigitalRiver.js', array( $this->drgc ), null, true );
 			wp_enqueue_script( 'paypal-checkout-js', 'https://www.paypalobjects.com/api/checkout.js', array( $this->drgc ), null, true );
 		}
 
@@ -96,6 +96,12 @@ class DRGC_Public {
     //test Order Handler
     $testOrder_option = get_option( 'drgc_testOrder_handler' );
 		$testOrder_enable = ( is_array( $testOrder_option ) && '1' == $testOrder_option['checkbox'] )  ? "true" : "false";
+
+		$applepay_option = get_option( 'drgc_applepay_handler' );
+		$applepay_enabled = ( is_array( $applepay_option ) && '1' == $applepay_option['checkbox'] )  ? 'true' : 'false';
+
+		$googlepay_option = get_option( 'drgc_googlepay_handler' );
+		$googlepay_enabled = ( is_array( $googlepay_option ) && '1' == $googlepay_option['checkbox'] )  ? 'true' : 'false';
 
 		$translation_array = array(
 			'upgrade_label'               => __('Upgrade', 'digital-river-global-commerce'),
@@ -158,8 +164,10 @@ class DRGC_Public {
 				'failure'  => isset( $_GET['ppcancel'] ) ? $_GET['ppcancel'] : false,
 				'success'  => isset ( $_GET['ppsuccess'] ) ? $_GET['ppsuccess'] : false,
       ),
-			'testOrder'         => $testOrder_enable,
-			'translations'      => $translation_array
+			'testOrder'          => $testOrder_enable,
+			'translations'       => $translation_array,
+			'isApplePayEnabled'  => $applepay_enabled,
+			'isGooglePayEnabled' => $googlepay_enabled
 		);
 
 		wp_localize_script( $this->drgc, 'drgc_params', $options );

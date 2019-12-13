@@ -27,6 +27,8 @@ jQuery(document).ready(($) => {
         const drLocale = drgc_params.drLocale || 'en_US';
         let cartData = drgc_params.cart.cart;
         const requestShipping = (cartData.shippingOptions.shippingOption) ? true : false;
+        const isGooglePayEnabled = drgc_params.isGooglePayEnabled === 'true';
+        const isApplePayEnabled = drgc_params.isApplePayEnabled === 'true';
 
         function getAddress(addressType) {
             const address = {
@@ -775,7 +777,7 @@ jQuery(document).ready(($) => {
         const baseRequest = CheckoutUtils.getBaseRequestData(cartData, requestShipping, buttonStyle);
         const paymentDataRequest = digitalriverjs.paymentRequest(baseRequest);
 
-        if ($('#dr-googlepay-button').length) {
+        if ($('#dr-googlepay-button').length && isGooglePayEnabled) {
             DRGooglePay.init({
                 digitalriverJs: digitalriverjs,
                 paymentDataRequest: paymentDataRequest,
@@ -783,7 +785,7 @@ jQuery(document).ready(($) => {
             });
         }
 
-        if ($('#dr-applepay-button').length) {
+        if ($('#dr-applepay-button').length && isApplePayEnabled) {
             DRApplePay.init({
                 digitalriverJs: digitalriverjs,
                 paymentDataRequest: paymentDataRequest,

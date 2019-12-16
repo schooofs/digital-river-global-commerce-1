@@ -146,9 +146,17 @@ class DRGC_Session {
 	 */
 	public function set_cookie() {
 		if ( ! headers_sent() && did_action( 'wp_loaded' ) ) {
-      @setcookie( $this->cookie, $this->session_id . '|' . $this->expires, $this->expires, '/', '', false, true );
-      @setcookie('wordpress_cache_off',"true",$this->expires,'/');
+			$this->set_guest_flag_cookie( 'false' );
+			@setcookie( $this->cookie, $this->session_id . '|' . $this->expires, $this->expires, '/', '', false, true );
+			@setcookie('wordpress_cache_off',"true",$this->expires,'/');
 		}
+	}
+
+	/**
+	 * Create/modify the cookie of drgc_guest_flag
+	 */
+	public function set_guest_flag_cookie( $value ) {
+		@setcookie( 'drgc_guest_flag', $value, $this->expires, '/' );
 	}
 
 	/**

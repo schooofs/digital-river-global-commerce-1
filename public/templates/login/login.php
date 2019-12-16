@@ -209,7 +209,7 @@ $checkout_URI = drgc_get_page_link( 'checkout' );
                     <div>
                         <button type="submit" class="dr-btn dr-signup"><?php echo __( 'Sign Up', 'digital-river-global-commerce' ); ?></button>
 
-                        <a class="dr-btn" href="<?php echo esc_url( drgc_get_page_link( 'cart' ) ); ?>" ><?php echo __( 'Continue As Guest', 'digital-river-global-commerce' ); ?></a>
+                        <a class="dr-btn" id="dr-guest-btn" href="#"><?php echo __( 'Continue As Guest', 'digital-river-global-commerce' ); ?></a>
                     </div>
                 </form>
 

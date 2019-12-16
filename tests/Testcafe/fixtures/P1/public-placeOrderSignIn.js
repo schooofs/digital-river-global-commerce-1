@@ -1,4 +1,3 @@
-import { Selector } from 'testcafe';
 import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 import MinicartPage from '../../page-models/public/minicart-page-model';
@@ -9,8 +8,8 @@ import GenericUtils from '../../utils/genericUtils';
 
 fixture `===== DRGC P1 Automation Test - Place Order Sign In =====`
   .httpAuth({
-    username: 'gcwpdemo',
-    password: '33a5b9f5',
+    username: Config.websiteAuth['username'],
+    password: Config.websiteAuth['password'],
   });
 
 const env = Config.env;

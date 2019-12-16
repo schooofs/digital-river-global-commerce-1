@@ -15,14 +15,18 @@ let config = {
     demo: 'password',
   },
   baseUrl: {
-    dev: 'http://localhost/wordpress/',  //Replace this to your localhost test site address
-    sys: 'http://tpedevapp0264.d010.digitalriverws.net/',
-    prod: 'http://wordpress.c141.digitalriverws.net/',
-    demo: 'http://gcwpdemo.wpengine.com/',
+    dev: 'Dev Site Web Address',  //Replace this to your localhost test site address
+    sys: 'Systest Site Web Address',
+    prod: 'Prod Site Web Address',
+    demo: 'Demo Site Web Address',
   },
   apiUrl: {
-    PRD: 'https://api.digitalriver.com',
-    NONPRD: 'https://dispatch-test.digitalriver.com',
+    PRD: 'Prod API URL',
+    NONPRD: 'NonProd API URL',
+  },
+  websiteAuth: {
+	username: 'username',
+	password: 'password'
   }
 };
 

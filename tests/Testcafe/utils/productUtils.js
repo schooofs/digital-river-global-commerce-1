@@ -14,8 +14,8 @@ export default class ProductUtils {
 
   getTestingDigitalProduct() {
     const product = {
-      //productID: '5104502000',
-      productID: '5104501900',
+      productID: '5104502000',
+      //productID: '5104501900',
       productName: 'Digital River Internet Security For Mac',
       permalink: 'digital-river-internet-security-for-mac'
     }

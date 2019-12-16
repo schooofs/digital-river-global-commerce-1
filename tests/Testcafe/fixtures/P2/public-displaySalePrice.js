@@ -1,4 +1,4 @@
-import { Selector, t } from 'testcafe';
+import { t } from 'testcafe';
 import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 import GeneralUtils from '../../utils/genericUtils';
@@ -6,8 +6,8 @@ import ProductUtils from '../../utils/productUtils';
 
 fixture `===== DRGC P2 Automation Test - Displaying Sale Price =====`
   .httpAuth({
-    username: 'gcwpdemo',
-    password: '33a5b9f5',
+    username: Config.websiteAuth['username'],
+    password: Config.websiteAuth['password'],
   });
 const onSaleProductID = new ProductUtils().getOnSaleProduct().productID;
 const utils = new GeneralUtils();

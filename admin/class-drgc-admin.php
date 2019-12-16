@@ -162,7 +162,7 @@ class DRGC_Admin {
 
 		add_settings_section(
 			$this->option_name . '_general',
-			null, // No need to print section title
+			'General',
 			array( $this, $this->option_name . '_general_cb' ),
 			$this->plugin_name
 		);
@@ -231,6 +231,31 @@ class DRGC_Admin {
 		);
 
 		add_settings_section(
+			$this->option_name . '_payment',
+			'Payments',
+			array( $this, $this->option_name . '_payment_cb' ),
+			$this->plugin_name
+		);
+
+		add_settings_field(
+			$this->option_name . '_applepay_handler',
+			__( 'Apple Pay', 'digital-river-global-commerce' ),
+			array( $this, $this->option_name . '_applepay_handler_cb' ),
+			$this->plugin_name,
+			$this->option_name . '_payment',
+			array( 'label_for' => $this->option_name . '_applepay_handler' )
+		);
+
+		add_settings_field(
+			$this->option_name . '_googlepay_handler',
+			__( 'Google Pay', 'digital-river-global-commerce' ),
+			array( $this, $this->option_name . '_googlepay_handler_cb' ),
+			$this->plugin_name,
+			$this->option_name . '_payment',
+			array( 'label_for' => $this->option_name . '_googlepay_handler' )
+		);
+
+		add_settings_section(
 			$this->option_name . '_extra',
 			'',
 			array( $this, $this->option_name . '_extra_cb' ),
@@ -243,7 +268,9 @@ class DRGC_Admin {
 		register_setting( $this->plugin_name, $this->option_name . '_domain', array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ) );
 		register_setting( $this->plugin_name, $this->option_name . '_digitalRiver_key', array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ) );
     register_setting( $this->plugin_name, $this->option_name . '_cron_handler', array( 'sanitize_callback' => array( $this, 'dr_sanitize_checkbox' ), 'default' => '' ) );
-    register_setting( $this->plugin_name, $this->option_name . '_testOrder_handler', array( 'sanitize_callback' => array( $this, 'dr_sanitize_checkbox' ), 'default' => '' ) );
+		register_setting( $this->plugin_name, $this->option_name . '_testOrder_handler', array( 'sanitize_callback' => array( $this, 'dr_sanitize_checkbox' ), 'default' => '' ) );
+		register_setting( $this->plugin_name, $this->option_name . '_applepay_handler', array( 'sanitize_callback' => array( $this, 'dr_sanitize_checkbox' ), 'default' => '' ) );
+		register_setting( $this->plugin_name, $this->option_name . '_googlepay_handler', array( 'sanitize_callback' => array( $this, 'dr_sanitize_checkbox' ), 'default' => '' ) );
 	}
 
 	/**
@@ -252,6 +279,15 @@ class DRGC_Admin {
 	 * @since  1.0.0
 	 */
 	public function drgc_general_cb() {
+		return; // No need to print section message
+	}
+
+	/**
+	 * Render the text for the payment section.
+	 *
+	 * @since  1.0.2
+	 */
+	public function drgc_payment_cb() {
 		return; // No need to print section message
 	}
 
@@ -376,5 +412,37 @@ class DRGC_Admin {
 				wp_delete_post( $variation->ID, true );
 			}
 		}
+	}
+
+	/**
+	 * Render checkbox field for enabling Apple Pay
+	 *
+	 * @since    1.0.2
+	 */
+	public function drgc_applepay_handler_cb() {
+		$option = get_option( $this->option_name . '_applepay_handler' );
+		$checked = '';
+
+		if ( is_array( $option ) && $option['checkbox'] === '1' ) {
+			$checked = 'checked="checked"';
+		}
+
+		echo '<label class="switch"><input type="checkbox" class="regular-text" name="' . $this->option_name . '_applepay_handler[checkbox]" id="' . $this->option_name . '_applepay_handler" value="1" ' . $checked . ' /><span class="slider round"></span></label>';
+	}
+
+	/**
+	 * Render checkbox field for enabling Google Pay
+	 *
+	 * @since    1.0.2
+	 */
+	public function drgc_googlepay_handler_cb() {
+		$option = get_option( $this->option_name . '_googlepay_handler' );
+		$checked = '';
+
+		if ( is_array( $option ) && $option['checkbox'] === '1' ) {
+			$checked = 'checked="checked"';
+		}
+
+		echo '<label class="switch"><input type="checkbox" class="regular-text" name="' . $this->option_name . '_googlepay_handler[checkbox]" id="' . $this->option_name . '_googlepay_handler" value="1" ' . $checked . ' /><span class="slider round"></span></label>';
 	}
 }

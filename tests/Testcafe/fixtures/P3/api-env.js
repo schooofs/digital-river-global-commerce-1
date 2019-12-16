@@ -14,8 +14,8 @@ let apiCheck = false;
 
 fixture `===== DRGC P3 Automation Test - Admin: API Environment Test =====`
   .httpAuth({
-    username: 'gcwpdemo',
-    password: '33a5b9f5',
+    username: Config.websiteAuth['username'],
+    password: Config.websiteAuth['password'],
   })
   .page(baseURL)
   .requestHooks(logger);

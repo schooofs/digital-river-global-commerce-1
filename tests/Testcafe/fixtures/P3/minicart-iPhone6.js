@@ -6,8 +6,8 @@ import ProductUtils from '../../utils/productUtils';
 
 fixture `===== DRGC P3 Automation Test - Mini Cart for iPhone6 =====`
   .httpAuth({
-    username: 'gcwpdemo',
-    password: '33a5b9f5',
+    username: Config.websiteAuth['username'],
+    password: Config.websiteAuth['password'],
   });
 
 const env = Config.env;

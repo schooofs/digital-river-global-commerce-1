@@ -1,9 +1,24 @@
 import { Selector, t } from 'testcafe';
 import HomePage from '../page-models/public/home-page-model';
+import CartPage from '../page-models/public/cart-page-model';
+import CheckoutPage from '../page-models/public/checkout-page-model';
 
 export default class GenericUtils {
   constructor() {
     this.homePage = new HomePage();
+    this.cartPage = new CartPage();
+  }
+
+  async checkEstShippingInfo(title, value) {
+    await t
+      .expect(this.cartPage.estimatedShippingTitle.innerText).eql(title)
+      .expect(this.cartPage.estimatedShippingValue.innerText).eql(value);
+  }
+
+  async checkShippingSummaryInfo(title, value) {
+    await t
+      .expect(new CheckoutPage().shippingSummaryTitle.innerText).eql(title)
+      .expect(new CheckoutPage().shippingSummaryValue.innerText).eql(value);
   }
 
   async clickItem(target) {
@@ -29,6 +44,40 @@ export default class GenericUtils {
     await this.clickItem(this.homePage.productsMenu);
     await this.clickItem(product);
   }
+
+
+  async testShippingFee(estShippingFee, shippingMethod, finalShippingFee) {
+    const checkoutPage = new CheckoutPage();
+    const estimatedShipping = 'Estimated Shipping';
+    const testEmail = "qa@test.com";
+    const fixedShipping = 'Shipping';
+    // Click Proceed to Checkout in View Cart page to proceed checkout
+    console.log('>> Direct to checkout page, still show Estimated Shipping');
+    await this.clickItem(this.cartPage.proceedToCheckoutBtn);
+    await this.checkShippingSummaryInfo(estimatedShipping, estShippingFee);
+
+    // Enter Email and continue
+    console.log('>> Checkout page - Entering email, still show Estimated Shipping');
+    await checkoutPage.completeFormEmail(testEmail);
+    await this.checkShippingSummaryInfo(estimatedShipping, estShippingFee);
+
+    // Enter shipping info
+    console.log('>> Checkout page - Entering shipping info, still show Estimated Shipping');
+    await t.expect(checkoutPage.shippingBtn.exists).ok();
+    await checkoutPage.completeFormShippingInfo();
+    await this.checkShippingSummaryInfo(estimatedShipping, estShippingFee);
+
+    // Skip Billing info
+    console.log('>> Checkout page - Skip Billing info and continue, still show Estimated Shipping');
+    await this.clickItem(checkoutPage.billingInfoSubmitBtn);
+    await this.checkShippingSummaryInfo(estimatedShipping, estShippingFee);
+
+    // Set delivery option
+    console.log('>> Checkout page - Set delivery, Estimated Shipping label changes to Shipping');
+    await t.expect(checkoutPage.deliveryOptionSubmitBtn.exists).ok();
+    await checkoutPage.setDeliveryOption(shippingMethod);
+    await this.checkShippingSummaryInfo(fixedShipping, finalShippingFee);
+}
 
   getNewUser() {
     const timestamp = Date.now();

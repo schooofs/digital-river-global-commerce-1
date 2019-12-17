@@ -41,63 +41,35 @@ const DRApplePay = (($, translations) => {
           }
         });
       } else {
-        if (requestShipping) {
-          const shippingAddressObj = {
-            id: 'shippingAddress',
-            city: shippingAddress.address.city,
-            countrySubdivision: shippingAddress.address.state,
-            postalCode: shippingAddress.address.postalCode,
-            country: shippingAddress.address.country
+        const shippingAddressObj = {
+          id: 'shippingAddress',
+          city: shippingAddress.address.city,
+          countrySubdivision: shippingAddress.address.state,
+          postalCode: shippingAddress.address.postalCode,
+          country: shippingAddress.address.country
+        };
+
+        DRCommerceApi.updateCart({expand: 'all'}, {shippingAddress: shippingAddressObj}).then((data) => {
+          const displayItems = CheckoutUtils.createDisplayItems(data.cart);
+          const shippingOptions = CheckoutUtils.createShippingOptions(data.cart);
+
+          CheckoutUtils.updateShippingOptions(shippingOptions, data.cart.shippingMethod.code);
+
+          const requestUpdateObject = {
+            total: {
+              label: translations.order_total_label,
+              amount: data.cart.pricing.orderTotal.value
+            },
+            displayItems: displayItems,
+            shippingOptions: shippingOptions
           };
 
-          DRCommerceApi.updateCart({expand: 'all'}, {shippingAddress: shippingAddressObj}).then((data) => {
-            const displayItems = CheckoutUtils.createDisplayItems(data.cart);
-            const shippingOptions = CheckoutUtils.createShippingOptions(data.cart);
-  
-            CheckoutUtils.updateShippingOptions(shippingOptions, data.cart.shippingMethod.code);
-  
-            const requestUpdateObject = {
-              total: {
-                label: translations.order_total_label,
-                amount: data.cart.pricing.orderTotal.value
-              },
-              displayItems: displayItems,
-              shippingOptions: shippingOptions
-            };
-  
-            requestUpdateObject.status = 'success';
-            event.updateWith(requestUpdateObject);
-          }).catch((jqXHR) => {
-            event.updateWith({
-              status: 'failure',
-              error: {
-                message: jqXHR.responseJSON.errors.error[0].description
-              }
-            });
-          });
-        } else {
-          DRCommerceApi.getCart({expand: 'all'}).then((data) => {
-            const displayItems = CheckoutUtils.createDisplayItems(data.cart);
-
-            const requestUpdateObject = {
-              total: {
-                label: translations.order_total_label,
-                amount: data.cart.pricing.orderTotal.value
-              },
-              displayItems: displayItems
-            };
-  
-            requestUpdateObject.status = 'success';
-            event.updateWith(requestUpdateObject);
-          }).catch((jqXHR) => {
-            event.updateWith({
-              status: 'failure',
-              error: {
-                message: jqXHR.responseJSON.errors.error[0].description
-              }
-            });
-          });
-        }
+          requestUpdateObject.status = 'success';
+          event.updateWith(requestUpdateObject);
+        }).catch((jqXHR) => {
+          CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
+          CheckoutUtils.resetBodyOpacity();
+        });
       }
     });
 
@@ -123,12 +95,8 @@ const DRApplePay = (($, translations) => {
         event.updateWith(requestUpdateObject);
         CheckoutUtils.updateSummaryPricing(data.cart);
       }).catch((jqXHR) => {
-        event.updateWith({
-          status: 'failure',
-          error: {
-            message: jqXHR.responseJSON.errors.error[0].description
-          }
-        });
+        CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
+        CheckoutUtils.resetBodyOpacity();
       });
     });
 

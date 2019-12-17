@@ -1,6 +1,28 @@
 const DRCommerceApi = (($, params) => {
   const apiBaseUrl = `https://${params.domain}/v1/shoppers`;
 
+  const getCart = (queryStrings = {}) => {
+    const queryStr = $.param(queryStrings);
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${params.accessToken}`
+        },
+        url: `${apiBaseUrl}/me/carts/active?${queryStr}`
+      })
+      .done((data) => {
+        resolve(data);
+      })
+      .fail((jqXHR) => {
+        reject(jqXHR);
+      });
+    });
+  };
+
   const updateCart = (queryStrings = {}, cartRequest = {}) => {
     const queryStr = $.param(queryStrings);
 
@@ -120,6 +142,7 @@ const DRCommerceApi = (($, params) => {
   };
 
   return {
+    getCart,
     updateCart,
     submitCart,
     applyShippingOption,

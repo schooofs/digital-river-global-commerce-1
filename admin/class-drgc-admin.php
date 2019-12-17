@@ -107,8 +107,6 @@ class DRGC_Admin {
 	public function enqueue_scripts() {
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		wp_enqueue_script( 'popper', '//unpkg.com/popper.js@1' );
-		wp_enqueue_script( 'tippy', '//unpkg.com/tippy.js@5' );
 		wp_enqueue_script( $this->drgc, DRGC_PLUGIN_URL . 'assets/js/drgc-admin' . $suffix . '.js', array( 'jquery', 'jquery-ui-progressbar' ), $this->version, false );
 
 		// transfer drgc options from PHP to JS
@@ -319,7 +317,7 @@ class DRGC_Admin {
 	 */
 	public function drgc_api_key_cb() {
 		$api_key = get_option( $this->option_name . '_api_key' );
-		echo '<input type="text" class="regular-text" name="' . $this->option_name . '_api_key' . '" id="' . $this->option_name . '_api_key' . '" value="' . $api_key . '" data-tippy-content="Required to access your Global Commerce catalog data" data-tippy-placement="right">';
+		echo '<div data-tooltip="Required to access your Global Commerce catalog data" data-tooltip-location="right"><input type="text" class="regular-text" name="' . $this->option_name . '_api_key' . '" id="' . $this->option_name . '_api_key' . '" value="' . $api_key . '"></div>';
 	}
 
 	/**
@@ -329,7 +327,7 @@ class DRGC_Admin {
 	 */
 	public function drgc_api_secret_cb() {
 		$api_secret = get_option( $this->option_name . '_api_secret' );
-		echo '<input type="text" class="regular-text" name="' . $this->option_name . '_api_secret' . '" id="' . $this->option_name . '_api_secret' . '" value="' . $api_secret . '" data-tippy-content="Required to support saved accounts for returning users" data-tippy-placement="right">';
+		echo '<div data-tooltip="Required to support saved accounts for returning users" data-tooltip-location="right"><input type="text" class="regular-text" name="' . $this->option_name . '_api_secret' . '" id="' . $this->option_name . '_api_secret' . '" value="' . $api_secret . '"></div>';
 	}
 
 	/**
@@ -349,7 +347,7 @@ class DRGC_Admin {
 	 */
 	public function drgc_digitalRiver_key_cb() {
 		$digitalRiver_key = get_option( $this->option_name . '_digitalRiver_key' );
-		echo '<input type="text" class="regular-text" name="' . $this->option_name . '_digitalRiver_key' . '" id="' . $this->option_name . '_digitalRiver_key' . '" value="' . $digitalRiver_key . '" data-tippy-content="Required to process payments via DigitalRiver.js" data-tippy-placement="right">';
+		echo '<div data-tooltip="Required to process payments via DigitalRiver.js" data-tooltip-location="right"><input type="text" class="regular-text" name="' . $this->option_name . '_digitalRiver_key' . '" id="' . $this->option_name . '_digitalRiver_key' . '" value="' . $digitalRiver_key . '"></div>';
 	}
 
 	/**

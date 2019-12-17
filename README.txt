@@ -95,8 +95,8 @@ No, you are responsible for hosting your own site.
 
 = 1.1 =
 * Price will be updated immediately in the site when the product price had been changed.
-* New Payment: ApplePay and GooglePay.
+* New payments: ApplePay and GooglePay.
 * Add login or guest checkout flow during checkout pages.
-* Add payment toggle to turn on/off ApplePay and GooglePay.
+* Add payment toggles to turn on/off ApplePay and GooglePay.
 * Improve instruction in setting section.
 * Add "Estimated" text for shipping cost when shipping address is not confirmed.

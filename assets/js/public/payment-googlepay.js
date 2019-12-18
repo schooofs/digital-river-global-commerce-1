@@ -25,41 +25,7 @@ const DRGooglePay = (($, translations) => {
     googlepay.on('shippingaddresschange', (event) => {
       const shippingAddress = event.shippingAddress;
 
-      if (shippingAddress.address.postalCode === '') {
-        event.updateWith({
-          status: 'failure',
-          error: {
-            fields: {
-              postalCode: 'Your postal code is invalid.'
-            }
-          }
-        });
-      } else if (shippingAddress.address.city === '') {
-        event.updateWith({
-          status: 'failure',
-          error: {
-            fields: {
-              city: 'Your city is invalid.'
-            }
-          }
-        });
-      } else if (shippingAddress.address.state === '') {
-        event.updateWith({
-          status: 'failure',
-          error: {
-            fields: {
-              region: 'Your region value is invalid. Please supply a different one.'
-            }
-          }
-        });
-      } else if (shippingAddress.address.country !== 'US') {
-        event.updateWith({
-          status: 'failure',
-          error: {
-            message: 'We can only ship to the US.'
-          }
-        });
-      } else {
+      if (shippingAddress.address.country === 'US') {
         const shippingAddressObj = {
           id: 'shippingAddress',
           city: shippingAddress.address.city,
@@ -86,8 +52,19 @@ const DRGooglePay = (($, translations) => {
           requestUpdateObject.status = 'success';
           event.updateWith(requestUpdateObject);
         }).catch((jqXHR) => {
-          CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
-          CheckoutUtils.resetBodyOpacity();
+          event.updateWith({
+            status: 'failure',
+            error: {
+              message: jqXHR.responseJSON.errors.error[0].description
+            }
+          });
+        });
+      } else {
+        event.updateWith({
+          status: 'failure',
+          error: {
+            message: 'We can only ship to the US.'
+          }
         });
       }
     });
@@ -114,8 +91,12 @@ const DRGooglePay = (($, translations) => {
         event.updateWith(requestUpdateObject);
         CheckoutUtils.updateSummaryPricing(data.cart);
       }).catch((jqXHR) => {
-        CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);
-        CheckoutUtils.resetBodyOpacity();
+        event.updateWith({
+          status: 'failure',
+          error: {
+            message: jqXHR.responseJSON.errors.error[0].description
+          }
+        });
       });
     });
 
@@ -159,7 +140,7 @@ const DRGooglePay = (($, translations) => {
       sessionStorage.setItem('paymentSourceId', sourceId);
       $('body').css({'pointer-events': 'none', 'opacity': 0.5});
 
-      DRCommerceApi.updateCart({expand: 'all'}, cartRequest).then((data) => {
+      DRCommerceApi.updateCart({expand: 'all'}, cartRequest).then(() => {
         DRCommerceApi.applyPaymentAndSubmitCart(sourceId);
       }).catch((jqXHR) => {
         CheckoutUtils.displayAlertMessage(jqXHR.responseJSON.errors.error[0].description);

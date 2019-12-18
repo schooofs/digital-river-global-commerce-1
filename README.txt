@@ -92,3 +92,10 @@ No, you are responsible for hosting your own site.
 = 1.0.2 =
 * Hide locale selector when there is only one option available
 * Fixed wrong path of product image gallery
+
+= 1.1 =
+* New Payment Method Support: Apple Pay and Google Pay.
+* Real-time product pricing updates within your site on product catalog changes.
+* Enhanced checkout pages with Account Creation and Guest Checkout options.
+* When a shopper's shipping addressed is not confirmed, Shipping Costs will be shown as estimated and not actuals.
+* Improved Settings Page help text.

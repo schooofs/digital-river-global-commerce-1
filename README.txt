@@ -94,9 +94,8 @@ No, you are responsible for hosting your own site.
 * Fixed wrong path of product image gallery
 
 = 1.1 =
-* Price will be updated immediately in the site when the product price had been changed.
-* New payments: ApplePay and GooglePay.
-* Add "Account Creation" or "Guest" checkout flow during checkout pages.
-* Add payment toggles to turn on/off ApplePay and GooglePay.
-* Improve instruction in setting section.
-* Add "Estimated" text for shipping cost when shipping address is not confirmed.
+* New Payment Method Support: Apple Pay and Google Pay.
+* Real-time product pricing updates within your site on product catalog changes.
+* Enhanced checkout pages with Account Creation and Guest Checkout options.
+* When a shopper's shipping addressed is not confirmed, Shipping Costs will be shown as estimated and not actuals.
+* Improved Settings Page help text.

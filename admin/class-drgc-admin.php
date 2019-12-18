@@ -178,7 +178,7 @@ class DRGC_Admin {
 
 		add_settings_field(
 			$this->option_name . '_api_key',
-			__( 'API Key', 'digital-river-global-commerce' ),
+			__( 'Commerce API Key', 'digital-river-global-commerce' ),
 			array( $this, $this->option_name . '_api_key_cb' ),
 			$this->plugin_name,
 			$this->option_name . '_general',
@@ -187,7 +187,7 @@ class DRGC_Admin {
 
 		add_settings_field(
 			$this->option_name . '_api_secret',
-			__( 'API Secret', 'digital-river-global-commerce' ),
+			__( 'Commerce API Secret', 'digital-river-global-commerce' ),
 			array( $this, $this->option_name . '_api_secret_cb' ),
 			$this->plugin_name,
 			$this->option_name . '_general',
@@ -205,7 +205,7 @@ class DRGC_Admin {
 
 		add_settings_field(
 			$this->option_name . '_digitalRiver_key',
-			__( 'Digital River Plugin Key', 'digital-river-global-commerce' ),
+			__( 'Payment Services API Key', 'digital-river-global-commerce' ),
 			array( $this, $this->option_name . '_digitalRiver_key_cb' ),
 			$this->plugin_name,
 			$this->option_name . '_general',
@@ -317,7 +317,7 @@ class DRGC_Admin {
 	 */
 	public function drgc_api_key_cb() {
 		$api_key = get_option( $this->option_name . '_api_key' );
-		echo '<input type="text" class="regular-text" name="' . $this->option_name . '_api_key' . '" id="' . $this->option_name . '_api_key' . '" value="' . $api_key . '"> ';
+		echo '<div data-tooltip="Required to access your Global Commerce catalog data" data-tooltip-location="right"><input type="text" class="regular-text" name="' . $this->option_name . '_api_key' . '" id="' . $this->option_name . '_api_key' . '" value="' . $api_key . '"></div>';
 	}
 
 	/**
@@ -327,7 +327,7 @@ class DRGC_Admin {
 	 */
 	public function drgc_api_secret_cb() {
 		$api_secret = get_option( $this->option_name . '_api_secret' );
-		echo '<input type="text" class="regular-text" name="' . $this->option_name . '_api_secret' . '" id="' . $this->option_name . '_api_secret' . '" value="' . $api_secret . '"> ';
+		echo '<div data-tooltip="Required to support saved accounts for returning users" data-tooltip-location="right"><input type="text" class="regular-text" name="' . $this->option_name . '_api_secret' . '" id="' . $this->option_name . '_api_secret' . '" value="' . $api_secret . '"></div>';
 	}
 
 	/**
@@ -347,7 +347,7 @@ class DRGC_Admin {
 	 */
 	public function drgc_digitalRiver_key_cb() {
 		$digitalRiver_key = get_option( $this->option_name . '_digitalRiver_key' );
-		echo '<input type="text" class="regular-text" name="' . $this->option_name . '_digitalRiver_key' . '" id="' . $this->option_name . '_digitalRiver_key' . '" value="' . $digitalRiver_key . '"> ';
+		echo '<div data-tooltip="Required to process payments via DigitalRiver.js" data-tooltip-location="right"><input type="text" class="regular-text" name="' . $this->option_name . '_digitalRiver_key' . '" id="' . $this->option_name . '_digitalRiver_key' . '" value="' . $digitalRiver_key . '"></div>';
 	}
 
 	/**

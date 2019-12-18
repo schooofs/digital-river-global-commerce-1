@@ -499,7 +499,10 @@ class DRGC_Public {
 			'ID'               => 'login',
 			'db_id'            => 'login',
 			'url'              => get_site_url() . '/login',
-			'classes'          => $is_logged_in ? array( 'menu-item', 'menu-item-has-children' ) : array( 'menu-item' )
+			'classes'          => $is_logged_in ? array( 'menu-item', 'menu-item-has-children' ) : array( 'menu-item' ),
+			'target'           => null,
+			'xfn'              => null,
+			'current'          => null // for preventing warning in debug mode
 		);
 		$items[] = (object) $new_item;
 
@@ -510,7 +513,10 @@ class DRGC_Public {
 				'ID'               => 'logout',
 				'db_id'            => 'logout',
 				'url'              => '#',
-				'classes'          => array( 'menu-item' )
+				'classes'          => array( 'menu-item' ),
+				'target'           => null,
+				'xfn'              => null,
+				'current'          => null // for preventing warning in debug mode
 			);
 			$items[] = (object) $new_sub_item;
 		}

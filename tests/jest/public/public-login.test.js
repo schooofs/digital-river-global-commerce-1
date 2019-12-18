@@ -57,3 +57,49 @@ describe('Test validatePassword', () => {
   });
 
 });
+
+describe('Test checkoutAsGuest', () => {
+  test('It should call AJAX for updating guest flag', () => {
+    const mockEvent = new Event('click');
+    $.ajax = jest.fn().mockImplementation(() => {
+      return Promise.resolve({ success: true });
+    });
+    LoginModule.checkoutAsGuest(mockEvent);
+
+    expect($.ajax).toBeCalledWith({
+      type: 'POST',
+      url: drgc_params.ajaxUrl,
+      data: {
+        action: 'drgc_checkout_as_guest',
+        nonce: drgc_params.ajaxNonce
+      },
+      success: expect.any(Function)
+    });
+  });
+});
+
+describe('Test logout', () => {
+  test('It should call AJAX for cleaning up the session, the button and the page should be loading status', () => {
+    const logoutBtn = document.createElement('a');
+    const mockEvent = new Event('click');
+    logoutBtn.text = 'Logout';
+    logoutBtn.href = '#';
+    logoutBtn.dispatchEvent(mockEvent);
+
+    $.post = jest.fn().mockImplementation(() => {
+      return Promise.resolve({ success: true });
+    });
+    LoginModule.logout(mockEvent);
+
+    expect($.post).toBeCalledWith(
+      drgc_params.ajaxUrl,
+      {
+        action: 'drgc_logout',
+        nonce: drgc_params.ajaxNonce
+      },
+      expect.any(Function)
+    );
+    expect($(logoutBtn).hasClass('sending')).toBe(true);
+    expect($('body').css('opacity')).toEqual('0.5');
+  });
+});

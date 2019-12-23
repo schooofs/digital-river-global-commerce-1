@@ -75,5 +75,3 @@ coverage/
 
 # Build JS #
 ##########
-/assets/js/drgc-public.min.js
-/assets/js/drgc-admin.min.js

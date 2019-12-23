@@ -45,13 +45,6 @@ Follow these steps to setup Digital River Global Commerce:
 2. Configure ‘Digital River > Settings’
 3. Import Products
 
-
-Follow these steps to setup Digital River Global Commerce
-
-1. Activate the plugin through the 'Plugins' menu in WordPress
-2. Configure 'Digital River > Settings'
-3. Import Products
-
 == OPEN NEW MARKETS ==
 
 Enter new markets in months, not years. With pre-established local acquirers and selling entities around the world, Digital River helps you accelerate time to market and ignite your global sales in over 200 countries.

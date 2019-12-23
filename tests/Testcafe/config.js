@@ -1,5 +1,5 @@
 let config = {
-  env: 'env', // local: dev; staging/systest: sys; production/demo: prod
+  env: 'dev', // local: dev; staging/systest: sys; production/demo: prod
   apiEnv: 'PRD',
   testEmail: 'qa@dr.com',
   adminUserName: {

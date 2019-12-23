@@ -54,6 +54,4 @@ test('Estimated Shipping Fee - Standard free Shipping', async t => {
   await utils.clickItem(new LoginPage().continueAsGuestBtn);
   await t.expect(checkoutPage.shippingSummaryTitle.exists).notOk();
   await t.expect(checkoutPage.shippingSummaryValue.exists).notOk();
-
-
 });

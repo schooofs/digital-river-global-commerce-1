@@ -11,7 +11,7 @@ export default class GenericUtils {
   }
 
   async checkEstShippingInfo(title, value) {
-	const cartPage = new CartPage();
+    const cartPage = new CartPage();
     await t
       .expect(cartPage.estimatedShippingTitle.innerText).eql(title)
       .expect(cartPage.estimatedShippingValue.innerText).eql(value);
@@ -31,7 +31,7 @@ export default class GenericUtils {
   }
 
   async checkCheckBox(checkbox, checked) {
-	console.log(">> CheckCheckBox")
+    console.log(">> CheckCheckBox")
     let ischecked = await checkbox.checked;
     while(ischecked != checked) {
       await t
@@ -86,8 +86,8 @@ export default class GenericUtils {
 
   async fillOrderInfoAndSubmitOrder(isPhysical) {
     const tyPage = new TYPage();
-	const checkoutPage = new CheckoutPage();
-	if (isPhysical) {
+    const checkoutPage = new CheckoutPage();
+    if (isPhysical) {
       // Enter shipping info
       console.log('>> Checkout page - Entering Shipping Info.');
       await checkoutPage.completeFormShippingInfo();
@@ -131,7 +131,7 @@ export default class GenericUtils {
   async addProductAndProceedToCheckout(product) {
     const minicartPage = new MiniCartPage();
     const cartPage = new CartPage();
-	const checkoutPage = new CheckoutPage();
+    const checkoutPage = new CheckoutPage();
     // Add a physical product into cart
     console.log('>> Add Product into Cart');
     await this.addProductsIntoCart(product);

@@ -50,7 +50,6 @@ export default class CheckoutPage {
     // Shipping Summary
     this.shippingSummaryTitle = Selector('.dr-summary__shipping').find('p').nth(0);
     this.shippingSummaryValue = Selector('.dr-summary__shipping').find('p').nth(1);
-
   }
 
   async completeFormEmail(testEmail) {
@@ -152,7 +151,7 @@ export default class CheckoutPage {
   async checSingupFormDisplayItems() {
     const drSignupForm = Selector('#dr-signup-form');
     const signUpTitle = Selector('.dr-login-sections__section.section-new').find('div').nth(0).find('h2').innerText;
-	const expectedSinUpTitle = 'NEW CUSTOMER';
+    const expectedSinUpTitle = 'NEW CUSTOMER';
     const formFirstName = drSignupForm.find('[name="first_name"]');
     const formLastName = drSignupForm.find('[name="last_name"]');
     const formEmail = drSignupForm.find('[name="uemail"]');

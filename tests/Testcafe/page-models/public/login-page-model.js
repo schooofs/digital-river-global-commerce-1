@@ -36,7 +36,7 @@ export default class HomePage {
 
   async checkDisplayAfterLogin(newUser) {
     const expectedWelcomeName = 'HI, ' + newUser.firstName;
-	console.log('  ---> Check logout button exists and the wording display correctly after login');
+      console.log('  ---> Check logout button exists and the wording display correctly after login');
     await t
       .expect(this.logoutDropDownMenu.innerText).eql(expectedWelcomeName)
       .expect(this.logoutMenu.exists).ok()

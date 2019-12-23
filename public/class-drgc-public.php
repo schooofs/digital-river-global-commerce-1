@@ -487,7 +487,7 @@ class DRGC_Public {
 	/**
 	 * Insert login link at menu.
 	 *
-	 * @since  1.3.0
+	 * @since  1.1.0
 	 */
 	public function insert_login_menu_items( $items, $args ) {
 		$customer = DRGC()->shopper->retrieve_shopper();
@@ -565,7 +565,7 @@ class DRGC_Public {
 	/**
 	 * Redirect on page load.
 	 *
-	 * @since  1.3.0
+	 * @since  1.1.0
 	 */
 	public function redirect_on_page_load() {
 		if ( is_page( 'checkout' ) ) {

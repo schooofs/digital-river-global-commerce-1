@@ -1,3 +1,8 @@
+/*
+ * modal.js by Bootstrap
+ * https://github.com/twbs/bootstrap
+ */
+
 jQuery(document).ready(($) => {
     if (typeof $().modal !== "function") {
         'use strict';

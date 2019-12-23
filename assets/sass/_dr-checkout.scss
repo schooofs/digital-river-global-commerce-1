@@ -39,6 +39,11 @@
         }
     }
 
+    &__googlepay,
+    &__applepay {
+        margin-top: 20px;
+    }
+
     .small-closed-left {
         clear: both;
         width: 48%;

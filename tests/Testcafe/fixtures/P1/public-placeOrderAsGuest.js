@@ -1,4 +1,4 @@
-import { Selector, ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
 import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 import MinicartPage from '../../page-models/public/minicart-page-model';
@@ -17,8 +17,8 @@ const tyPage = new TYPage();
 
 fixture `===== DRGC P1 Automation Test - Place Order As Guest =====`
   .httpAuth({
-    username: 'gcwpdemo',
-    password: '33a5b9f5',
+    username: Config.websiteAuth['username'],
+    password: Config.websiteAuth['password'],
   })
   .beforeEach(async t => {
     console.log('Before Each: Click Menu -> Product to Enter Product Page');
@@ -35,6 +35,7 @@ test('Place order with physical product', async t => {
   // Add a physical product into cart
   console.log('>> Add physical product into cart');
   await t
+    .setTestSpeed(0.9)
     .click(homePage.addPhyProduct)
     .takeScreenshot('BWC/minicart.jpg');
 
@@ -59,11 +60,16 @@ test('Place order with physical product', async t => {
   await checkoutPage.completeFormShippingInfo();
 
   // Set billing info as diff from shipping info
-  console.log('>> Checkout page - Set billing info to diff from shipping info.');
-  await t
-	.expect(checkoutPage.billingDiffCheckbox.exists).ok()
-	.hover(checkoutPage.billingDiffCheckbox)
-	.click(checkoutPage.billingDiffCheckbox);
+  // If checkbox is checked, the billing info will be set to same as shipping info
+  let ischecked = await checkoutPage.useSameAddrCheckbox.checked;
+  while(ischecked) {
+    console.log('>> Checkout page - Set billing info to diff from shipping info.');
+    await t
+      .expect(checkoutPage.useSameAddrCheckbox.exists).ok()
+      .hover(checkoutPage.useSameAddrCheckbox)
+      .click(checkoutPage.useSameAddrCheckbox);
+    ischecked = await checkoutPage.useSameAddrCheckbox.checked;
+  }
 
   // Enter Billing Info
   console.log('>> Checkout page - Entering billing info.');
@@ -98,7 +104,7 @@ test('Place order with digital product', async t => {
   // Add a Digital product into cart
   console.log('>> Add digital product into cart');
   await t
-    .setTestSpeed(0.7)
+    .setTestSpeed(0.9)
     .click(homePage.addDigiProduct)
     .takeScreenshot('BWC/minicart_d.jpg');
 

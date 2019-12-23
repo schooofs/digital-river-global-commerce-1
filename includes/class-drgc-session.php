@@ -146,8 +146,17 @@ class DRGC_Session {
 	 */
 	public function set_cookie() {
 		if ( ! headers_sent() && did_action( 'wp_loaded' ) ) {
+			$this->set_guest_flag_cookie( 'false' );
 			@setcookie( $this->cookie, $this->session_id . '|' . $this->expires, $this->expires, '/', '', false, true );
+			@setcookie('wordpress_cache_off',"true",$this->expires,'/');
 		}
+	}
+
+	/**
+	 * Create/modify the cookie of drgc_guest_flag
+	 */
+	public function set_guest_flag_cookie( $value ) {
+		@setcookie( 'drgc_guest_flag', $value, $this->expires, '/' );
 	}
 
 	/**
@@ -218,7 +227,7 @@ class DRGC_Session {
 		);
 
 		foreach ( $records as $session ) {
-          
+
 			return json_decode( $session->session_data, true );
 		}
 	}
@@ -252,14 +261,14 @@ class DRGC_Session {
 		if ( ! $this->has_session() && $this->session_data ) {
 			return;
 		}
-		
+
 		global $wpdb;
 
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO $this->table_name ( `session_id`, `expires`, `session_data` ) 
-			VALUES ( %s, %d, %s ) 
-			ON DUPLICATE KEY 
+				"INSERT INTO $this->table_name ( `session_id`, `expires`, `session_data` )
+			VALUES ( %s, %d, %s )
+			ON DUPLICATE KEY
 			UPDATE `expires` = VALUES(`expires`), `session_data` = VALUES(`session_data`)",
 				$this->session_id,
 				$this->expires,

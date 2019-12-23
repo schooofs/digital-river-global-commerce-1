@@ -1,8 +1,9 @@
 import { Selector, t } from 'testcafe';
-import DataUtils from '../../utils/dataUtils';
+import GeneralUtils from '../../utils/genericUtils';
 
 export default class CheckoutPage {
   constructor() {
+    this.utils = new GeneralUtils();
     this.primary = Selector('#primary');
 
     this.email = Selector('#checkout-email-form').find('input');
@@ -14,7 +15,7 @@ export default class CheckoutPage {
     this.deliverByExpress = Selector('#shipping-option-8196700');
     this.deliverByStandard = Selector('#shipping-option-167400');
     this.deliveryOptionSubmitBtn = Selector('#checkout-delivery-form > button');
-    this.billingDiffCheckbox = Selector('#checkbox-billing');
+    this.useSameAddrCheckbox = Selector('#checkbox-billing');
     this.submitPaymentBtn = Selector('#dr-submit-payment');
     this.submitOrderBtn = Selector("#checkout-confirmation-form > button");
 
@@ -45,6 +46,10 @@ export default class CheckoutPage {
     this.ccExpiry = Selector('#ccExpiry');
     this.cardCVVIframe = Selector('#card-cvv > iframe');
     this.ccCVV = Selector('#ccCVV');
+
+    // Shipping Summary
+    this.shippingSummaryTitle = Selector('.dr-summary__shipping').find('p').nth(0);
+    this.shippingSummaryValue = Selector('.dr-summary__shipping').find('p').nth(1);
   }
 
   async completeFormEmail(testEmail) {
@@ -54,7 +59,7 @@ export default class CheckoutPage {
   }
 
   async completeFormShippingInfo() {
-	const shippingInfo = new DataUtils().getShippingUserData();
+    const shippingInfo = this.utils.getShippingUserData();
     const shippingStateOption = this.shippingState.find('option');
     const shippingCountryOption = this.shippingCountry.find('option');
 
@@ -75,7 +80,7 @@ export default class CheckoutPage {
   }
 
   async completeFormBillingInfo() {
-	const billingInfo = new DataUtils().getShippingUserData();
+    const billingInfo = this.utils.getBillingUserData();
     const billingStateOption = this.billingState.find('option');
     const billingCountryOption = this.billingCountry.find('option');
 
@@ -97,17 +102,17 @@ export default class CheckoutPage {
 
   async setDeliveryOption(deliveryOption) {
     if (deliveryOption === 'express') {
-      await t.click(this.deliverByExpress);
+      await this.utils.clickItem(this.deliverByExpress);
     }
     else if (deliveryOption === 'standard') {
-        await t.click(this.deliverByStandard);
+      await this.utils.clickItem(this.deliverByStandard);
     }
 
-    await t.click(this.deliveryOptionSubmitBtn);
+    await this.utils.clickItem(this.deliveryOptionSubmitBtn);
   }
 
   async completeFormCreditCardInfo() {
-	const creditCardInfo = new DataUtils().getCreditCardInfo();
+    const creditCardInfo = this.utils.getCreditCardInfo();
 
     await t
       .click(this.creditCard)

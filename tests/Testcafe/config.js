@@ -15,22 +15,19 @@ let config = {
     demo: 'password',
   },
   baseUrl: {
-    dev: 'http://localhost/DRWPLocal/',  //Replace this to your localhost test site address
-    sys: 'http://tpedevapp0264.d010.digitalriverws.net/',
-    prod: 'http://wordpress.c141.digitalriverws.net/',
-    demo: 'http://gcwpdemo.wpengine.com',
+    dev: 'Dev Site Web Address',  //Replace this to your localhost test site address
+    sys: 'Systest Site Web Address',
+    prod: 'Prod Site Web Address',
+    demo: 'Demo Site Web Address',
   },
   apiUrl: {
-    PRD: 'https://api.digitalriver.com',
-    NONPRD: 'https://dispatch-test.digitalriver.com',
+    PRD: 'Prod API URL',
+    NONPRD: 'NonProd API URL',
   },
-  drSettings: {
-    siteID:     'drdod15',
-    apiKey:     '99477953970e432da4d89b982f6bcc49',
-    apiSecret:  'a4dccc3558ec4e09ae2879864f900f24',
-    domainInput:  'api.digitalriver.com',
-    pluginKey:  '6eb251a648bc4e6b87b24671262f2e91',
-  },
+  websiteAuth: {
+	username: 'username',
+	password: 'password'
+  }
 };
 
 module.exports = config;

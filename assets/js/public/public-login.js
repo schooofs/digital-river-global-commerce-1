@@ -1,6 +1,83 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
 
+const LoginModule = (($) => {
+    const validatePassword = (e) => {
+        const elem = e.target;
+        const customMsgArr = [];
+        let customMsg = '';
+
+        if (elem.value.length < 8 || elem.value.length > 32) {
+            customMsgArr.push(drgc_params.translations.password_length_error_msg);
+        }
+        if (!/[A-Z]/.test(elem.value)) {
+            customMsgArr.push(drgc_params.translations.password_uppercase_error_msg);
+        }
+        if (!/[a-z]/.test(elem.value)) {
+            customMsgArr.push(drgc_params.translations.password_lowercase_error_msg);
+        }
+        if (!/[0-9]/.test(elem.value)) {
+            customMsgArr.push(drgc_params.translations.password_number_error_msg);
+        }
+        if (!/[!_@]/.test(elem.value)) {
+            customMsgArr.push(drgc_params.translations.password_char_error_msg);
+        }
+        if (!/^[a-zA-Z0-9!_@]+$/.test(elem.value)) {
+            customMsgArr.push(drgc_params.translations.password_banned_char_error_msg);
+        }
+
+        customMsg = customMsgArr.join(' ');
+        elem.setCustomValidity(customMsg);
+
+        if (elem.validity.valueMissing) {
+            $(elem).next('.invalid-feedback').text(drgc_params.translations.required_field_msg);
+        } else if (elem.validity.customError) {
+            $(elem).next('.invalid-feedback').text(elem.validationMessage);
+        } else {
+            $(elem).next('.invalid-feedback').text('');
+        }
+    };
+
+    const checkoutAsGuest = (e) => {
+        e.preventDefault();
+        const data = {
+            action: 'drgc_checkout_as_guest',
+            nonce: drgc_params.ajaxNonce,
+        };
+        $.ajax({
+            type: 'POST',
+            url: drgc_params.ajaxUrl,
+            data,
+            success: () => {
+                window.location.href = drgc_params.checkoutUrl;
+            }
+        });
+    };
+
+    const logout = (e) => {
+        e.preventDefault();
+
+        if ($(e.target).data('processing')) return;
+
+        $(e.target).toggleClass('sending').data('processing', true).blur();
+
+        const data = {
+            action: 'drgc_logout',
+            nonce: drgc_params.ajaxNonce
+        };
+        $('body').css({ 'pointer-events': 'none', 'opacity': 0.5 });
+        $.post(drgc_params.ajaxUrl, data, function(response) {
+            location.reload();
+        });
+    };
+
+    return {
+        validatePassword,
+        checkoutAsGuest,
+        logout
+    };
+})(jQuery);
+
 jQuery(document).ready(($) => {
     const ajaxUrl = drgc_params.ajaxUrl;
 
@@ -32,7 +109,7 @@ jQuery(document).ready(($) => {
 
         $.post(ajaxUrl, data, function(response) {
             if ( response.success ) {
-                location.reload();
+                window.location.href = drgc_params.checkoutUrl;
             } else {
                 $form.data('processing', false);
                 but.removeClass('sending').blur();
@@ -52,24 +129,11 @@ jQuery(document).ready(($) => {
     });
 
     $('.drgc-wrapper').on('click', '.dr-logout', function(e) {
-        e.preventDefault();
+        LoginModule.logout(e);
+    });
 
-        if ($(this).data('processing')) {
-            return;
-        }
-
-        var but = $(this).toggleClass('sending').blur();
-
-        $(this).data('processing', true);
-
-        const data = {
-            action: 'drgc_logout',
-            nonce: drgc_params.ajaxNonce
-        };
-
-        $.post(ajaxUrl, data, function(response) {
-            location.reload();
-        });
+    $('#menu-item-logout a').on('click', function(e) {
+        LoginModule.logout(e);
     });
 
     $('#dr_login_form, #dr-signup-form, #dr-pass-reset-form, #checkout-email-form').find('input[type=email]').on('input', (e) => {
@@ -82,37 +146,7 @@ jQuery(document).ready(($) => {
     });
 
     $('#dr-signup-form input[name=upw], #dr-confirm-password-reset-form input[name=password]').on('input', (e) => {
-        const elem = e.target;
-        const customMsgArr = [];
-        let customMsg = '';
-
-        if (elem.value.length < 8 || elem.value.length > 32) {
-            customMsgArr.push(drgc_params.translations.password_length_error_msg);
-        }
-        if (!/[A-Z]/.test(elem.value)) {
-            customMsgArr.push(drgc_params.translations.password_uppercase_error_msg);
-        }
-        if (!/[a-z]/.test(elem.value)) {
-            customMsgArr.push(drgc_params.translations.password_lowercase_error_msg);
-        }
-        if (!/[0-9]/.test(elem.value)) {
-            customMsgArr.push(drgc_params.translations.password_number_error_msg);
-        }
-        if (!/[!_@]/.test(elem.value)) {
-            customMsgArr.push(drgc_params.translations.password_char_error_msg);
-        }
-        if (!/^[a-zA-Z0-9!_@]+$/.test(elem.value)) {
-            customMsgArr.push(drgc_params.translations.password_banned_char_error_msg);
-        }
-
-        customMsg = customMsgArr.join(' ');
-        elem.setCustomValidity(customMsg);
-
-        if (elem.validity.valueMissing) {
-            $(elem).next('.invalid-feedback').text(drgc_params.translations.required_field_msg);
-        } else if (elem.validity.customError) {
-            $(elem).next('.invalid-feedback').text(elem.validationMessage);
-        }
+        LoginModule.validatePassword(e);
     });
 
     $('#dr-signup-form input[type=password], #dr-confirm-password-reset-form input[type=password]').on('input', (e) => {
@@ -160,7 +194,7 @@ jQuery(document).ready(($) => {
 
         $.post(ajaxUrl, data, function(response) {
             if (response.success) {
-                location.reload();
+                window.location.href = drgc_params.checkoutUrl;
             } else {
                 $form.data('processing', false);
                 $button.removeClass('sending').blur();
@@ -177,6 +211,10 @@ jQuery(document).ready(($) => {
             }
         });
 
+    });
+
+    $('#dr-guest-btn').click((e) => {
+        LoginModule.checkoutAsGuest(e);
     });
 
     $('#dr-pass-reset-form').on('submit', function(e) {
@@ -276,3 +314,5 @@ jQuery(document).ready(($) => {
         }
     }
 });
+
+export default LoginModule;

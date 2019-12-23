@@ -1,12 +1,16 @@
 /* searchbox-iPhone6.js */
 import { Selector } from 'testcafe';
-import config from '../../config';
+import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 
-fixture `===== DRGC P3 Automation Test - Search Box for iPhone6 =====`;
+fixture `===== DRGC P3 Automation Test - Search Box for iPhone6 =====`
+  .httpAuth({
+    username: Config.websiteAuth['username'],
+    password: Config.websiteAuth['password'],
+  });
 
-const env = config.env;
-const baseURL = config.baseUrl[env];
+const env = Config.env;
+const baseURL = Config.baseUrl[env];
 const homePage = new HomePage();
 const mobileViewHamburgList = Selector('.navbar.navbar-expand-xl.fixed-top').find('[data-target="#navbarNavDropdown"]').find('span');
 const searchBoxToggle = Selector('.fa.fa-search');

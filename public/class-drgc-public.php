@@ -79,7 +79,7 @@ class DRGC_Public {
 		wp_enqueue_script( $this->drgc, DRGC_PLUGIN_URL . 'assets/js/drgc-public' . $suffix . '.js', array( 'jquery' ), $this->version, false );
 
 		if ( is_page( 'checkout' ) ) {
-			wp_enqueue_script( 'digital-river-js', 'https://js.digitalriver.com/v1/DigitalRiver.js', array( $this->drgc ), null, true );
+			wp_enqueue_script( 'digital-river-js', 'https://js.digitalriverws.com/v1/DigitalRiver.js', array( $this->drgc ), null, true );
 			wp_enqueue_script( 'paypal-checkout-js', 'https://www.paypalobjects.com/api/checkout.js', array( $this->drgc ), null, true );
 		}
 
@@ -97,12 +97,20 @@ class DRGC_Public {
     $testOrder_option = get_option( 'drgc_testOrder_handler' );
 		$testOrder_enable = ( is_array( $testOrder_option ) && '1' == $testOrder_option['checkbox'] )  ? "true" : "false";
 
+		$applepay_option = get_option( 'drgc_applepay_handler' );
+		$applepay_enabled = ( is_array( $applepay_option ) && '1' == $applepay_option['checkbox'] )  ? 'true' : 'false';
+
+		$googlepay_option = get_option( 'drgc_googlepay_handler' );
+		$googlepay_enabled = ( is_array( $googlepay_option ) && '1' == $googlepay_option['checkbox'] )  ? 'true' : 'false';
+
 		$translation_array = array(
 			'upgrade_label'               => __('Upgrade', 'digital-river-global-commerce'),
 			'add_label'                   => __('Add', 'digital-river-global-commerce'),
 			'free_label'                  => __('FREE', 'digital-river-global-commerce'),
 			'tax_label'              	    => __('Tax', 'digital-river-global-commerce'),
 			'estimated_tax_label'         => __('Estimated Tax', 'digital-river-global-commerce'),
+			'shipping_label'              => __('Shipping', 'digital-river-global-commerce'),
+			'estimated_shipping_label'    => __('Estimated Shipping', 'digital-river-global-commerce'),
 			'credit_card_ending_label'    => __('Credit card ending in', 'digital-river-global-commerce'),
 			'pay_with_card_label'         => __('pay with card', 'digital-river-global-commerce'),
 			'pay_with_paypal_label'       => __('pay with paypal', 'digital-river-global-commerce'),
@@ -111,6 +119,9 @@ class DRGC_Public {
 			'remove_label'                => __('Remove', 'digital-river-global-commerce'),
 			'subtotal_label'              => __('Sub-Total', 'digital-river-global-commerce'),
 			'qty_label'                   => __('Qty', 'digital-river-global-commerce'),
+			'shipping_and_handling_label'	=> __('Shipping and Handling', 'digital-river-global-commerce'),
+			'discount_label'		          => __('Discount', 'digital-river-global-commerce'),
+			'order_total_label'		        => __('Order Total', 'digital-river-global-commerce'),
 			'password_reset_title'        => __('Password reset email sent', 'digital-river-global-commerce'),
 			'password_saved_title'        => __('Password saved', 'digital-river-global-commerce'),
 			'password_reset_msg'          => __('You will be receiving an email soon with instructions on resetting your login password.', 'digital-river-global-commerce'),
@@ -129,7 +140,8 @@ class DRGC_Public {
 			'password_char_error_msg'        => __('Must use at least one special character (! _ @).', 'digital-river-global-commerce'),
 			'password_banned_char_error_msg' => __('Contains non-allowable special characters (only ! _ @ are allowed).', 'digital-river-global-commerce'),
 			'password_confirm_error_msg'     => __('Passwords do not match.', 'digital-river-global-commerce'),
-			'undefined_error_msg'            => __('Something went wrong.', 'digital-river-global-commerce')
+			'undefined_error_msg'            => __('Something went wrong.', 'digital-river-global-commerce'),
+			'loading_msg'                    => __('Loading...', 'digital-river-global-commerce')
 		);
 
 		// transfer drgc options from PHP to JS
@@ -152,8 +164,10 @@ class DRGC_Public {
 				'failure'  => isset( $_GET['ppcancel'] ) ? $_GET['ppcancel'] : false,
 				'success'  => isset ( $_GET['ppsuccess'] ) ? $_GET['ppsuccess'] : false,
       ),
-			'testOrder'         => $testOrder_enable,
-			'translations'      => $translation_array
+			'testOrder'          => $testOrder_enable,
+			'translations'       => $translation_array,
+			'isApplePayEnabled'  => $applepay_enabled,
+			'isGooglePayEnabled' => $googlepay_enabled
 		);
 
 		wp_localize_script( $this->drgc, 'drgc_params', $options );
@@ -184,6 +198,7 @@ class DRGC_Public {
 		}
 
 		if ( array_key_exists( 'access_token', $attempt ) ) {
+			$plugin->session->set_guest_flag_cookie( 'false' );
 			$plugin->session->dirty_set_session( $_COOKIE['drgc_session'] );
 
 			wp_send_json_success( $attempt );
@@ -283,6 +298,7 @@ class DRGC_Public {
 					wp_send_json_error( $user );
 				}
 
+				$plugin->session->set_guest_flag_cookie( 'false' );
 				$attempt = $plugin->shopper->generate_access_token_by_ref_id( $externalReferenceId );
 				wp_send_json_success( $attempt );
 			}
@@ -291,10 +307,18 @@ class DRGC_Public {
 		}
 	}
 
+	public function checkout_as_guest_ajax() {
+		check_ajax_referer( 'drgc_ajax', 'nonce' );
+		$plugin = DRGC();
+		$plugin->session->set_guest_flag_cookie( 'true' );
+		wp_send_json_success();
+	}
+
 	public function dr_logout_ajax() {
 		check_ajax_referer( 'drgc_ajax', 'nonce' );
 		$plugin = DRGC();
 		$plugin->shopper = null;
+		$plugin->session->set_guest_flag_cookie( 'false' );
 		$plugin->session->dirty_set_session( $_COOKIE['drgc_session'] );
 		$plugin->session->clear_session();
 		wp_send_json_success();
@@ -461,6 +485,46 @@ class DRGC_Public {
 	}
 
 	/**
+	 * Insert login link at menu.
+	 *
+	 * @since  1.1.0
+	 */
+	public function insert_login_menu_items( $items, $args ) {
+		$customer = DRGC()->shopper->retrieve_shopper();
+		$is_logged_in = $customer && 'Anonymous' !== $customer['id'];
+
+		$new_item = array(
+			'title'            => $is_logged_in ? __( 'Hi, ', 'digital-river-global-commerce' ) . $customer['firstName'] : __( 'Login' ),
+			'menu_item_parent' => 0,
+			'ID'               => 'login',
+			'db_id'            => 'login',
+			'url'              => get_site_url() . '/login',
+			'classes'          => $is_logged_in ? array( 'menu-item', 'menu-item-has-children' ) : array( 'menu-item' ),
+			'target'           => null,
+			'xfn'              => null,
+			'current'          => null // for preventing warning in debug mode
+		);
+		$items[] = (object) $new_item;
+
+		if ( $is_logged_in ) {
+			$new_sub_item = array(
+				'title'            => __( 'Logout', 'digital-river-global-commerce' ),
+				'menu_item_parent' => 'login',
+				'ID'               => 'logout',
+				'db_id'            => 'logout',
+				'url'              => '#',
+				'classes'          => array( 'menu-item' ),
+				'target'           => null,
+				'xfn'              => null,
+				'current'          => null // for preventing warning in debug mode
+			);
+			$items[] = (object) $new_sub_item;
+		}
+
+		return $items;
+	}
+
+	/**
 	 * Render minicart on header.
 	 *
 	 * @since  1.0.0
@@ -468,7 +532,7 @@ class DRGC_Public {
 	public function minicart_in_header( $content ) {
 		if ( !is_page( 'cart' ) && !is_page( 'checkout' ) && !is_page( 'thank-you' ) ) {
 			ob_start();
-			include_once 'partials/minicart.php';
+			include_once 'partials/drgc-minicart.php';
 			$append = ob_get_clean();
 			return $content . $append;
 		}
@@ -495,6 +559,24 @@ class DRGC_Public {
 	public function add_legal_link() {
 		if ( is_page( 'cart' ) || is_page( 'checkout' ) || is_page( 'thank-you' ) ) {
 			include_once 'partials/drgc-legal-footer.php';
-    }
+		}
+	}
+
+	/**
+	 * Redirect on page load.
+	 *
+	 * @since  1.1.0
+	 */
+	public function redirect_on_page_load() {
+		if ( is_page( 'checkout' ) ) {
+			$customer = DRGC()->shopper->retrieve_shopper();
+			$is_logged_in = $customer && 'Anonymous' !== $customer['id'];
+			$is_guest = 'true' === $_COOKIE['drgc_guest_flag'];
+
+			if ( ! $is_logged_in && ! $is_guest ) {
+				wp_redirect( get_permalink( get_page_by_path( 'login' ) ) );
+				exit;
+			}
+		}
 	}
 }

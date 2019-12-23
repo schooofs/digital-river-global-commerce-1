@@ -4,7 +4,7 @@ let siteConfig = {
     apiKey:     'API_KEY',
     apiSecret:  'API_SECRET',
     domainInput:  'DOMAIN_INPUT',
-    pluginKey:  'PLUGIN_KEY',  
+    pluginKey:  'PLUGIN_KEY',
   }
 };
 

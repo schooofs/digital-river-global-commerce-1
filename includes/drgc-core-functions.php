@@ -147,8 +147,6 @@ function drgc_currency_toggler() {
 		$output .= '<select class="custom-select dr-currency-select">';
 
 		foreach ( $locales['locales'] as $locale => $currency ) {
-			$country = drgc_code_to_counry( $locale );
-
 			$output .= "<option ";
 			$output .= $current_locale === $locale ? 'selected ' : '';
 			$output .= "data-locale=\"{$locale}\" value=\"{$currency}\">";

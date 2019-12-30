@@ -1,9 +1,6 @@
 import { Selector, t } from 'testcafe';
-import Config from '../../config';
 
-const env = Config.env;
-
-export default class HomePage {
+export default class LoginPage {
   constructor() {
     this.continueAsGuestBtn = Selector('#dr-guest-btn');
     this.signupFirstName = Selector('#dr-signup-form').find('[name="first_name"]');

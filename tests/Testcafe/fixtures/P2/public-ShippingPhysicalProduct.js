@@ -2,8 +2,6 @@ import { Selector, t } from 'testcafe';
 import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 import MinicartPage from '../../page-models/public/minicart-page-model';
-import CartPage from '../../page-models/public/cart-page-model';
-import CheckoutPage from '../../page-models/public/checkout-page-model';
 import GeneralUtils from '../../utils/genericUtils';
 
 const env = Config.env;
@@ -14,7 +12,7 @@ const utils = new GeneralUtils();
 const standardFee = '5.00USD';
 const expressFee = '7.49USD';
 
-fixture `===== DRGC P1 Automation Test - Physical Product Shipping =====`
+fixture `===== DRGC P2 Automation Test - Physical Product Shipping =====`
   .httpAuth({
     username: Config.websiteAuth['username'],
     password: Config.websiteAuth['password'],

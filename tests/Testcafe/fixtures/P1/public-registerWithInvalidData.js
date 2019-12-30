@@ -122,7 +122,6 @@ test('Sign Up: Missing Password', async t => {
   console.log('  -> Click Login Button and Direct to Login Page');
   console.log('  -> Click Login Button and Direct to Login Page');
   await t.click(loginPage.loginMenu);
-  await t.click(loginPage.loginMenu);
 
   console.log('  -> Entering New User Info and SignUp');
   await t
@@ -145,7 +144,6 @@ test('Sign Up: Missing Confirm Password', async t => {
   const newUser = utils.getNewUser();
   console.log('  -> Click Login Button and Direct to Login Page');
   console.log('  -> Click Login Button and Direct to Login Page');
-  await t.click(loginPage.loginMenu);
   await t.click(loginPage.loginMenu);
 
   console.log('  -> Entering New User Info and SignUp');

@@ -71,7 +71,7 @@ test('Place order as a new customer: Regiser as a new customer when checkout', a
   await utils.fillOrderInfoAndSubmitOrder(true);
 });
 
-test('Place order as a new customer: Singin first then checkout', async t => {
+test('Place order as a new customer: Signin first then checkout', async t => {
   console.log('Test Case: Place Order as a New Customer: Signin First then Checkout');
 
   console.log('  -> Click Login Button and Direct to Login Page');

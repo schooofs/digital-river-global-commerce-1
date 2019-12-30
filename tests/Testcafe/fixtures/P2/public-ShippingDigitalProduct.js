@@ -15,7 +15,7 @@ const cartPage = new CartPage();
 const checkoutPage = new CheckoutPage();
 const utils = new GeneralUtils();
 
-fixture `===== DRGC P1 Automation Test - No Shipping for Digital Products =====`
+fixture `===== DRGC P2 Automation Test - No Shipping for Digital Products =====`
   .httpAuth({
     username: Config.websiteAuth['username'],
     password: Config.websiteAuth['password'],

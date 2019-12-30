@@ -2,7 +2,6 @@
 import { Selector, t } from 'testcafe';
 import Config from '../../config';
 import GeneralUtils from '../../utils/genericUtils';
-import ProductUtils from '../../utils/productUtils';
 import HomePage from '../../page-models/public/home-page-model';
 
 fixture `===== DRGC P3 Automation Test - Mini Cart for iPhone6 =====`

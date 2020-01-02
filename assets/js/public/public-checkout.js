@@ -94,6 +94,8 @@ jQuery(document).ready(($) => {
         // Submit first (email) form
         var emailPayload;
 
+        CheckoutUtils.applyLegalLinks(digitalriverjs);
+
         // Create elements through DR.js
         if ($('.credit-card-section').length) {
             const options = {
@@ -524,9 +526,14 @@ jQuery(document).ready(($) => {
 
         $('#checkout-confirmation-form button[type="submit"]').on('click', (e) => {
             e.preventDefault();
-            $(e.target).toggleClass('sending').blur();
-            $('#dr-payment-failed-msg').hide();
-            applyPaymentToCart(paymentSourceId);
+            if (!$('#dr-tAndC').prop('checked')) {
+                $('#dr-checkout-err-field').text(drgc_params.translations.required_tandc_msg).show();
+            } else {
+                $('#dr-checkout-err-field').text('').hide();
+                $(e.target).toggleClass('sending').blur();
+                $('#dr-payment-failed-msg').hide();
+                applyPaymentToCart(paymentSourceId);
+            }
         });
 
         function applyShippingAndUpdateCart(shippingOptionId) {

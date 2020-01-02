@@ -115,6 +115,23 @@ const CheckoutUtils = (($, params) => {
     $('div.dr-summary__total > .total-value').text(formattedOrderTotal);
   };
 
+  const applyLegalLinks = (digitalriverjs) => {
+    const entityCode = drgc_params.cart.cart.businessEntityCode || drgc_params.order.order.businessEntityCode;
+    if (entityCode) {
+      const complianceData = digitalriverjs.Compliance.getDetails(
+        entityCode,
+        $('.dr-currency-select option:selected').data('locale')
+      ).disclosure;
+
+      $('.dr-resellerDisclosure').prop('href', complianceData.resellerDisclosure.url);
+      $('.dr-termsOfSale').prop('href', complianceData.termsOfSale.url);
+      $('.dr-privacyPolicy').prop('href', complianceData.privacyPolicy.url);
+      $('.dr-cookiePolicy').prop('href', complianceData.cookiePolicy.url);
+      $('.dr-cancellationRights').prop('href', complianceData.cancellationRights.url);
+      $('.dr-legalNotice').prop('href', complianceData.legalNotice.url);
+    }
+  };
+
   const displayAlertMessage = (message) => {
     alert('ERROR! ' + message);
   }
@@ -124,15 +141,16 @@ const CheckoutUtils = (($, params) => {
   };
 
   return {
-    createDisplayItems: createDisplayItems,
-    createShippingOptions: createShippingOptions,
-    updateShippingOptions: updateShippingOptions,
-    getBaseRequestData: getBaseRequestData,
-    updateDeliverySection: updateDeliverySection,
-    updateAddressSection: updateAddressSection,
-    updateSummaryPricing: updateSummaryPricing,
-    displayAlertMessage: displayAlertMessage,
-    resetBodyOpacity: resetBodyOpacity
+    createDisplayItems,
+    createShippingOptions,
+    updateShippingOptions,
+    getBaseRequestData,
+    updateDeliverySection,
+    updateAddressSection,
+    updateSummaryPricing,
+    applyLegalLinks,
+    displayAlertMessage,
+    resetBodyOpacity
   };
 })(jQuery, drgc_params);
 

@@ -383,3 +383,20 @@ function drgc_get_user_status() {
 		return 'false';
 	}
 }
+
+/**
+ * Get business entity name by entity code
+ *
+ * @param string $entity_code
+ * @return string
+ */
+function drgc_get_business_entity_name( $entity_code = '' ) {
+	$entity_list = array(
+		'DR_INC-ENTITY' => 'Digital River, Inc.',
+		'DR_IRELAND-ENTITY' => 'Digital River Ireland Ltd.'
+	);
+	if ( ! array_key_exists( $entity_code, $entity_list ) ) {
+		$entity_code = 'DR_INC-ENTITY';
+	}
+	return $entity_list[$entity_code];
+}

@@ -222,6 +222,11 @@
     margin-bottom: 0; // Override default `<label>` bottom margin
   }
 
+  label[for="dr-tAndC"].form-check-label {
+    margin-bottom: 1em;
+  }
+
+
   .form-check-inline {
     display: inline-flex;
     align-items: center;

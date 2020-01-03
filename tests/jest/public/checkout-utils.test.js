@@ -282,4 +282,37 @@ describe('Checkout Utils', () => {
 
     expect(requestData).toEqual(stubRequestData);
   });
+
+  test('applyLegalLinks should get urls by DR.js and apply them to the links', () => {
+    document.body.innerHTML = `<div id="container">
+      <select class="custom-select dr-currency-select">
+        <option data-locale="ja_JP" value="JPY">Japan (JPY)</option>
+        <option data-locale="en_US" value="USD" selected>United States of America (USD)</option>
+      </select>
+      <a href="#" target="_blank" class="dr-privacyPolicy">Privacy Policy</a>
+      <a href="#" target="_blank" class="dr-termsOfSale">Terms of Sale</a>
+    </div>`;
+    const digitalriverjs = {
+      Compliance: {
+        getDetails: (entityCode, locale) => {
+          return {
+            disclosure: {
+              businessEntity: { name: 'Digital River Inc.', id: 'DR_INC-ENTITY' },
+              resellerDisclosure: { localizedText: 'is the authorised reseller.', url: 'https://store-domain/resellerDisclosure' },
+              termsOfSale: { localizedText: 'Terms of Sale', url: 'https://store-domain/termsOfSale' },
+              privacyPolicy: { localizedText: 'Privacy Policy', url: 'https://store-domain/privacyPolicy' },
+              cookiePolicy: { localizedText: 'Cookies', url: 'https://store-domain/cookiePolicy' },
+              cancellationRights: { localizedText: 'Cancellation Right', url: 'https://store-domain/cancellationRights' },
+              legalNotice: { localizedText: 'Legal Notice', url: 'https://store-domain/legalNotice' }
+            }
+          };
+        }
+      }
+    };
+
+    CheckoutUtils.applyLegalLinks(digitalriverjs);
+    expect($('.dr-termsOfSale').prop('href')).toEqual('https://store-domain/termsOfSale');
+    expect($('.dr-privacyPolicy').prop('href')).toEqual('https://store-domain/privacyPolicy');
+  });
+
 });

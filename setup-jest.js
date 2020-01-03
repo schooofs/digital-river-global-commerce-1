@@ -20,5 +20,10 @@ global.drgc_params = {
     password_number_error_msg: 'Must use at least one number.',
     password_char_error_msg: 'Must use at least one special character (! _ @).',
     password_banned_char_error_msg: 'Contains non-allowable special characters (only ! _ @ are allowed).'
+  },
+  cart: {
+    cart: {
+      businessEntityCode: 'DR_INC-ENTITY'
+    }
   }
 };

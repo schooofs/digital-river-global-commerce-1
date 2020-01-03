@@ -432,6 +432,7 @@ jQuery(document).ready(($) => {
 
     $('body').on('change', '.dr-currency-select', function(e) {
         e.preventDefault();
+        $('body').css({ 'pointer-events': 'none', 'opacity': 0.5 });
 
         let data = {
             currency: e.target.value,

@@ -285,10 +285,6 @@ describe('Checkout Utils', () => {
 
   test('applyLegalLinks should get urls by DR.js and apply them to the links', () => {
     document.body.innerHTML = `<div id="container">
-      <select class="custom-select dr-currency-select">
-        <option data-locale="ja_JP" value="JPY">Japan (JPY)</option>
-        <option data-locale="en_US" value="USD" selected>United States of America (USD)</option>
-      </select>
       <a href="#" target="_blank" class="dr-privacyPolicy">Privacy Policy</a>
       <a href="#" target="_blank" class="dr-termsOfSale">Terms of Sale</a>
     </div>`;

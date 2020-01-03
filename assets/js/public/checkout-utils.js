@@ -116,13 +116,12 @@ const CheckoutUtils = (($, params) => {
   };
 
   const applyLegalLinks = (digitalriverjs) => {
-    const entityCode = drgc_params.cart.cart.businessEntityCode || drgc_params.order.order.businessEntityCode;
-    if (entityCode) {
-      const complianceData = digitalriverjs.Compliance.getDetails(
-        entityCode,
-        $('.dr-currency-select option:selected').data('locale')
-      ).disclosure;
+    const entityCode = drgc_params.order && drgc_params.order.order ?
+      drgc_params.order.order.businessEntityCode :
+      (drgc_params.cart && drgc_params.cart.cart ? drgc_params.cart.cart.businessEntityCode : '');
 
+    if (entityCode) {
+      const complianceData = digitalriverjs.Compliance.getDetails(entityCode, drgc_params.drLocale).disclosure;
       $('.dr-resellerDisclosure').prop('href', complianceData.resellerDisclosure.url);
       $('.dr-termsOfSale').prop('href', complianceData.termsOfSale.url);
       $('.dr-privacyPolicy').prop('href', complianceData.privacyPolicy.url);

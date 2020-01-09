@@ -23,7 +23,8 @@ test('Minicart price', async t => {
 
   // Add the on sale product into cart and check it displays on sale price in mini cart
   console.log(">> Check on sale price in mini cart")
-  await utils.addProductsIntoCart(onSaleProductID);
+  //await utils.addProductsIntoCart(onSaleProductID);
+  await utils.addProductAndProceedToCheckout(homePage.addOnSaleProduct);
   await t
     .expect(homePage.minicartItem.exists).ok()
     .expect(homePage.minicartRegularPrice.exists).ok()
@@ -45,9 +46,9 @@ test('Category page price', async t => {
 
 test('Porduct page price', async t => {
   console.log('Test Case: Product Detail Page - Check the Sale Price');
-  const onSaleProductPageLink = homePage.onSaleBuyButton.parent('div').find('.card-overlay');
-  const regularPrice = homePage.onSaleBuyButton.parent('form').find('.product-price-old');
-  const salePrice = homePage.onSaleBuyButton.parent('form').find('.product-price');
+  const onSaleProductPageLink = homePage.addOnSaleProduct.parent('div').find('.card-overlay');
+  const regularPrice = homePage.addOnSaleProduct.parent('form').find('.product-price-old');
+  const salePrice = homePage.addOnSaleProduct.parent('form').find('.product-price');
 
   console.log('>> Navigate to target testing website');
   await t
@@ -62,7 +63,7 @@ test('Porduct page price', async t => {
 
 async function checkSaleBtnPriceExists(regularPrice, salePrice) {
   await t
-    .expect(homePage.onSaleBuyButton.exists).ok()
+    .expect(homePage.addOnSaleProduct.exists).ok()
     .expect(regularPrice.exists).ok()
     .expect(salePrice.exists).ok();
 }

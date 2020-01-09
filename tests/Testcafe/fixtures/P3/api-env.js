@@ -2,7 +2,6 @@ import { RequestLogger } from 'testcafe';
 import Config from '../../config';
 import HomePage from '../../page-models/public/home-page-model';
 import GeneralUtils from '../../utils/genericUtils';
-import ProductUtils from '../../utils/productUtils';
 
 const logger = new RequestLogger();
 const env = Config.env;
@@ -24,7 +23,7 @@ test('Verify API Environment', async t => {
   console.log('Test Case: Verify API Environment');
   console.log('>> Add a product into cart and go to checkout page');
   await t.maximizeWindow();
-  await utils.addProductsIntoCart(new ProductUtils().getTestingPhysicalProduct().productID);
+  await utils.addProductsIntoCart(homePage.addPhyProduct);
   await utils.clickItem(homePage.checkoutBtn);
 
   console.log("API ENVIROMENT SET:" + Config.apiEnv);

@@ -4,6 +4,7 @@ import HomePage from '../../page-models/public/home-page-model';
 import MinicartPage from '../../page-models/public/minicart-page-model';
 import CartPage from '../../page-models/public/cart-page-model';
 import CheckoutPage from '../../page-models/public/checkout-page-model';
+import LoginPage from '../../page-models/public/login-page-model';
 import GeneralUtils from '../../utils/genericUtils';
 
 const env = Config.env;
@@ -14,7 +15,7 @@ const cartPage = new CartPage();
 const checkoutPage = new CheckoutPage();
 const utils = new GeneralUtils();
 
-fixture `===== DRGC P1 Automation Test - No Shipping for Digital Products =====`
+fixture `===== DRGC P2 Automation Test - No Shipping for Digital Products =====`
   .httpAuth({
     username: Config.websiteAuth['username'],
     password: Config.websiteAuth['password'],
@@ -50,7 +51,7 @@ test('Estimated Shipping Fee - Standard free Shipping', async t => {
   // Click Proceed to Checkout in View Cart page to proceed checkout
   console.log('>> Direct to checkout page, no shipping info for Digital Product');
   await utils.clickItem(cartPage.proceedToCheckoutBtn);
+  await utils.clickItem(new LoginPage().continueAsGuestBtn);
   await t.expect(checkoutPage.shippingSummaryTitle.exists).notOk();
   await t.expect(checkoutPage.shippingSummaryValue.exists).notOk();
-
 });

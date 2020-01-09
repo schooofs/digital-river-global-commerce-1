@@ -2,7 +2,7 @@
 import { Selector, t } from 'testcafe';
 import Config from '../../config';
 import GeneralUtils from '../../utils/genericUtils';
-import ProductUtils from '../../utils/productUtils';
+import HomePage from '../../page-models/public/home-page-model';
 
 fixture `===== DRGC P3 Automation Test - Mini Cart for iPhone6 =====`
   .httpAuth({
@@ -15,7 +15,7 @@ const baseURL = Config.baseUrl[env];
 const mobileViewHamburgList = Selector('.navbar.navbar-expand-xl.fixed-top').find('[data-target="#navbarNavDropdown"]').find('span');
 const miniCartToggle = Selector('.dr-minicart-toggle');
 const utils = new GeneralUtils();
-
+const homePage = new HomePage();
 
 test('Verify minicart lineItem quanaity exist in iPhone6 portrait', async t => {
   console.log('Test Case: Portrait Mode - Verify Minicart Line Item Quanaity Exist in iPhone6 ');
@@ -27,7 +27,7 @@ test('Verify minicart lineItem quanaity exist in iPhone6 portrait', async t => {
     });
 
   await utils.clickItem(mobileViewHamburgList);
-  await utils.addProductsIntoCart(new ProductUtils().getTestingPhysicalProduct().productID);
+  await utils.addProductsIntoCart(homePage.addPhyProduct);
 
   await checkMiniCartInfo('BWC/minicart-iPhone6-portrait.png');
 });
@@ -50,7 +50,7 @@ test('Verify minicart lineItem quanaity exist in iPhone6 landscape', async t => 
     });
 
   await utils.clickItem(mobileViewHamburgList);
-  await utils.addProductsIntoCart(new ProductUtils().getTestingPhysicalProduct().productID);
+  await utils.addProductsIntoCart(homePage.addPhyProduct);
 
   await checkMiniCartInfo('BWC/minicart-iPhone6-landscape.png');
 });

@@ -131,6 +131,12 @@ const CheckoutUtils = (($, params) => {
     }
   };
 
+  const displayPreTAndC = () => {
+    if (drgc_params.googlePayBtnStatus && drgc_params.googlePayBtnStatus === 'LOADING') return;
+    if (drgc_params.applePayBtnStatus && drgc_params.applePayBtnStatus === 'LOADING') return;
+    $('.dr-preTAndC-wrapper').show();
+  };
+
   const displayAlertMessage = (message) => {
     alert('ERROR! ' + message);
   }
@@ -148,6 +154,7 @@ const CheckoutUtils = (($, params) => {
     updateAddressSection,
     updateSummaryPricing,
     applyLegalLinks,
+    displayPreTAndC,
     displayAlertMessage,
     resetBodyOpacity
   };

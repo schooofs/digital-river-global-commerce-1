@@ -4,6 +4,25 @@ import DRGooglePay from './payment-googlepay';
 import DRApplePay from './payment-applepay';
 
 const CheckoutModule = (($) => {
+    const initPreTAndC = () => {
+        $('#dr-preTAndC').change((e) => {
+            if ($(e.target).is(':checked')) {
+                $('#dr-preTAndC-err-msg').text('').hide();
+                $('.dr-cloudpay-btn').css({ 'pointer-events': 'auto' });
+            } else {
+                $('.dr-cloudpay-btn').css({ 'pointer-events': 'none' });
+            }
+        });
+
+        $('.dr-cloudpay-btn-wrapper').click(() => {
+            if (!$('#dr-preTAndC').is(':checked')) {
+                $('#dr-preTAndC-err-msg').text(drgc_params.translations.required_tandc_msg).show();
+            }
+        });
+
+        $('#dr-preTAndC').trigger('change');
+    };
+
     const updateSummaryLabels = () => {
         if ($('.dr-checkout__payment').hasClass('active') || $('.dr-checkout__confirmation').hasClass('active')) {
             $('.dr-summary__tax .item-label').text(drgc_params.translations.tax_label);
@@ -15,6 +34,7 @@ const CheckoutModule = (($) => {
     };
 
     return {
+        initPreTAndC,
         updateSummaryLabels
     };
 })(jQuery);
@@ -95,6 +115,7 @@ jQuery(document).ready(($) => {
         var emailPayload;
 
         CheckoutUtils.applyLegalLinks(digitalriverjs);
+        CheckoutModule.initPreTAndC();
 
         // Create elements through DR.js
         if ($('.credit-card-section').length) {

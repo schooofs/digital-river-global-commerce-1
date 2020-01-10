@@ -3,6 +3,11 @@ import DRCommerceApi from './commerce-api';
 
 const DRApplePay = (($, translations) => {
   const initApplePayEvents = (applepay, requestShipping) => {
+    applepay.on('ready', () => {
+      drgc_params.applePayBtnStatus = 'READY';
+      CheckoutUtils.displayPreTAndC();
+    });
+
     applepay.on('shippingaddresschange', (event) => {
       const shippingAddress = event.shippingAddress;
 
@@ -197,12 +202,15 @@ const DRApplePay = (($, translations) => {
     const applepay = digitalriverJs.createElement('applepay', paymentDataRequest);
 
     if (applepay.canMakePayment()) {
+      drgc_params.applePayBtnStatus = 'LOADING';
       initApplePayEvents(applepay, requestShipping);
       applepay.mount('dr-applepay-button');
       document.getElementById('dr-applepay-button').style.border = 'none';
 
       return applepay;
     } else {
+      drgc_params.applePayBtnStatus = 'UNAVAILABLE';
+      $('.dr-checkout__applepay').hide();
       return false;
     }
   };

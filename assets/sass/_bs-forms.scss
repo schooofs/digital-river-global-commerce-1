@@ -206,6 +206,11 @@
     position: relative;
     display: block;
     padding-left: $form-check-input-gutter;
+
+    &.dr-preTAndC-wrapper {
+      padding-left: 1.8rem;
+      margin-top: 20px;
+    }
   }
 
   .form-check-input {

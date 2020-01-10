@@ -191,6 +191,8 @@ input[type=radio] { position: relative; opacity: 1; width: auto; height: auto; }
 
 .drgc-wrapper .form-check { position: relative; display: block; padding-left: 1.25rem; }
 
+.drgc-wrapper .form-check.dr-preTAndC-wrapper { padding-left: 1.8rem; margin-top: 20px; }
+
 .drgc-wrapper .form-check-input { position: absolute; margin-top: 0.3rem; margin-left: -1.25rem; }
 
 .drgc-wrapper .form-check-input:disabled ~ .form-check-label { color: #6c757d; }
@@ -1016,13 +1018,13 @@ input[type=number] { -webkit-appearance: textfield; -moz-appearance: textfield; 
 
 @media (min-width: 1200px) { .dr-checkout { width: 50%; } }
 
-.dr-checkout__email, .dr-checkout__shipping, .dr-checkout__billing, .dr-checkout__delivery, .dr-checkout__payment, .dr-checkout__confirmation { background: #ffffff; margin-bottom: 20px; padding: 0 10px; }
+.dr-checkout__cloudpay, .dr-checkout__email, .dr-checkout__shipping, .dr-checkout__billing, .dr-checkout__delivery, .dr-checkout__payment, .dr-checkout__confirmation { background: #ffffff; margin-bottom: 20px; padding: 0 10px; }
 
 .dr-checkout__billing .billing-section { display: none; }
 
 .dr-checkout__billing .billing-section__name { font-family: Open Sans; font-size: 16px; font-weight: 600; line-height: 16px; text-transform: uppercase; color: #333; margin: 16px 0; }
 
-.dr-checkout__googlepay, .dr-checkout__applepay { margin-top: 20px; }
+.dr-checkout__googlepay, .dr-checkout__applepay { margin-top: 15px; }
 
 .dr-checkout .small-closed-left { clear: both; width: 48%; float: left; }
 
@@ -1057,6 +1059,8 @@ input[type=number] { -webkit-appearance: textfield; -moz-appearance: textfield; 
 .DRElement--complete { color: #69bf29; border-color: #69bf29; }
 
 .DRElement--invalid { color: #dc3545; border-color: #dc3545; }
+
+.DRElement.dr-cloudpay-btn { padding: 0; }
 
 .dr-panel-edit { display: none; width: 100%; padding-top: 20px; padding-bottom: 20px; overflow: hidden; }
 

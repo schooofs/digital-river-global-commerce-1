@@ -143,16 +143,14 @@ function drgc_currency_toggler() {
 
 	if ( ! empty( $locales['locales'] ) && count( $locales['locales'] ) > 1 ) {
 		$output = '<div class="dr-currency-toggler">';
-		$output .= sprintf("<span>%s</span>", __( 'Locale: ' ) );
+		$output .= sprintf("<span>%s</span>", __( 'Currency: ' ) );
 		$output .= '<select class="custom-select dr-currency-select">';
 
 		foreach ( $locales['locales'] as $locale => $currency ) {
-			$country = drgc_code_to_counry( $locale );
-
 			$output .= "<option ";
 			$output .= $current_locale === $locale ? 'selected ' : '';
 			$output .= "data-locale=\"{$locale}\" value=\"{$currency}\">";
-			$output .= "{$country} ({$currency})</option>";
+			$output .= "{$currency}</option>";
 		}
 
 		$output .= '</select></div>';

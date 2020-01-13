@@ -13,7 +13,7 @@ const cartPage = new CartPage();
 const utils = new GeneralUtils();
 const freeShipping = 'FREE';
 
-fixture `===== DRGC P1 Automation Test - Free Shipping =====`
+fixture `===== DRGC P2 Automation Test - Free Shipping =====`
   .httpAuth({
     username: Config.websiteAuth['username'],
     password: Config.websiteAuth['password'],

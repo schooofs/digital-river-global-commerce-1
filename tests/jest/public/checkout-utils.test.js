@@ -311,4 +311,30 @@ describe('Checkout Utils', () => {
     expect($('.dr-privacyPolicy').prop('href')).toEqual('https://store-domain/privacyPolicy');
   });
 
+  test('displayPreTAndC should show T&C of GooglePay & ApplePay once the button(s) is(are) ready', () => {
+    document.body.innerHTML = `<div class="dr-preTAndC-wrapper"><input type="checkbox" id="dr-preTAndC"></div>`;
+    const preTAndCWrapper = document.getElementsByClassName('dr-preTAndC-wrapper')[0];
+
+    // One is ready but another one is loading, T&C should be hidden
+    preTAndCWrapper.style.display = 'none';
+    drgc_params.googlePayBtnStatus = 'READY';
+    drgc_params.applePayBtnStatus = 'LOADING';
+    CheckoutUtils.displayPreTAndC();
+    expect(preTAndCWrapper.style.display).toEqual('none');
+
+    // One is ready but another one is unavailable, T&C should be visible
+    preTAndCWrapper.style.display = 'none';
+    drgc_params.googlePayBtnStatus = 'READY';
+    drgc_params.applePayBtnStatus = 'UNAVAILABLE';
+    CheckoutUtils.displayPreTAndC();
+    expect(preTAndCWrapper.style.display).toEqual('');
+
+    // Both are ready, T&C should be visible
+    preTAndCWrapper.style.display = 'none';
+    drgc_params.googlePayBtnStatus = 'READY';
+    drgc_params.applePayBtnStatus = 'READY';
+    CheckoutUtils.displayPreTAndC();
+    expect(preTAndCWrapper.style.display).toEqual('');
+  });
+
 });

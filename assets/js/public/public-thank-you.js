@@ -1,3 +1,5 @@
+import CheckoutUtils from './checkout-utils';
+
 const ThankYouModule = {};
 
 jQuery(document).ready(($) => {
@@ -10,6 +12,9 @@ jQuery(document).ready(($) => {
             window.print();
             document.body.innerHTML = originalContents;
         });
+
+        const digitalriverjs = new DigitalRiver(drgc_params.digitalRiverKey);
+        CheckoutUtils.applyLegalLinks(digitalriverjs);
     }
 });
 

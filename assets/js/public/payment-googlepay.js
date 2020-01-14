@@ -22,6 +22,11 @@ const DRGooglePay = (($, translations) => {
   };
 
   const initGooglePayEvents = (googlepay, requestShipping) => {
+    googlepay.on('ready', () => {
+      drgc_params.googlePayBtnStatus = 'READY';
+      CheckoutUtils.displayPreTAndC();
+    });
+
     googlepay.on('shippingaddresschange', (event) => {
       const shippingAddress = event.shippingAddress;
 
@@ -165,12 +170,15 @@ const DRGooglePay = (($, translations) => {
     const googlepay = digitalriverJs.createElement('googlepay', paymentDataRequest);
 
     if (googlepay.canMakePayment() && isConnectionSecure()) {
+      drgc_params.googlePayBtnStatus = 'LOADING';
       initGooglePayEvents(googlepay, requestShipping);
       googlepay.mount('dr-googlepay-button');
       document.getElementById('dr-googlepay-button').style.border = 'none';
 
       return googlepay;
     } else {
+      drgc_params.googlePayBtnStatus = 'UNAVAILABLE';
+      $('.dr-checkout__googlepay').hide();
       return false;
     }
   };

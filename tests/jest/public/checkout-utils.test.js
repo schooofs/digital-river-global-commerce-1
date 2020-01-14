@@ -282,4 +282,59 @@ describe('Checkout Utils', () => {
 
     expect(requestData).toEqual(stubRequestData);
   });
+
+  test('applyLegalLinks should get urls by DR.js and apply them to the links', () => {
+    document.body.innerHTML = `<div id="container">
+      <a href="#" target="_blank" class="dr-privacyPolicy">Privacy Policy</a>
+      <a href="#" target="_blank" class="dr-termsOfSale">Terms of Sale</a>
+    </div>`;
+    const digitalriverjs = {
+      Compliance: {
+        getDetails: (entityCode, locale) => {
+          return {
+            disclosure: {
+              businessEntity: { name: 'Digital River Inc.', id: 'DR_INC-ENTITY' },
+              resellerDisclosure: { localizedText: 'is the authorised reseller.', url: 'https://store-domain/resellerDisclosure' },
+              termsOfSale: { localizedText: 'Terms of Sale', url: 'https://store-domain/termsOfSale' },
+              privacyPolicy: { localizedText: 'Privacy Policy', url: 'https://store-domain/privacyPolicy' },
+              cookiePolicy: { localizedText: 'Cookies', url: 'https://store-domain/cookiePolicy' },
+              cancellationRights: { localizedText: 'Cancellation Right', url: 'https://store-domain/cancellationRights' },
+              legalNotice: { localizedText: 'Legal Notice', url: 'https://store-domain/legalNotice' }
+            }
+          };
+        }
+      }
+    };
+
+    CheckoutUtils.applyLegalLinks(digitalriverjs);
+    expect($('.dr-termsOfSale').prop('href')).toEqual('https://store-domain/termsOfSale');
+    expect($('.dr-privacyPolicy').prop('href')).toEqual('https://store-domain/privacyPolicy');
+  });
+
+  test('displayPreTAndC should show T&C of GooglePay & ApplePay once the button(s) is(are) ready', () => {
+    document.body.innerHTML = `<div class="dr-preTAndC-wrapper"><input type="checkbox" id="dr-preTAndC"></div>`;
+    const preTAndCWrapper = document.getElementsByClassName('dr-preTAndC-wrapper')[0];
+
+    // One is ready but another one is loading, T&C should be hidden
+    preTAndCWrapper.style.display = 'none';
+    drgc_params.googlePayBtnStatus = 'READY';
+    drgc_params.applePayBtnStatus = 'LOADING';
+    CheckoutUtils.displayPreTAndC();
+    expect(preTAndCWrapper.style.display).toEqual('none');
+
+    // One is ready but another one is unavailable, T&C should be visible
+    preTAndCWrapper.style.display = 'none';
+    drgc_params.googlePayBtnStatus = 'READY';
+    drgc_params.applePayBtnStatus = 'UNAVAILABLE';
+    CheckoutUtils.displayPreTAndC();
+    expect(preTAndCWrapper.style.display).toEqual('');
+
+    // Both are ready, T&C should be visible
+    preTAndCWrapper.style.display = 'none';
+    drgc_params.googlePayBtnStatus = 'READY';
+    drgc_params.applePayBtnStatus = 'READY';
+    CheckoutUtils.displayPreTAndC();
+    expect(preTAndCWrapper.style.display).toEqual('');
+  });
+
 });

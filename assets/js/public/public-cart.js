@@ -1,5 +1,6 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
+import CheckoutUtils from './checkout-utils';
 
 const CartModule = {};
 
@@ -494,8 +495,11 @@ jQuery(document).ready(($) => {
     });
 
     /*init cart via JS*/
-    if($("#dr-cart-page-wrapper").length >0){
+    if($('#dr-cart-page-wrapper').length){
       fetchFreshCart();
+
+      const digitalriverjs = new DigitalRiver(drgc_params.digitalRiverKey);
+      CheckoutUtils.applyLegalLinks(digitalriverjs);
     }
 });
 

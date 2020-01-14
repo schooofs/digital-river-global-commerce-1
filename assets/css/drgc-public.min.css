@@ -9,7 +9,7 @@ iframe{width:1px;min-width:100%;border:0}
 .dr-loader-container{position:relative;margin:0 auto;overflow:hidden}
 .dr-loader{position:relative;margin:0 auto;text-align:center}
 .dr-legal-footer a{font-family:"Open Sans",sans-serif;font-size:16px;color:#000;line-height:16px;margin-right:10px;text-decoration:underline}
-.dr-legal-footer .dr-aboutDigitalRiver{margin-right:0}
+.dr-legal-footer .dr-resellerDisclosure{margin-right:0}
 #dr-minicart .dr-minicart-display{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;position:absolute;text-align:left;top:61px;right:0;width:330px;min-height:300px;max-height:400px;background-color:#fff;border:1px solid #ddd;-webkit-box-shadow:0 3px 10px rgba(0,0,0,0.2);box-shadow:0 3px 10px rgba(0,0,0,0.2);z-index:99;font-size:18px}
 #dr-minicart .dr-minicart-header,#dr-minicart .dr-minicart-body,#dr-minicart .dr-minicart-footer{padding:0 10px}
 #dr-minicart .dr-minicart-header{padding:1rem 0 1rem 1rem;border-bottom:1px solid #eee}
@@ -80,9 +80,11 @@ input[type=radio]{position:relative;opacity:1;width:auto;height:auto}
 .drgc-wrapper .form-row{display:-webkit-box;display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-5px;margin-left:-5px}
 .drgc-wrapper .form-row>.col,.drgc-wrapper .form-row>[class*="col-"]{padding-right:5px;padding-left:5px}
 .drgc-wrapper .form-check{position:relative;display:block;padding-left:1.25rem}
+.drgc-wrapper .form-check.dr-preTAndC-wrapper{padding-left:1.8rem;margin-top:20px}
 .drgc-wrapper .form-check-input{position:absolute;margin-top:.3rem;margin-left:-1.25rem}
 .drgc-wrapper .form-check-input:disabled ~ .form-check-label{color:#6c757d}
 .drgc-wrapper .form-check-label{margin-bottom:0}
+.drgc-wrapper label[for="dr-tAndC"].form-check-label{margin-bottom:1em}
 .drgc-wrapper .form-check-inline{display:-webkit-inline-box;display:-ms-inline-flexbox;display:inline-flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;padding-left:0;margin-right:.75rem}
 .drgc-wrapper .form-check-inline .form-check-input{position:static;margin-top:0;margin-right:.3125rem;margin-left:0}
 .drgc-wrapper .valid-feedback{display:none;width:100%;margin-top:.25rem;font-size:80%;color:#28a745}
@@ -359,10 +361,10 @@ input[type=number]{-webkit-appearance:textfield;-moz-appearance:textfield;appear
 .dr-check-account__link{font-size:14px;font-weight:600;text-decoration:underline;color:#000}
 .dr-checkout{width:100%}
 .dr-checkout .d-none{display:none !important}
-.dr-checkout__email,.dr-checkout__shipping,.dr-checkout__billing,.dr-checkout__delivery,.dr-checkout__payment,.dr-checkout__confirmation{background:#fff;margin-bottom:20px;padding:0 10px}
+.dr-checkout__cloudpay,.dr-checkout__email,.dr-checkout__shipping,.dr-checkout__billing,.dr-checkout__delivery,.dr-checkout__payment,.dr-checkout__confirmation{background:#fff;margin-bottom:20px;padding:0 10px}
 .dr-checkout__billing .billing-section{display:none}
 .dr-checkout__billing .billing-section__name{font-family:Open Sans;font-size:16px;font-weight:600;line-height:16px;text-transform:uppercase;color:#333;margin:16px 0}
-.dr-checkout__googlepay,.dr-checkout__applepay{margin-top:20px}
+.dr-checkout__googlepay,.dr-checkout__applepay{margin-top:15px}
 .dr-checkout .small-closed-left{clear:both;width:48%;float:left}
 .dr-checkout .small-closed-right{width:48%;float:right}
 .dr-checkout .dr-accordion__title-long{display:block}
@@ -380,6 +382,7 @@ input[type=number]{-webkit-appearance:textfield;-moz-appearance:textfield;appear
 .DRElement,.DRElement--empty,.DRElement--complete,.DRElement--invalid{font-family:Segoe UI,Tahoma,Geneva,Verdana,sans-serif;font-size:14px;height:48px}
 .DRElement--complete{color:#69bf29;border-color:#69bf29}
 .DRElement--invalid{color:#dc3545;border-color:#dc3545}
+.DRElement.dr-cloudpay-btn{padding:0}
 .dr-panel-edit{display:none;width:100%;padding-top:20px;padding-bottom:20px;overflow:hidden}
 .dr-checkout__el.active .dr-panel-edit{display:block}
 .dr-checkout__el.closed .dr-panel-edit{display:none}

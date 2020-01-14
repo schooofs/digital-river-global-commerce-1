@@ -36,10 +36,18 @@
     <div class="dr-checkout-wrapper__content" <?php echo $display; ?>>
 
         <div class="dr-checkout">
-            
-            <?php include_once DRGC_PLUGIN_DIR . 'public/templates/checkout/checkout-googlepay.php'; ?>
 
-            <?php include_once DRGC_PLUGIN_DIR . 'public/templates/checkout/checkout-applepay.php'; ?>
+            <div class="dr-checkout__el dr-checkout__cloudpay">
+
+                <?php include_once DRGC_PLUGIN_DIR . 'public/templates/checkout/checkout-pretandc.php'; ?>
+
+                <?php include_once DRGC_PLUGIN_DIR . 'public/templates/checkout/checkout-googlepay.php'; ?>
+
+                <?php include_once DRGC_PLUGIN_DIR . 'public/templates/checkout/checkout-applepay.php'; ?>
+
+                <div class="invalid-feedback" id="dr-preTAndC-err-msg"></div>
+
+            </div>
 
             <?php include_once DRGC_PLUGIN_DIR . 'public/templates/checkout/checkout-email.php'; ?>
 

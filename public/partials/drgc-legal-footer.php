@@ -13,6 +13,14 @@
 ?>
 
 <div class="container dr-legal-footer text-center">
-  <p class="dr-legalResellerStatement"><a class="dr-aboutDigitalRiver" href="https://store.digitalriver.com/store/defaults/<?php echo get_dr_locale( get_locale() );?>/DisplayDRAboutDigitalRiverPage" target="_blank">Digital River, Inc.</a><?php echo __( ' is the authorized reseller and merchant of the products and services offered within this store.' ); ?></p>
-  <p class="dr-legalPolicyLinks"><a class="dr-privacyPolicy" href="https://store.digitalriver.com/store/defaults/<?php echo get_dr_locale( get_locale() );?>/DisplayDRPrivacyPolicyPage" target="_blank"><?php echo __( 'Privacy Policy' ); ?></a><a class="dr-termsAndConditions" href="https://store.digitalriver.com/store/defaults/<?php echo get_dr_locale( get_locale() );?>/DisplayDRTermsAndConditionsPage" target="_blank"><?php echo __( 'Terms of Sale' );?></a></p>
+  <p class="dr-legalResellerStatement">
+  	<a href="#" target="_blank" class="dr-resellerDisclosure"><?php echo drgc_get_business_entity_name( $entity_code ); ?></a><?php echo __( ' is the authorized reseller and merchant of the products and services offered within this store.', 'digital-river-global-commerce' ); ?>
+  </p>
+  <p class="dr-legalPolicyLinks">
+  	<a href="#" target="_blank" class="dr-privacyPolicy"><?php echo __( 'Privacy Policy', 'digital-river-global-commerce' ); ?></a>
+  	<a href="#" target="_blank" class="dr-termsOfSale"><?php echo __( 'Terms of Sale', 'digital-river-global-commerce' ); ?></a>
+  	<a href="#" target="_blank" class="dr-cookiePolicy"><?php echo __( 'Cookies', 'digital-river-global-commerce' ); ?></a>
+  	<a href="#" target="_blank" class="dr-cancellationRights"><?php echo __( 'Cancellation Right', 'digital-river-global-commerce' ); ?></a>
+  	<a href="#" target="_blank" class="dr-legalNotice"><?php echo __( 'Legal Notice', 'digital-river-global-commerce' ); ?></a>
+  </p>
 </div>

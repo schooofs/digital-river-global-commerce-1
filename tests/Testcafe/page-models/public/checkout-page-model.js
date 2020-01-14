@@ -50,6 +50,9 @@ export default class CheckoutPage {
     // Shipping Summary
     this.shippingSummaryTitle = Selector('.dr-summary__shipping').find('p').nth(0);
     this.shippingSummaryValue = Selector('.dr-summary__shipping').find('p').nth(1);
+
+    // Terms of Sale & Privacy
+    this.checkboxTermsofSaleAndPolicy = Selector('#dr-tAndC');
   }
 
   async completeFormEmail(testEmail) {

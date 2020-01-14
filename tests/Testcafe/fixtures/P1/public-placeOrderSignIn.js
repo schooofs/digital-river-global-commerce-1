@@ -132,6 +132,9 @@ test('Place order as a new customer: Signin first then checkout', async t => {
   console.log('>> Checkout page - Entering Payment Info.');
   await checkoutPage.completeFormCreditCardInfo();
 
+  // Agree to Terms of Sales and Privacy Policy then submit order
+  console.log('>> Checkout page - agree to Terms of Sale');
+  await utils.checkCheckBox(checkoutPage.checkboxTermsofSaleAndPolicy, true);
   // Submit Order
   console.log('>> Checkout page - Place order');
   await t
@@ -144,7 +147,6 @@ test('Place order as a new customer: Signin first then checkout', async t => {
   const orderNum = await tyPage.orderNumber.textContent;
   console.log(orderNum.trim());
 });
-
 
 async function checkRedirectToLoginPage() {
   console.log('>> Check it redirect to login page');

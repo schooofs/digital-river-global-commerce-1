@@ -114,6 +114,10 @@ export default class GenericUtils {
     console.log('>> Checkout page - Entering Payment Info.');
     await checkoutPage.completeFormCreditCardInfo();
 
+    // Agree to Terms of Sales and Privacy Policy then submit order
+    console.log('>> Checkout page - agree to Terms of Sale');
+    await this.checkCheckBox(checkoutPage.checkboxTermsofSaleAndPolicy, true);
+
     // Submit Order
     console.log('>> Checkout page - Place order');
     await t

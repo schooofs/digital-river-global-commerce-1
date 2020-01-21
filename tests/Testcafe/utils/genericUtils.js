@@ -31,7 +31,6 @@ export default class GenericUtils {
   }
 
   async checkCheckBox(checkbox, checked) {
-    console.log(">> CheckCheckBox")
     let ischecked = await checkbox.checked;
     while(ischecked != checked) {
       await t

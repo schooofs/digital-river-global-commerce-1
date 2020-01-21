@@ -3,14 +3,14 @@ import ProductUtils from '../../utils/productUtils';
 
 const dataUtils = new ProductUtils();
 const physicalProdID = dataUtils.getTestingPhysicalProduct().productID;
-const digitalProdID = dataUtils.getTestingDigitalProduct().productID;
+const digitalProdName = dataUtils.getTestingDigitalProduct().productName;
 const onSaleProdID = dataUtils.getOnSaleProduct().productID;
 
 export default class HomePage {
   constructor() {
     this.productsMenu = Selector('a[title="Products"]');
     this.addPhyProduct = Selector('.dr-buy-btn[data-product-id="' + physicalProdID + '"]');
-    this.addDigiProduct = Selector('.dr-buy-btn[data-product-id="' + digitalProdID + '"]');
+    this.addDigiProduct = Selector('.c-product-card-content__text').withText(digitalProdName.toUpperCase()).parent(2).find('button');
     this.addOnSaleProduct = Selector('button[data-product-id="' + onSaleProdID + '"]');
     this.categoryRegularPrice = this.addOnSaleProduct.parent('div').find('.new-price');
     this.categorySalePrice = this.addOnSaleProduct.parent('div').find('.new-price');

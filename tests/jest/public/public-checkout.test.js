@@ -81,3 +81,28 @@ describe('Test updateSummaryLabels', () => {
   });
 
 });
+
+describe('Test getCountryOptionsFromGC', () => {
+
+  test('It should call AJAX for getting country options from GC SimpleRegistrationPage', () => {
+    document.body.innerHTML = `
+      <div class="dr-currency-toggler">
+        <span>Currency: </span>
+        <select class="custom-select dr-currency-select">
+          <option data-locale="ja_JP" value="JPY">JPY</option>
+          <option data-locale="en_GB" value="GBP" selected>GBP</option>
+        </select>
+      </div>`;
+    $.ajax = jest.fn().mockImplementation(() => {
+      return Promise.resolve('<!DOCTYPE html><html xml:lang="en" lang="en"></html>');
+    });
+
+    CheckoutModule.getCountryOptionsFromGC();
+    expect($.ajax).toBeCalledWith({
+      type: 'GET',
+      url:  'https://gc.digitalriver.com/store/drdod15/en_GB/DisplayPage/id.SimpleRegistrationPage',
+      success: expect.any(Function)
+    });
+  });
+
+});

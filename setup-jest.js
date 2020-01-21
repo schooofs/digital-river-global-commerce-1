@@ -2,6 +2,8 @@ global.jQuery = require('jquery');
 global.$ = global.jQuery;
 
 global.drgc_params = {
+  siteID: 'drdod15',
+  wpLocale: 'en_US',
   drLocale: 'en_US',
   translations: {
     subtotal_label: 'Sub-total',
@@ -24,6 +26,7 @@ global.drgc_params = {
   },
   cart: {
     cart: {
+      hasPhysicalProduct: true,
       businessEntityCode: 'DR_INC-ENTITY'
     }
   }

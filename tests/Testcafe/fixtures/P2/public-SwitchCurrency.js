@@ -26,7 +26,7 @@ fixture `===== DRGC P2 Automation Test - Currency Unit When Switch Currency'====
 });
 
 test('Switch Currency: Product Page', async t => {
-  console.log('Test Case: Check  the unit of currency after switching currency in Product Page.');
+  console.log('Test Case: Check the unit of currency after switching currency in Product Page.');
   const price = Selector('.price').nth(0);
   await switchCurrencyFromUsdToEur();
   console.log('>> Default USD, switch currency to EUR and check the currency display correctly');
@@ -34,7 +34,7 @@ test('Switch Currency: Product Page', async t => {
 });
 
 test('Switch Currency: Detail Page', async t => {
-  console.log('Test Case: Check  the unit of currency after switching currency in Detail Page.');
+  console.log('Test Case: Check the unit of currency after switching currency in Detail Page.');
   const firstProduct = Selector('.c-product-card').nth(0);
   const price = Selector('.product-price').nth(0);
   await t.click(firstProduct);
@@ -44,7 +44,7 @@ test('Switch Currency: Detail Page', async t => {
 });
 
 test('Switch Currency: Cart Page', async t => {
-  console.log('Test Case: Check  the unit of currency after switching currency in Cart Page.');
+  console.log('Test Case: Check the unit of currency after switching currency in Cart Page.');
   await utils.addProductsIntoCart(homePage.addPhyProduct);
   await minicartPage.clickViewCartBtn();
 
@@ -55,7 +55,7 @@ test('Switch Currency: Cart Page', async t => {
 });
 
 test('Switch Currency: Checkout Page', async t => {
-  console.log('Test Case: Check  the unit of currency after switching currency in Dheckout Page.');
+  console.log('Test Case: Check the unit of currency after switching currency in Checkout Page.');
   await utils.addProductsIntoCart(homePage.addPhyProduct);
   await minicartPage.clickCheckoutBtn();
   await utils.clickItem(new LoginPage().continueAsGuestBtn);

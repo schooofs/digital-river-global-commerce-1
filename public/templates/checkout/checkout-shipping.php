@@ -171,7 +171,7 @@ if ( $cart['cart']['shippingAddress']['line1'] != '') {
         </div>
 
 
-        <div class="form-group dr-panel-edit__el <?php echo $shippingAddress['country'] !== 'US' ? 'd-none' : '' ?>">
+        <div class="form-group dr-panel-edit__el d-none">
 
             <select class="form-control custom-select" name="shipping-countrySubdivision" id="shipping-field-state" required>
 

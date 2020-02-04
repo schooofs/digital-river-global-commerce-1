@@ -40,7 +40,8 @@ describe('Test initPreTAndC', () => {
 
 describe('Test updateSummaryLabels', () => {
 
-  test('It should display "Estimated" at tax/shipping label when the section is unfinished', () => {
+  let deliverySection, paymentSection, taxLabel, shippingLabel;
+  beforeAll(() => {
     document.body.innerHTML = `
       <div class="dr-checkout-wrapper__content">
         <div class="dr-checkout">
@@ -52,6 +53,13 @@ describe('Test updateSummaryLabels', () => {
           <div class="dr-checkout__confirmation"></div>
         </div>
         <div class="dr-summary">
+          <div class="dr-currency-toggler">
+            <span>Currency: </span>
+            <select class="custom-select dr-currency-select">
+              <option data-locale="en_US" value="USD" selected>USD</option>
+              <option data-locale="en_GB" value="GBP">GBP</option>
+            </select>
+          </div>
           <div class="dr-summary__tax">
             <p class="item-label">Estimated Tax</p>
             <p class="item-label">0.00USD</p>
@@ -63,21 +71,42 @@ describe('Test updateSummaryLabels', () => {
         </div>
       </div>`;
 
-    const deliverySection = document.getElementsByClassName('dr-checkout__shipping')[0];
-    const paymentSection = document.getElementsByClassName('dr-checkout__payment')[0];
-    const taxLabel = document.querySelector('.dr-summary__tax .item-label');
-    const shippingLabel = document.querySelector('.dr-summary__shipping .item-label');
+    deliverySection = document.getElementsByClassName('dr-checkout__shipping')[0];
+    paymentSection = document.getElementsByClassName('dr-checkout__payment')[0];
+    taxLabel = document.querySelector('.dr-summary__tax .item-label');
+    shippingLabel = document.querySelector('.dr-summary__shipping .item-label');
+  });
 
+  test('It should display "Estimated" at tax/shipping label when the section is unfinished', () => {
     deliverySection.classList.add('active');
+    paymentSection.classList.remove('active');
     CheckoutModule.updateSummaryLabels();
     expect(taxLabel.innerHTML).toEqual('Estimated Tax');
     expect(shippingLabel.innerHTML).toEqual('Estimated Shipping');
+  });
 
+  test('It should NOT display "Estimated" at tax/shipping label when the section is finished', () => {
     deliverySection.classList.remove('active');
     paymentSection.classList.add('active');
     CheckoutModule.updateSummaryLabels();
     expect(taxLabel.innerHTML).toEqual('Tax');
     expect(shippingLabel.innerHTML).toEqual('Shipping');
+  });
+
+  test('It should display "Estimated VAT" when currency is GBP/EUR and the section is unfinished', () => {
+    deliverySection.classList.add('active');
+    paymentSection.classList.remove('active');
+    $('.dr-currency-select').val('GBP');
+    CheckoutModule.updateSummaryLabels();
+    expect(taxLabel.innerHTML).toEqual('Estimated VAT');
+  });
+
+  test('It should display "VAT" when currency is GBP/EUR and the section is finished', () => {
+    deliverySection.classList.remove('active');
+    paymentSection.classList.add('active');
+    $('.dr-currency-select').val('GBP');
+    CheckoutModule.updateSummaryLabels();
+    expect(taxLabel.innerHTML).toEqual('VAT');
   });
 
 });

@@ -398,3 +398,13 @@ function drgc_get_business_entity_name( $entity_code = '' ) {
 	}
 	return $entity_list[$entity_code];
 }
+
+/**
+ * Displaying VAT/Tax depends on currency
+ *
+ * @param string $currency
+ * @return bool
+ */
+function drgc_should_display_vat( $currency = '' ) {
+	return ( $currency == 'GBP' || $currency == 'EUR' );
+}

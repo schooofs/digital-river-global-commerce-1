@@ -23,12 +23,23 @@ const CheckoutModule = (($) => {
         $('#dr-preTAndC').trigger('change');
     };
 
+    const shouldDisplayVat = () => {
+        const currency = $('.dr-currency-select').val();
+        return (currency === 'GBP' || currency === 'EUR');
+    };
+
     const updateSummaryLabels = () => {
         if ($('.dr-checkout__payment').hasClass('active') || $('.dr-checkout__confirmation').hasClass('active')) {
-            $('.dr-summary__tax .item-label').text(drgc_params.translations.tax_label);
+            $('.dr-summary__tax .item-label').text(shouldDisplayVat() ?
+                drgc_params.translations.vat_label :
+                drgc_params.translations.tax_label
+            );
             $('.dr-summary__shipping .item-label').text(drgc_params.translations.shipping_label);
         } else {
-            $('.dr-summary__tax .item-label').text(drgc_params.translations.estimated_tax_label);
+            $('.dr-summary__tax .item-label').text(shouldDisplayVat() ?
+                drgc_params.translations.estimated_vat_label :
+                drgc_params.translations.estimated_tax_label
+            );
             $('.dr-summary__shipping .item-label').text(drgc_params.translations.estimated_shipping_label);
         }
     };

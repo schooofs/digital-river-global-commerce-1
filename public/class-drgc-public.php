@@ -111,6 +111,8 @@ class DRGC_Public {
 			'upgrade_label'               => __('Upgrade', 'digital-river-global-commerce'),
 			'add_label'                   => __('Add', 'digital-river-global-commerce'),
 			'free_label'                  => __('FREE', 'digital-river-global-commerce'),
+			'vat_label'                   => __('VAT', 'digital-river-global-commerce'),
+			'estimated_vat_label'         => __('Estimated VAT', 'digital-river-global-commerce'),
 			'tax_label'              	    => __('Tax', 'digital-river-global-commerce'),
 			'estimated_tax_label'         => __('Estimated Tax', 'digital-river-global-commerce'),
 			'shipping_label'              => __('Shipping', 'digital-river-global-commerce'),

@@ -294,10 +294,10 @@ jQuery(document).ready(($) => {
             if (jqXHR.status === 409) {
                 if (jqXHR.responseJSON.errors.error[0].code === 'restricted-bill-to-country') {
                     $target.text(drgc_params.translations.address_error_msg).show();
-                }
-
-                if (jqXHR.responseJSON.errors.error[0].code === 'restricted-ship-to-country') {
+                } else if (jqXHR.responseJSON.errors.error[0].code === 'restricted-ship-to-country') {
                     $target.text(drgc_params.translations.address_error_msg).show();
+                } else {
+                    $target.text(drgc_params.translations.undefined_error_msg).show();
                 }
             } else {
                 $target.text(jqXHR.responseJSON.errors.error[0].description).show();
@@ -497,13 +497,15 @@ jQuery(document).ready(($) => {
         $('form#checkout-delivery-form').on('submit', function(e) {
             e.preventDefault();
 
+            const $form = $(e.target);
             const $input = $(this).children().find('input:radio:checked').first();
-            const button = $(this).find('button[type="submit"]').toggleClass('sending').blur();
+            const $button = $(this).find('button[type="submit"]').toggleClass('sending').blur();
             // Validate shipping option
             const data = {
                 expand: 'all',
                 shippingOptionId: $input.data('id')
             };
+            $form.find('.dr-err-field').hide();
 
             $.ajax({
                 type: 'POST',
@@ -514,7 +516,7 @@ jQuery(document).ready(($) => {
                 },
                 url: `${apiBaseUrl}/me/carts/active/apply-shipping-option?${$.param(data)}`,
                 success: (data) => {
-                    button.removeClass('sending').blur();
+                    $button.removeClass('sending').blur();
 
                     const $section = $('.dr-checkout__delivery');
                     const freeShipping = data.cart.pricing.shippingAndHandling.value === 0;
@@ -524,7 +526,8 @@ jQuery(document).ready(($) => {
                     updateSummaryPricing(data.cart);
                 },
                 error: (jqXHR) => {
-                    console.log(jqXHR);
+                    $button.removeClass('sending').blur();
+                    displayAddressErrMsg(jqXHR, $form.find('.dr-err-field'));
                 }
             });
         });

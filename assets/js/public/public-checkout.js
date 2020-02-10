@@ -33,9 +33,36 @@ const CheckoutModule = (($) => {
         }
     };
 
+    const getCountryOptionsFromGC = () => {
+        const selectedLocale = $('.dr-currency-select option:selected').data('locale') || drgc_params.drLocale;
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                type: 'GET',
+                url: `https://gc.digitalriver.com/store/${drgc_params.siteID}/${selectedLocale}/DisplayPage/id.SimpleRegistrationPage`,
+                success: (response) => {
+                    const addressTypes = drgc_params.cart.cart.hasPhysicalProduct ? ['shipping', 'billing'] : ['billing'];
+                    addressTypes.forEach((type) => {
+                        const savedCountryCode = $(`#${type}-field-country`).val();
+                        const $options = $(response).find(`select[name=${type.toUpperCase()}country] option`).not(':first');
+                        const optionArr = $.map($options, (option) => { return option.value; });
+                        $(`#${type}-field-country option`).not(':first').remove();
+                        $(`#${type}-field-country`)
+                            .append($options)
+                            .val(savedCountryCode.indexOf(optionArr) > -1 ? savedCountryCode : '');
+                    });
+                    resolve();
+                },
+                error: (jqXHR) => {
+                    reject(jqXHR);
+                }
+            });
+        });
+    };
+
     return {
         initPreTAndC,
-        updateSummaryLabels
+        updateSummaryLabels,
+        getCountryOptionsFromGC
     };
 })(jQuery);
 
@@ -114,6 +141,11 @@ jQuery(document).ready(($) => {
         // Submit first (email) form
         var emailPayload;
 
+        if (cartData.totalItemsInCart) {
+            CheckoutModule.getCountryOptionsFromGC().then(() => {
+                $('#shipping-field-country, #billing-field-country').trigger('change');
+            });
+        }
         CheckoutUtils.applyLegalLinks(digitalriverjs);
         CheckoutModule.initPreTAndC();
 

@@ -31,7 +31,6 @@ export default class GenericUtils {
   }
 
   async checkCheckBox(checkbox, checked) {
-    console.log(">> CheckCheckBox")
     let ischecked = await checkbox.checked;
     while(ischecked != checked) {
       await t
@@ -176,7 +175,7 @@ export default class GenericUtils {
       lastName: 'Mcclinton',
       addrLine1: '10451 Gunpowder Falls St',
       city: 'Las Vegas',
-      country: 'United States of America',
+      country: 'USA',
       countryValue: 'US',
       state: 'Nevada',
       stateValue: 'NV',
@@ -193,7 +192,7 @@ export default class GenericUtils {
       lastName: 'Doe',
       addrLine1: '10380 Bren Rd W',
       city: 'Minnetonka',
-      country: 'United States of America',
+      country: 'USA',
       countryValue: 'US',
       state: 'Minnesota',
       stateValue: 'MN',

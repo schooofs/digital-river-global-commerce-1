@@ -4,12 +4,14 @@ import HomePage from '../../page-models/public/home-page-model';
 import MinicartPage from '../../page-models/public/minicart-page-model';
 import GeneralUtils from '../../utils/genericUtils';
 import LoginPage from '../../page-models/public/login-page-model';
+import ProductUtils from '../../utils/productUtils'
 
 const env = Config.env;
 const baseURL = Config.baseUrl[env];
 const homePage = new HomePage();
 const minicartPage = new MinicartPage();
 const utils = new GeneralUtils();
+const physicalProdName = new ProductUtils().getTestingPhysicalProduct().productName;
 
 fixture `===== DRGC P2 Automation Test - Currency Unit When Switch Currency'=====`
   .httpAuth({
@@ -26,16 +28,16 @@ fixture `===== DRGC P2 Automation Test - Currency Unit When Switch Currency'====
 });
 
 test('Switch Currency: Product Page', async t => {
-  console.log('Test Case: Check  the unit of currency after switching currency in Product Page.');
-  const price = Selector('.price').nth(0);
+  console.log('Test Case: Check the unit of currency after switching currency in Product Page.');
+  const price = Selector('.c-product-card-content__text').withText(physicalProdName.toUpperCase()).parent(2).find('span').nth(1);
   await switchCurrencyFromUsdToEur();
   console.log('>> Default USD, switch currency to EUR and check the currency display correctly');
   await t.expect(price.innerText).contains('EUR');
 });
 
 test('Switch Currency: Detail Page', async t => {
-  console.log('Test Case: Check  the unit of currency after switching currency in Detail Page.');
-  const firstProduct = Selector('.c-product-card').nth(0);
+  console.log('Test Case: Check the unit of currency after switching currency in Detail Page.');
+  const firstProduct = Selector('.c-product-card-content__text').withText(physicalProdName.toUpperCase());
   const price = Selector('.product-price').nth(0);
   await t.click(firstProduct);
   console.log('>> Default USD, switch currency to EUR and check the currency display correctly');
@@ -44,7 +46,7 @@ test('Switch Currency: Detail Page', async t => {
 });
 
 test('Switch Currency: Cart Page', async t => {
-  console.log('Test Case: Check  the unit of currency after switching currency in Cart Page.');
+  console.log('Test Case: Check the unit of currency after switching currency in Cart Page.');
   await utils.addProductsIntoCart(homePage.addPhyProduct);
   await minicartPage.clickViewCartBtn();
 
@@ -55,7 +57,7 @@ test('Switch Currency: Cart Page', async t => {
 });
 
 test('Switch Currency: Checkout Page', async t => {
-  console.log('Test Case: Check  the unit of currency after switching currency in Dheckout Page.');
+  console.log('Test Case: Check the unit of currency after switching currency in Checkout Page.');
   await utils.addProductsIntoCart(homePage.addPhyProduct);
   await minicartPage.clickCheckoutBtn();
   await utils.clickItem(new LoginPage().continueAsGuestBtn);

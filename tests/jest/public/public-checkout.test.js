@@ -129,7 +129,7 @@ describe('Test getCountryOptionsFromGC', () => {
     CheckoutModule.getCountryOptionsFromGC();
     expect($.ajax).toBeCalledWith({
       type: 'GET',
-      url:  'https://gc.digitalriver.com/store/drdod15/en_GB/DisplayPage/id.SimpleRegistrationPage',
+      url:  'https://drh-fonts.img.digitalrivercontent.net/store/drdod15/en_GB/DisplayPage/id.SimpleRegistrationPage',
       success: expect.any(Function),
       error: expect.any(Function)
     });

@@ -7,6 +7,8 @@ global.drgc_params = {
   drLocale: 'en_US',
   translations: {
     subtotal_label: 'Sub-total',
+    vat_label: 'VAT',
+    estimated_vat_label: 'Estimated VAT',
     tax_label: 'Tax',
     estimated_tax_label: 'Estimated Tax',
     shipping_label: 'Shipping',

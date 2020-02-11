@@ -33,7 +33,7 @@ $delivery_info = 'Delivery in 2-5 working days and extended 30 days return perio
 
 <div class="dr-summary__tax">
 
-    <p class="item-label"><?php echo __('Estimated Tax') ?></p>
+    <p class="item-label"><?php echo drgc_should_display_vat( $customer['currency'] ) ? __('Estimated VAT') : __('Estimated Tax') ?></p>
 
     <p class="item-value"><?php echo $estimated_tax_value; ?></p>
 

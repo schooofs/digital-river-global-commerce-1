@@ -294,10 +294,10 @@ jQuery(document).ready(($) => {
             if (jqXHR.status === 409) {
                 if (jqXHR.responseJSON.errors.error[0].code === 'restricted-bill-to-country') {
                     $target.text(drgc_params.translations.address_error_msg).show();
-                }
-
-                if (jqXHR.responseJSON.errors.error[0].code === 'restricted-ship-to-country') {
+                } else if (jqXHR.responseJSON.errors.error[0].code === 'restricted-ship-to-country') {
                     $target.text(drgc_params.translations.address_error_msg).show();
+                } else {
+                    $target.text(drgc_params.translations.undefined_error_msg).show();
                 }
             } else {
                 $target.text(jqXHR.responseJSON.errors.error[0].description).show();
@@ -401,9 +401,11 @@ jQuery(document).ready(($) => {
 
             $button.addClass('sending').blur();
             updateCart({ expand: 'all' }, { shippingAddress: payload.shipping }).then((data) => {
-                if ( isLogin == 'true') saveShippingAddress();
-                $button.removeClass('sending').blur();
+                if (isLogin === 'true') saveShippingAddress();
 
+                return makeSureShippingOptionPreSelected(data);
+            }).then((data) => {
+                $button.removeClass('sending').blur();
                 setShippingOptions(data.cart);
 
                 const $section = $('.dr-checkout__shipping');
@@ -434,8 +436,14 @@ jQuery(document).ready(($) => {
                         saveBillingAddress();
                     }
                 }
-                
+
+                // Still needs to apply shipping option once again or the value will be rolled back after updateCart (API's bug)
+                return drgc_params.cart.cart.hasPhysicalProduct ?
+                    makeSureShippingOptionPreSelected(data) :
+                    new Promise(resolve => resolve(data));
+            }).then((data) => {
                 $button.removeClass('sending').blur();
+                setShippingOptions(data.cart);
 
                 const $section = $('.dr-checkout__billing');
                 displaySavedAddress(data.cart.billingAddress, $section.find('.dr-panel-result__text'));
@@ -489,13 +497,15 @@ jQuery(document).ready(($) => {
         $('form#checkout-delivery-form').on('submit', function(e) {
             e.preventDefault();
 
+            const $form = $(e.target);
             const $input = $(this).children().find('input:radio:checked').first();
-            const button = $(this).find('button[type="submit"]').toggleClass('sending').blur();
+            const $button = $(this).find('button[type="submit"]').toggleClass('sending').blur();
             // Validate shipping option
             const data = {
                 expand: 'all',
                 shippingOptionId: $input.data('id')
             };
+            $form.find('.dr-err-field').hide();
 
             $.ajax({
                 type: 'POST',
@@ -506,7 +516,7 @@ jQuery(document).ready(($) => {
                 },
                 url: `${apiBaseUrl}/me/carts/active/apply-shipping-option?${$.param(data)}`,
                 success: (data) => {
-                    button.removeClass('sending').blur();
+                    $button.removeClass('sending').blur();
 
                     const $section = $('.dr-checkout__delivery');
                     const freeShipping = data.cart.pricing.shippingAndHandling.value === 0;
@@ -516,7 +526,8 @@ jQuery(document).ready(($) => {
                     updateSummaryPricing(data.cart);
                 },
                 error: (jqXHR) => {
-                    console.log(jqXHR);
+                    $button.removeClass('sending').blur();
+                    displayAddressErrMsg(jqXHR, $form.find('.dr-err-field'));
                 }
             });
         });
@@ -600,26 +611,43 @@ jQuery(document).ready(($) => {
             }
         });
 
+        function makeSureShippingOptionPreSelected(data) {
+            // If default shipping option is not in the list, then pre-select the 1st one
+            const defaultShippingOption = data.cart.shippingMethod.code;
+            let shippingOptions = data.cart.shippingOptions.shippingOption || [];
+            shippingOptions = shippingOptions.map((option) => {
+                return option.id;
+            });
+            if (shippingOptions.length && shippingOptions.indexOf(defaultShippingOption) === -1) {
+                return applyShippingAndUpdateCart(shippingOptions[0]);
+            } else {
+                return new Promise(resolve => resolve(data));
+            }
+        }
+
         function applyShippingAndUpdateCart(shippingOptionId) {
             const data = {
                 expand: 'all',
                 shippingOptionId: shippingOptionId
             };
 
-            $.ajax({
-                type: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${drgc_params.accessToken}`
-                },
-                url: `${apiBaseUrl}/me/carts/active/apply-shipping-option?${$.param(data)}`,
-                success: (data) => {
-                    updateSummaryPricing(data.cart);
-                },
-                error: (jqXHR) => {
-                    console.log(jqXHR);
-                }
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    type: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Accept: 'application/json',
+                        Authorization: `Bearer ${drgc_params.accessToken}`
+                    },
+                    url: `${apiBaseUrl}/me/carts/active/apply-shipping-option?${$.param(data)}`,
+                    success: (data) => {
+                        updateSummaryPricing(data.cart);
+                        resolve(data);
+                    },
+                    error: (jqXHR) => {
+                        reject(jqXHR);
+                    }
+                });
             });
         }
 

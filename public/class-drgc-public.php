@@ -147,7 +147,7 @@ class DRGC_Public {
 			'password_banned_char_error_msg' => __('Contains non-allowable special characters (only ! _ @ are allowed).', 'digital-river-global-commerce'),
 			'password_confirm_error_msg'     => __('Passwords do not match.', 'digital-river-global-commerce'),
 			'required_tandc_msg'             => __('Please indicate you have read and accepted the privacy policy and terms of sale.', 'digital-river-global-commerce'),
-			'undefined_error_msg'            => __('Something went wrong.', 'digital-river-global-commerce'),
+			'undefined_error_msg'            => __('Something went wrong. Please try again.', 'digital-river-global-commerce'),
 			'loading_msg'                    => __('Loading...', 'digital-river-global-commerce')
 		);
 

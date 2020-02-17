@@ -27,7 +27,7 @@ if ( !defined( 'WPINC' ) ) {
 /**
  * Current Plugin Version
  */
-define( 'DRGC_VERSION', '1.0.0.' . time() );
+define( 'DRGC_VERSION', '1.2.0.' . time() );
 define( 'DRGC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'DRGC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 

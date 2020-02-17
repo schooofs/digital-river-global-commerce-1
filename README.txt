@@ -4,7 +4,7 @@ Tags: ecommerce, global commerce, digital river, online store , headless commerc
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 Requires at least: 5.1
-Tested up to: 5.1
+Tested up to: 5.3.2
 
 A complete ecommerce plugin for WordPress, Digital River works behind the scenes to process payments, fight fraud, fulfill orders, and shield your business from global tax and regulatory risk.
 
@@ -98,3 +98,10 @@ No, you are responsible for hosting your own site.
 * Enhanced checkout pages with Account Creation and Guest Checkout options.
 * When a shopper's shipping addressed is not confirmed, Shipping Costs will be shown as estimated and not actuals.
 * Improved Settings Page help text.
+
+= [1.2] - 2020-02-19 =
+* Added default legal links in the footer and Terms Of Sale checkbox during checkout.
+* Updated text label of locale dropdown during checkout from "Locale" to "Currency" for ease of use by shoppers.
+* Currency selector needed to populate ship to country possibilities.
+* Added support for dynamic naming tax field as "Tax" or "VAT" based on geographic region of sale.
+* Checked available shipping options and applied the default one to the cart.

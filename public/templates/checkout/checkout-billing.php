@@ -193,7 +193,7 @@ if ( $cart['cart']['billingAddress']['line1'] != '') {
 
             </div>
 
-            <div class="form-group dr-panel-edit__el <?php echo $billingAddress['country'] !== 'US' ? 'd-none' : '' ?>">
+            <div class="form-group dr-panel-edit__el d-none">
 
                 <select class="form-control custom-select" name="billing-countrySubdivision" id="billing-field-state" required>
 

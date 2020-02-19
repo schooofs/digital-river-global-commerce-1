@@ -35,7 +35,6 @@ $total_value = $order['order']['pricing']['formattedTotal'] ?? '';
 
 
 <div class="dr-summary__subtotal">
-    <input id="dr-total-float" type="hidden" value="<?php echo $cart['cart']['pricing']['orderTotal']['value'] ?>">
     <p class="subtotal-label"><?php echo __('Subtotal') . ' - (' .  $subtotal_items . ' ' . $subtotal_items_text . ')' ?></p>
 
     <p class="subtotal-value"><?php echo $subtotal_value; ?></p>

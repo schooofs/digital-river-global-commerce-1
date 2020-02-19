@@ -78,8 +78,10 @@ class DRGC_Public {
 
 		wp_enqueue_script( $this->drgc, DRGC_PLUGIN_URL . 'assets/js/drgc-public' . $suffix . '.js', array( 'jquery' ), $this->version, false );
 
-		if ( is_page( 'checkout' ) ) {
+		if ( is_page( 'cart' ) || is_page( 'checkout' ) || is_page( 'thank-you' ) ) {
 			wp_enqueue_script( 'digital-river-js', 'https://js.digitalriverws.com/v1/DigitalRiver.js', array( $this->drgc ), null, true );
+		}
+		if ( is_page( 'checkout' ) ) {
 			wp_enqueue_script( 'paypal-checkout-js', 'https://www.paypalobjects.com/api/checkout.js', array( $this->drgc ), null, true );
 		}
 
@@ -89,8 +91,10 @@ class DRGC_Public {
 		}
 
 		$cart_obj = '';
+		$order_obj = '';
 		if ( DRGC()->cart ) {
 			$cart_obj = DRGC()->cart->retrieve_cart();
+			if ( is_page( 'thank-you' ) ) $order_obj = DRGC()->cart->retrieve_order();
 		}
 
     //test Order Handler
@@ -107,6 +111,8 @@ class DRGC_Public {
 			'upgrade_label'               => __('Upgrade', 'digital-river-global-commerce'),
 			'add_label'                   => __('Add', 'digital-river-global-commerce'),
 			'free_label'                  => __('FREE', 'digital-river-global-commerce'),
+			'vat_label'                   => __('VAT', 'digital-river-global-commerce'),
+			'estimated_vat_label'         => __('Estimated VAT', 'digital-river-global-commerce'),
 			'tax_label'              	    => __('Tax', 'digital-river-global-commerce'),
 			'estimated_tax_label'         => __('Estimated Tax', 'digital-river-global-commerce'),
 			'shipping_label'              => __('Shipping', 'digital-river-global-commerce'),
@@ -140,7 +146,8 @@ class DRGC_Public {
 			'password_char_error_msg'        => __('Must use at least one special character (! _ @).', 'digital-river-global-commerce'),
 			'password_banned_char_error_msg' => __('Contains non-allowable special characters (only ! _ @ are allowed).', 'digital-river-global-commerce'),
 			'password_confirm_error_msg'     => __('Passwords do not match.', 'digital-river-global-commerce'),
-			'undefined_error_msg'            => __('Something went wrong.', 'digital-river-global-commerce'),
+			'required_tandc_msg'             => __('Please indicate you have read and accepted the privacy policy and terms of sale.', 'digital-river-global-commerce'),
+			'undefined_error_msg'            => __('Something went wrong. Please try again.', 'digital-river-global-commerce'),
 			'loading_msg'                    => __('Loading...', 'digital-river-global-commerce')
 		);
 
@@ -157,6 +164,7 @@ class DRGC_Public {
 			'digitalRiverKey'   =>  get_option( 'drgc_digitalRiver_key' ),
 			'accessToken'       =>  $access_token,
 			'cart'              =>  $cart_obj,
+			'order'             =>  $order_obj,
 			'thankYouEndpoint'  =>  esc_url( drgc_get_page_link( 'thank-you' ) ),
 			'isLogin'           =>  drgc_get_user_status(),
 			'payPal'            =>  array (
@@ -558,6 +566,13 @@ class DRGC_Public {
 
 	public function add_legal_link() {
 		if ( is_page( 'cart' ) || is_page( 'checkout' ) || is_page( 'thank-you' ) ) {
+			if ( ! is_page( 'thank-you' ) ) {
+				$cart = DRGC()->cart->retrieve_cart();
+				$entity_code = $cart['cart']['businessEntityCode'];
+			} else {
+				$order = DRGC()->cart->retrieve_order();
+				$entity_code = $order['order']['businessEntityCode'];
+			}
 			include_once 'partials/drgc-legal-footer.php';
 		}
 	}

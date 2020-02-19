@@ -11,6 +11,7 @@
         width: 50%;
     }
 
+    &__cloudpay,
     &__email,
     &__shipping,
     &__billing,
@@ -41,7 +42,7 @@
 
     &__googlepay,
     &__applepay {
-        margin-top: 20px;
+        margin-top: 15px;
     }
 
     .small-closed-left {

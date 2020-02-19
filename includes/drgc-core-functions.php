@@ -143,16 +143,14 @@ function drgc_currency_toggler() {
 
 	if ( ! empty( $locales['locales'] ) && count( $locales['locales'] ) > 1 ) {
 		$output = '<div class="dr-currency-toggler">';
-		$output .= sprintf("<span>%s</span>", __( 'Locale: ' ) );
+		$output .= sprintf("<span>%s</span>", __( 'Currency: ' ) );
 		$output .= '<select class="custom-select dr-currency-select">';
 
 		foreach ( $locales['locales'] as $locale => $currency ) {
-			$country = drgc_code_to_counry( $locale );
-
 			$output .= "<option ";
 			$output .= $current_locale === $locale ? 'selected ' : '';
 			$output .= "data-locale=\"{$locale}\" value=\"{$currency}\">";
-			$output .= "{$country} ({$currency})</option>";
+			$output .= "{$currency}</option>";
 		}
 
 		$output .= '</select></div>';
@@ -382,4 +380,31 @@ function drgc_get_user_status() {
 	} else {
 		return 'false';
 	}
+}
+
+/**
+ * Get business entity name by entity code
+ *
+ * @param string $entity_code
+ * @return string
+ */
+function drgc_get_business_entity_name( $entity_code = '' ) {
+	$entity_list = array(
+		'DR_INC-ENTITY' => 'Digital River, Inc.',
+		'DR_IRELAND-ENTITY' => 'Digital River Ireland Ltd.'
+	);
+	if ( ! array_key_exists( $entity_code, $entity_list ) ) {
+		$entity_code = 'DR_INC-ENTITY';
+	}
+	return $entity_list[$entity_code];
+}
+
+/**
+ * Displaying VAT/Tax depends on currency
+ *
+ * @param string $currency
+ * @return bool
+ */
+function drgc_should_display_vat( $currency = '' ) {
+	return ( $currency == 'GBP' || $currency == 'EUR' );
 }

@@ -12,7 +12,7 @@ const utils = new GeneralUtils();
 const standardFee = '5.00USD';
 const expressFee = '7.49USD';
 
-fixture `===== DRGC P1 Automation Test - Physical Product Shipping =====`
+fixture `===== DRGC P2 Automation Test - Physical Product Shipping =====`
   .httpAuth({
     username: Config.websiteAuth['username'],
     password: Config.websiteAuth['password'],

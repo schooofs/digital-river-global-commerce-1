@@ -33,6 +33,7 @@ function get_locale_mapping() {
         'de_CH' => 'de_CH',
         'dzo' => '',
         'el' => 'el_GR',
+        'en' => 'en_US',
         'en_US' => 'en_US',
         'en_CA' => 'en_CA',
         'en_AU' => 'en_AU',

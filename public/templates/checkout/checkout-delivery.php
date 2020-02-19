@@ -41,10 +41,12 @@ $result = 'Standard $0.00';
         <div class="dr-panel-edit__el"></div>
 
         <button type="submit" class="dr-panel-edit__btn dr-btn">
-            
+
             <?php echo __( 'Save and continue' ); ?>
-            
+
         </button>
+
+        <div class="invalid-feedback dr-err-field"></div>
 
     </form>
 

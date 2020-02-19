@@ -206,6 +206,11 @@
     position: relative;
     display: block;
     padding-left: $form-check-input-gutter;
+
+    &.dr-preTAndC-wrapper {
+      padding-left: 1.8rem;
+      margin-top: 20px;
+    }
   }
 
   .form-check-input {
@@ -221,6 +226,11 @@
   .form-check-label {
     margin-bottom: 0; // Override default `<label>` bottom margin
   }
+
+  label[for="dr-tAndC"].form-check-label {
+    margin-bottom: 1em;
+  }
+
 
   .form-check-inline {
     display: inline-flex;

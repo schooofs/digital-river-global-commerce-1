@@ -102,6 +102,4 @@ No, you are responsible for hosting your own site.
 = [1.2] - 2020-02-19 =
 * Added default legal links in the footer and Terms Of Sale checkbox during checkout.
 * Updated text label of locale dropdown during checkout from "Locale" to "Currency" for ease of use by shoppers.
-* Currency selector needed to populate ship to country possibilities.
 * Added support for dynamic naming tax field as "Tax" or "VAT" based on geographic region of sale.
-* Checked available shipping options and applied the default one to the cart.

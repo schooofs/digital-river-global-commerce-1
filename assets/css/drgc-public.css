@@ -740,7 +740,7 @@ input[type=number] { -webkit-appearance: textfield; -moz-appearance: textfield; 
 
 .dr-btn { position: relative; display: inline-block; background-color: #00a7e1; color: white; font-family: 'Open Sans', sans-serif; font-size: 15px; font-weight: 700; line-height: 1; text-transform: uppercase; text-align: center; border: none; padding: 13px; text-decoration: none; }
 
-.dr-btn:hover { background: #006e95; text-decoration: none; color: white; }
+.dr-btn:hover { background-color: #006e95; text-decoration: none; color: white; }
 
 .dr-btn:focus { outline: none; }
 
@@ -753,6 +753,12 @@ input[type=number] { -webkit-appearance: textfield; -moz-appearance: textfield; 
 .dr-btn:not(.disabled).sending:before { opacity: 1; -webkit-transition-duration: .5s; transition-duration: .5s; -webkit-transition-delay: .5s; transition-delay: .5s; -webkit-transition-duration: 1s; transition-duration: 1s; -webkit-transition-property: opacity; transition-property: opacity; -webkit-animation-duration: 1s; animation-duration: 1s; -webkit-animation-iteration-count: infinite; animation-iteration-count: infinite; -webkit-animation-name: rotate; animation-name: rotate; -webkit-animation-timing-function: linear; animation-timing-function: linear; }
 
 .dr-btn:not(.disabled).sending:after { -webkit-transition-delay: 0s; transition-delay: 0s; width: 20px; }
+
+.dr-btn:disabled { -webkit-filter: grayscale(100%); filter: grayscale(100%); }
+
+.dr-btn:disabled:hover { background-color: #00a7e1; }
+
+.dr-buy-btn:disabled { -webkit-filter: grayscale(100%); filter: grayscale(100%); }
 
 .drgc-wrapper .dr-btn { width: 100%; }
 

@@ -14,7 +14,7 @@
     text-decoration: none;
 
     &:hover {
-        background: $blue-dark;
+        background-color: $blue-dark;
         text-decoration: none;
         color: white;
     }
@@ -70,6 +70,18 @@
             }
         }
     }
+
+    &:disabled {
+        filter: grayscale(100%);
+
+        &:hover {
+            background-color: $blue;
+        }
+    }
+}
+
+.dr-buy-btn:disabled {
+    filter: grayscale(100%);
 }
 
 .drgc-wrapper {

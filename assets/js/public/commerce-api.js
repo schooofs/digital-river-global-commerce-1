@@ -141,13 +141,32 @@ const DRCommerceApi = (($, params) => {
     });
   };
 
+  const getProductInventoryStatus = (productID) => {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'GET',
+        headers: {
+          Authorization: `Bearer ${params.accessToken}`,
+        },
+        url: `${apiBaseUrl}/me/products/${productID}/inventory-status?format=json`,
+        success: (data) => {
+          resolve(data);
+        },
+        error: (jqXHR) => {
+          reject(jqXHR);
+        }
+      });
+    });
+  };
+
   return {
     getCart,
     updateCart,
     submitCart,
     applyShippingOption,
     applyPaymentAndSubmitCart,
-    getProductPricing
+    getProductPricing,
+    getProductInventoryStatus
   };
 
 })(jQuery, drgc_params);

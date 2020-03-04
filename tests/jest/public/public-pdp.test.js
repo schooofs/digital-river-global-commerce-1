@@ -30,30 +30,6 @@ describe('Test bindVariationPrice', () => {
     expect($target.data('price')).toEqual('100.00USD');
   });
 
-  // test('The first variation option should be selected to trigger displaying pricing event', () => {
-  //   const pricing = {
-  //     formattedListPrice: '100.00USD',
-  //     formattedSalePriceWithQuantity: '100.00USD',
-  //     listPrice: { currency: 'USD', value: 100 },
-  //     salePriceWithQuantity: { currency: 'USD', value: 100 }
-  //   };
-  //   let $targetA, $targetB;
-
-  //   $targetA = $('<option value="123456">Variation A</option>');
-  //   $targetB = $('<option value="654321">Variation B</option>');
-  //   PdpModule.bindVariationPrice(pricing, $targetA , 0);
-  //   PdpModule.bindVariationPrice(pricing, $targetB , 1);
-  //   expect($targetA.prop('selected')).toBe(true);
-  //   expect($targetB.prop('selected')).toBe(false);
-
-  //   $targetA = $('<input type="radio" name="variation" value="123456">');
-  //   $targetB = $('<input type="radio" name="variation" value="654321">');
-  //   PdpModule.bindVariationPrice(pricing, $targetA , 0);
-  //   PdpModule.bindVariationPrice(pricing, $targetB , 1);
-  //   expect($targetA.prop('checked')).toBe(true);
-  //   expect($targetB.prop('checked')).toBe(false);
-  // });
-
 });
 
 describe('Test bindVariationInventoryStatus', () => {

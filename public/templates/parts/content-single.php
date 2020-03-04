@@ -11,7 +11,8 @@
  * @subpackage Digital_River_Global_Commerce/public/templates/parts
  */
 
-$product_image = get_post_meta( get_the_ID(), 'gc_product_images_url', true );
+$product_image_url = get_post_meta( get_the_ID(), 'gc_product_images_url', true );
+$product_thumbnail_url = get_post_meta( get_the_ID(), 'gc_thumbnail_url', true );
 $short_description = get_post_meta( get_the_ID(), 'short_description', true );
 $long_description = get_post_meta( get_the_ID(), 'long_description', true );
 
@@ -36,7 +37,8 @@ if ( $variations && isset( $variations[0] ) ) {
   $variations = $variations_sort;
 	$gc_id = get_post_meta( $variations[0]->ID, 'gc_product_id', true );
 	$pricing = drgc_get_product_pricing( $variations[0]->ID );
-	$product_image = get_post_meta( $variations[0]->ID, 'gc_product_images_url', true );
+	$product_image_url = get_post_meta( $variations[0]->ID, 'gc_product_images_url', true );
+    $product_thumbnail_url = get_post_meta( $variations[0]->ID, 'gc_thumbnail_url', true );
 } else {
 	$pricing = drgc_get_product_pricing( get_the_ID() );
 
@@ -50,7 +52,7 @@ $regular_price = isset( $pricing['regular_price'] ) ? $pricing['regular_price'] 
 <div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
     <div class="row">
         <div class="col-12 col-md-6">
-            <img src="<?php echo $product_image ?>" alt="<?php the_title_attribute() ?>"/>
+            <img src="<?php echo $product_thumbnail_url ?: $product_image_url ?>" alt="<?php the_title_attribute() ?>" class="dr-pd-img" />
         </div>
 
         <div class="col-12 col-md-6">
@@ -76,18 +78,20 @@ $regular_price = isset( $pricing['regular_price'] ) ? $pricing['regular_price'] 
 
                     <div class="dr_prod-variations">
 
-                        <select name="dr-variation" >
+                        <select name="dr-variation">
                         <?php foreach ( $variations as $variation ) :
         					$var_gc_id = get_post_meta( $variation->ID, 'gc_product_id', true );
         					$variation_type = get_post_meta( $variation->ID, $var_type, true );
                             $var_pricing = drgc_get_product_pricing( $variation->ID );
                             $list_price = isset( $var_pricing['list_price_value'] ) ? $var_pricing['list_price_value'] : '';
                             $sale_price = isset( $var_pricing['sale_price_value'] ) ? $var_pricing['sale_price_value'] : '';
+                            $var_image_url = get_post_meta( $variation->ID, 'gc_product_images_url', true );
+                            $var_thumbnail_url = get_post_meta( $variation->ID, 'gc_thumbnail_url', true );
         				?>
                             <option value="<?php echo $var_gc_id; ?>"
-                                    data-price="<?php echo isset( $var_pricing['price'] ) ? $var_pricing['price'] : ''; ?>"
-                                    <?php echo ( (int) $list_price > (int) $sale_price ) ? 'data-old-price="' . $list_price . '"' : ''; ?>
-                            >
+                                data-price="<?php echo isset( $var_pricing['price'] ) ? $var_pricing['price'] : ''; ?>"
+                                <?php echo ( (int) $list_price > (int) $sale_price ) ? 'data-old-price="' . $list_price . '"' : ''; ?>
+                                data-thumbnail-url="<?php echo $var_thumbnail_url ?: $var_image_url ?>">
                     <?php
                       if(ucwords( $variation_type) != ""){
                         echo ucwords( $variation_type);

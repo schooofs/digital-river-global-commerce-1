@@ -292,10 +292,11 @@ jQuery(document).ready(($) => {
     $('.dr_prod-variations select').on('change', function(e) {
         e.preventDefault();
 
+        const $selectedOption = $(this).children('option:selected');
         const varId = $(this).val();
-        const price = $(this).children('option:selected').data('price');
-        const listPriceValue = $(this).children('option:selected').data('old-price');
-        const purchasable = $(this).children('option:selected').data('purchasable');
+        const price = $selectedOption.data('price');
+        const listPriceValue = $selectedOption.data('old-price');
+        const purchasable = $selectedOption.data('purchasable');
         const $prodPrice = $('.single-dr_product .dr-pd-content .dr-pd-price');
         const $buyBtn = $('.dr-buy-btn');
         let prodPriceHtml = '';
@@ -306,6 +307,8 @@ jQuery(document).ready(($) => {
         $prodPrice.html(prodPriceHtml);
 
         PdpModule.displayRealTimeBuyBtn(purchasable, $buyBtn);
+
+        $('.dr-pd-img').attr('src', $selectedOption.data('thumbnail-url'));
     });
 
     $('input[type=radio][name=variation]').on('click', (e) => {

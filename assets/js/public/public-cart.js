@@ -217,11 +217,17 @@ jQuery(document).ready(($) => {
         success: (candyRackData, textStatus, xhr) => {
           $.each(candyRackData.offers.offer, function( index, offer ) {
             let promoText = offer.salesPitch[0].length > 0 ? offer.salesPitch[0]   : "";
-            let buyButtonText = (offer.type == "Up-sell") ? drgc_params.translations.upgrade_label : drgc_params.translations.add_label;
             $.each(offer.productOffers.productOffer, function( index, productOffer ) {
               const salePrice = productOffer.pricing.formattedSalePriceWithQuantity;
               const listPrice = productOffer.pricing.formattedListPriceWithQuantity;
+              const purchasable = productOffer.product.inventoryStatus.productIsInStock === 'true';
+              let buyButtonText = '';
 
+              if (purchasable) {
+                buyButtonText = (offer.type === 'Up-sell') ? drgc_params.translations.upgrade_label : drgc_params.translations.add_label;
+              } else {
+                buyButtonText = drgc_params.translations.out_of_stock;
+              }
               let candyRackProductHTML = `
               <div  class="dr-product dr-candyRackProduct" data-product-id="${productOffer.product.id}" data-parent-product-id="${productID}">
                 <div class="dr-product-content">
@@ -238,7 +244,9 @@ jQuery(document).ready(($) => {
                     </div>
                 </div>
                 <div class="dr-product__price">
-                    <button type="button" class="dr-btn dr-buy-candyRack" data-buy-uri="${productOffer.addProductToCart.uri}">${buyButtonText}</button>
+                    <button type="button" class="dr-btn dr-buy-candyRack"
+                      data-buy-uri="${productOffer.addProductToCart.uri}"
+                      ${purchasable ? '' : 'disabled="disabled"'}>${buyButtonText}</button>
                     <span class="sale-price">${salePrice}</span>
                     <span class="regular-price dr-strike-price ${salePrice === listPrice ? 'd-none' : ''}">${listPrice}</span>
                 </div>
@@ -384,6 +392,7 @@ jQuery(document).ready(($) => {
           </div>
           `;
           $('#tempCartProducts').append(lineItemHTML);
+          $(".dr-cart__products").html($("#tempCartProducts").html());
         }).then(() => {
           lineItemCount++;
           if(lineItemCount === data.cart.lineItems.lineItem.length){

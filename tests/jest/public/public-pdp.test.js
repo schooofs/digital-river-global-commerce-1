@@ -134,15 +134,27 @@ describe('Test displayRealTimeBuyBtn', () => {
 
   const $buyBtn = $('<button type="button">Add to Cart</button>');
 
-  test('When the product is unpurchasable, its buy button should be unavailable and display "Out of Stock"', () => {
-    PdpModule.displayRealTimeBuyBtn('false', $buyBtn);
+  test('For non-redirect buy button, when the product is purchasable, its buy button should be available and display "Add to Cart"', () => {
+    PdpModule.displayRealTimeBuyBtn('true', false, $buyBtn);
+    expect($buyBtn.text()).toEqual('Add to Cart');
+    expect($buyBtn.prop('disabled')).toBe(false);
+  });
+
+  test('For non-redirect buy button, when the product is unpurchasable, its buy button should be unavailable and display "Out of Stock"', () => {
+    PdpModule.displayRealTimeBuyBtn('false', false, $buyBtn);
     expect($buyBtn.text()).toEqual('Out of Stock');
     expect($buyBtn.prop('disabled')).toBe(true);
   });
 
-  test('When the product is purchasable, its buy button should be available and display "Add to Cart"', () => {
-    PdpModule.displayRealTimeBuyBtn('true', $buyBtn);
-    expect($buyBtn.text()).toEqual('Add to Cart');
+  test('For redirect buy button, when the product is purchasable, its buy button should be available and display "Buy Now"', () => {
+    PdpModule.displayRealTimeBuyBtn('true', true, $buyBtn);
+    expect($buyBtn.text()).toEqual('Buy Now');
+    expect($buyBtn.prop('disabled')).toBe(false);
+  });
+
+  test('For redirect buy button, when the product is unpurchasable, its buy button should be available and display "Buy Now"', () => {
+    PdpModule.displayRealTimeBuyBtn('false', true, $buyBtn);
+    expect($buyBtn.text()).toEqual('Buy Now');
     expect($buyBtn.prop('disabled')).toBe(false);
   });
 

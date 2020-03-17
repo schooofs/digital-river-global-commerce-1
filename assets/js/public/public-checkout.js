@@ -132,7 +132,7 @@ jQuery(document).ready(($) => {
                     console.log('address update success.');
                 },
                 error: (jqXHR) => {
-                    console.log(jqXHR);
+                    CheckoutUtils.apiErrorHandler(jqXHR);
                 }
             });
         }

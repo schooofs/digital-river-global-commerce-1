@@ -1,6 +1,7 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
 import DRCommerceApi from './commerce-api';
+import CheckoutUtils from './checkout-utils';
 
 const PdpModule = (($) => {
     const bindVariationPrice = (pricing, $target) => {
@@ -212,10 +213,6 @@ jQuery(document).ready(($) => {
         }
     }
 
-    function errorCallback(jqXHR) {
-        console.log('errorStatus', jqXHR.status);
-    }
-
     (function() {
         if ( $('#dr-minicart'.length)) {
             displayMiniCart(drgc_params.cart.cart);
@@ -259,7 +256,7 @@ jQuery(document).ready(($) => {
 
             drService.updateCart(productID, quantity)
                 .then(cart => displayMiniCart(cart))
-                .catch(jqXHR => errorCallback(jqXHR));
+                .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
         }
     });
 
@@ -270,7 +267,7 @@ jQuery(document).ready(($) => {
         drService.removeLineItem(lineItemID)
             .then(() => drService.getCart())
             .then(cart => displayMiniCart(cart))
-            .catch(jqXHR => errorCallback(jqXHR));
+            .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
     });
 
     $('span.dr-pd-qty-plus, span.dr-pd-qty-minus').on('click', (e) => {

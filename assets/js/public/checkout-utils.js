@@ -139,7 +139,14 @@ const CheckoutUtils = (($, params) => {
 
   const displayAlertMessage = (message) => {
     alert('ERROR! ' + message);
-  }
+  };
+
+  const apiErrorHandler = (jqXHR) => {
+    if (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.errors) {
+      const currentError = jqXHR.responseJSON.errors.error[0];
+      drToast.displayMessage(currentError.description, 'error');
+    }
+  };
 
   const resetBodyOpacity = () => {
     $('body').css({'pointer-events': 'auto', 'opacity': 1});
@@ -156,6 +163,7 @@ const CheckoutUtils = (($, params) => {
     applyLegalLinks,
     displayPreTAndC,
     displayAlertMessage,
+    apiErrorHandler,
     resetBodyOpacity
   };
 })(jQuery, drgc_params);

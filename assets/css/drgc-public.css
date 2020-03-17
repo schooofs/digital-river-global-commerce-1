@@ -768,6 +768,36 @@ input[type=number] { -webkit-appearance: textfield; -moz-appearance: textfield; 
 @keyframes rotate { 0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
   100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); } }
 
+.dr-toast { visibility: hidden; min-width: 250px; max-width: 100%; background-color: #333; color: #fff; text-align: center; border-radius: 2px; padding: 14px 18px; position: fixed; z-index: 99999; top: 30px; font-size: 17px; -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); }
+
+.dr-toast.show { visibility: visible; -webkit-animation: slideDown 1s, slideUp 1s 7s; animation: slideDown 1s, slideUp 1s 7s; }
+
+.dr-toast.success { background-color: #8bc34a; }
+
+.dr-toast.warning { background-color: #e9a33c; }
+
+.dr-toast.error { background-color: #d93737; }
+
+@-webkit-keyframes slideDown { from { top: 0;
+    opacity: 0; }
+  to { top: 30px;
+    opacity: 1; } }
+
+@keyframes slideDown { from { top: 0;
+    opacity: 0; }
+  to { top: 30px;
+    opacity: 1; } }
+
+@-webkit-keyframes slideUp { from { top: 30px;
+    opacity: 1; }
+  to { top: 0;
+    opacity: 0; } }
+
+@keyframes slideUp { from { top: 30px;
+    opacity: 1; }
+  to { top: 0;
+    opacity: 0; } }
+
 .dr-cart { margin-bottom: 40px; }
 
 .dr-cart__actions .continue-shopping, .dr-cart__actions-bottom .continue-shopping { font-family: "Open Sans", sans-serif; font-size: 16px; color: #000000; text-decoration: underline; line-height: 16px; }

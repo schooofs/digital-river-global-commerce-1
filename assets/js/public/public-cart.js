@@ -111,8 +111,8 @@ jQuery(document).ready(($) => {
                 }
             },
             error: (jqXHR) => {
-                // TODO: Handle errors gracefully | revery back
-                console.log(jqXHR);
+                CheckoutUtils.apiErrorHandler(jqXHR);
+                $qty.val(val); // reset to original qty
             }
         });
     }
@@ -146,7 +146,7 @@ jQuery(document).ready(($) => {
                 renderCartProduct(data);
             },
             error: (jqXHR) => {
-                console.log(jqXHR);
+                CheckoutUtils.apiErrorHandler(jqXHR);
             }
         });
     }
@@ -282,8 +282,7 @@ jQuery(document).ready(($) => {
             fetchFreshCart();
           },
           error: (jqXHR) => {
-            console.log(jqXHR);
-               // On Error give feedback
+            CheckoutUtils.apiErrorHandler(jqXHR);
           }
       });
     });
@@ -400,12 +399,7 @@ jQuery(document).ready(($) => {
             reOrderCartAndMerchandising(data);
           }
         }).catch((jqXHR) => {
-          if (jqXHR.responseJSON.errors) {
-            const errMsgs = jqXHR.responseJSON.errors.error.map((err) => {
-              return err.description;
-            });
-            console.log(errMsgs);
-          }
+          CheckoutUtils.apiErrorHandler(jqXHR);
         });
       });
     }

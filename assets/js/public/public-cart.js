@@ -1,6 +1,7 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
 import CheckoutUtils from './checkout-utils';
+import DRCommerceApi from './commerce-api';
 
 const CartModule = {};
 
@@ -28,28 +29,14 @@ jQuery(document).ready(($) => {
         e.preventDefault();
 
         const $this = $(e.target);
-        const lineItemId = $this.closest('.dr-product').data('line-item-id');
+        const lineItemID = $this.closest('.dr-product').data('line-item-id');
 
-        $.ajax({
-            type: 'DELETE',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type":"application/json",
-                "Authorization": `Bearer ${drgc_params.accessToken}`
-            },
-            url: `${apiBaseUrl}/me/carts/active/line-items/${lineItemId}`,
-            success: (data, textStatus, xhr) => {
-                if ( xhr.status === 204 ) {
-                    $(`.dr-product[data-line-item-id="${lineItemId}"]`).remove();
-                    fetchFreshCart();
-                }
-                // TODO: On Error give feedback
-            },
-            error: (jqXHR) => {
-                console.log(jqXHR);
-                 // On Error give feedback
-            }
-        });
+        DRCommerceApi.removeLineItem(lineItemID)
+            .then(() => {
+                $(`.dr-product[data-line-item-id="${lineItemID}"]`).remove();
+                fetchFreshCart();
+            })
+            .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
     });
 
     $('body').on('click', 'span.dr-pd-cart-qty-plus, span.dr-pd-cart-qty-minus', throttle(setProductQty, 200));
@@ -287,30 +274,6 @@ jQuery(document).ready(($) => {
       });
     });
 
-    function updateCart(queryParams = {}, cartRequest = {}) {
-        const queryStr = $.param(queryParams);
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                type: 'POST',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type":"application/json",
-                    "Authorization": `Bearer ${drgc_params.accessToken}`,
-                },
-                url:  `${apiBaseUrl}/me/carts/active?&${queryStr}`,
-                data: JSON.stringify({
-                    cart: cartRequest
-                }),
-                success: (data) => {
-                    resolve(data);
-                },
-                error: (jqXHR) => {
-                    reject(jqXHR);
-                }
-            });
-        });
-    }
-
     function getpermalink(permalinkProductId){
       return new Promise((resolve, reject) => {
         $.ajax({
@@ -475,7 +438,7 @@ jQuery(document).ready(($) => {
         }
 
         $(e.target).addClass('sending').blur();
-        updateCart({ promoCode }).then(() => {
+        DRCommerceApi.updateCart({ promoCode }).then(() => {
             $(e.target).removeClass('sending');
             $('#dr-promo-code-err-field').text('').hide();
             fetchFreshCart();

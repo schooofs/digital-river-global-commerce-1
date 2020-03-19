@@ -5,6 +5,8 @@ global.drgc_params = {
   siteID: 'drdod15',
   wpLocale: 'en_US',
   drLocale: 'en_US',
+  domain: 'api.digitalriver.com',
+  accessToken: 'mockedAccessToken',
   translations: {
     subtotal_label: 'Sub-total',
     vat_label: 'VAT',

@@ -64,80 +64,6 @@ const PdpModule = (($) => {
 })(jQuery);
 
 jQuery(document).ready(($) => {
-    class DRService {
-
-        constructor() {
-            this.domain = drgc_params.domain;
-            this.apiBaseUrl = 'https://' + this.domain + '/v1/shoppers';
-            this.drLocale = drgc_params.drLocale || 'en_US';
-        }
-
-        getCart() {
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    type: 'GET',
-                    headers: {
-                        Accept: 'application/json',
-                        Authorization: `Bearer ${drgc_params.accessToken}`
-                    },
-                    url: `${this.apiBaseUrl}/me/carts/active`,
-                    success: (data) => {
-                        resolve(data.cart);
-                    },
-                    error: (jqXHR) => {
-                        reject(jqXHR);
-                    }
-                });
-            });
-        }
-
-        updateCart(productID, quantity) {
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    type: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        Authorization: `Bearer ${drgc_params.accessToken}`
-                    },
-                    url: (() => {
-                        let url = `${this.apiBaseUrl}/me/carts/active?productId=${productID}`;
-                        if (quantity) url += `&quantity=${quantity}`;
-                        if (drgc_params.testOrder == "true") url += '&testOrder=true';
-                        return url;
-                    })(),
-                    success: (data) => {
-                        resolve(data.cart);
-                        openMiniCartDisplay();
-                    },
-                    error: (jqXHR) => {
-                        reject(jqXHR);
-                    }
-                });
-            });
-        }
-
-
-        removeLineItem(lineItemID) {
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    type: 'DELETE',
-                    headers: {
-                        Accept: 'application/json',
-                        Authorization: `Bearer ${drgc_params.accessToken}`
-                    },
-                    url: `${this.apiBaseUrl}/me/carts/active/line-items/${lineItemID}`,
-                    success: () => {
-                        resolve();
-                    },
-                    error: (jqXHR) => {
-                        reject(jqXHR);
-                    }
-                });
-            });
-        }
-    }
-
-    const drService = new DRService();
     let lineItems = [];
 
     function toggleMiniCartDisplay() {
@@ -180,7 +106,7 @@ jQuery(document).ready(($) => {
             const miniCartCheckoutBtn = `<a class="dr-btn" id="dr-minicart-checkout-btn" href="${drgc_params.checkoutUrl}">${drgc_params.translations.checkout_label}</a>`;
 
             lineItems.forEach((li) => {
-                const productId = li.product.uri.replace(`${drService.apiBaseUrl}/me/products/`, '');
+                const productId = li.product.uri.replace(`${DRCommerceApi.apiBaseUrl}/me/products/`, '');
                 const listPrice = Number(li.pricing.listPriceWithQuantity.value);
                 const salePrice = Number(li.pricing.salePriceWithQuantity.value);
                 const formattedSalePrice = li.pricing.formattedSalePriceWithQuantity;
@@ -235,7 +161,7 @@ jQuery(document).ready(($) => {
             const productID = $this.attr('data-product-id') ? $this.attr('data-product-id').toString() : '';
             const existingProducts = lineItems.map((li) => {
                 const { uri } = li.product;
-                const id = uri.replace(`${drService.apiBaseUrl}/me/products/`, '');
+                const id = uri.replace(`${DRCommerceApi.apiBaseUrl}/me/products/`, '');
                 return {
                     id,
                     quantity: li.quantity
@@ -254,8 +180,16 @@ jQuery(document).ready(($) => {
                 }
             });
 
-            drService.updateCart(productID, quantity)
-                .then(cart => displayMiniCart(cart))
+            const queryObj = {
+                productId: productID,
+                quantity,
+                testOrder: drgc_params.testOrder
+            };
+            DRCommerceApi.updateCart(queryObj)
+                .then(res => {
+                  displayMiniCart(res.cart);
+                  openMiniCartDisplay();
+                })
                 .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
         }
     });
@@ -264,9 +198,9 @@ jQuery(document).ready(($) => {
         e.preventDefault();
         const lineItemID = $(e.target).data('line-item-id');
 
-        drService.removeLineItem(lineItemID)
-            .then(() => drService.getCart())
-            .then(cart => displayMiniCart(cart))
+        DRCommerceApi.removeLineItem(lineItemID)
+            .then(() => DRCommerceApi.getCart())
+            .then(res => displayMiniCart(res.cart))
             .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
     });
 

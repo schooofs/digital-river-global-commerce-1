@@ -1,4 +1,5 @@
 import FloatLabel from './float-label'; // 3rd-party plugin
+import DRCommerceApi from './commerce-api';
 import CheckoutUtils from './checkout-utils';
 import DRGooglePay from './payment-googlepay';
 import DRApplePay from './payment-applepay';
@@ -256,30 +257,6 @@ jQuery(document).ready(($) => {
             return true;
         }
 
-        function updateCart(queryParams = {}, cartRequest = {}) {
-            const queryStr = $.param(queryParams);
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    type: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type':'application/json',
-                        Authorization: `Bearer ${drgc_params.accessToken}`
-                    },
-                    url: `${apiBaseUrl}/me/carts/active?${queryStr}`,
-                    data: JSON.stringify({
-                        cart: cartRequest
-                    })
-                })
-                .done((data) => {
-                    resolve(data);
-                })
-                .fail((jqXHR) => {
-                    reject(jqXHR);
-                });
-            });
-        }
-
         function displaySavedAddress(addressObj, $target) {
             const addressArr = [
                 `${addressObj.firstName} ${addressObj.lastName}`,
@@ -399,8 +376,13 @@ jQuery(document).ready(($) => {
 
             if (!isFormValid) return;
 
+            const cartRequest = {
+              cart: {
+                shippingAddress: payload.shipping
+              }
+            };
             $button.addClass('sending').blur();
-            updateCart({ expand: 'all' }, { shippingAddress: payload.shipping }).then((data) => {
+            DRCommerceApi.updateCart({ expand: 'all' }, cartRequest).then((data) => {
                 if (isLogin === 'true') saveShippingAddress();
 
                 return makeSureShippingOptionPreSelected(data);
@@ -429,8 +411,13 @@ jQuery(document).ready(($) => {
             if (!isFormValid) return;
             if (billingSameAsShipping) payload.billing = Object.assign({}, payload.shipping);
 
+            const cartRequest = {
+              cart: {
+                billingAddress: payload.billing
+              }
+            };
             $button.addClass('sending').blur();
-            updateCart({ expand: 'all' }, { billingAddress: payload.billing }).then((data) => {
+            DRCommerceApi.updateCart({ expand: 'all' }, cartRequest).then((data) => {
                 if (isLogin == 'true') {
                     if ((requestShipping && !billingSameAsShipping) || !requestShipping) {
                         saveBillingAddress();

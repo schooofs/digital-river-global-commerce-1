@@ -104,7 +104,7 @@ describe('Checkout Utils', () => {
         }
       }]
     };
-    
+
     const stubOptions = [{
       id: '12345',
       label: 'shipping option #1',
@@ -128,7 +128,7 @@ describe('Checkout Utils', () => {
         }
       }]
     };
-    
+
     const stubOptions = [{
       id: '12345',
       label: 'shipping option #1',
@@ -335,6 +335,39 @@ describe('Checkout Utils', () => {
     drgc_params.applePayBtnStatus = 'READY';
     CheckoutUtils.displayPreTAndC();
     expect(preTAndCWrapper.style.display).toEqual('');
+  });
+
+  describe('Test apiErrorHandler ', () => {
+    window.drToast = {};
+    drToast.displayMessage = jest.fn();
+
+    test('drToast.displayMessage should not been called when the error is not well-formed', () => {
+      const jqXHR = {
+        status: 409,
+        responseJSON: {}
+      };
+      CheckoutUtils.apiErrorHandler(jqXHR);
+      expect(drToast.displayMessage).not.toBeCalled();
+    });
+
+    test('drToast.displayMessage should been called when there is a standard error', () => {
+      const jqXHR = {
+        status: 409,
+        responseJSON: {
+          errors: {
+            error: [
+              {
+                relation: 'https://developers.digitalriver.com/v1/shoppers/CartsResource',
+                code: 'inventory-unavailable-error',
+                description: 'This product is currently out of stock and cannot be added to your cart.'
+              }
+            ]
+          }
+        }
+      };
+      CheckoutUtils.apiErrorHandler(jqXHR);
+      expect(drToast.displayMessage).toBeCalledWith('This product is currently out of stock and cannot be added to your cart.', 'error');
+    });
   });
 
 });

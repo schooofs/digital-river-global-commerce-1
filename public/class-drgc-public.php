@@ -148,7 +148,10 @@ class DRGC_Public {
 			'password_confirm_error_msg'     => __('Passwords do not match.', 'digital-river-global-commerce'),
 			'required_tandc_msg'             => __('Please indicate you have read and accepted the privacy policy and terms of sale.', 'digital-river-global-commerce'),
 			'undefined_error_msg'            => __('Something went wrong. Please try again.', 'digital-river-global-commerce'),
-			'loading_msg'                    => __('Loading...', 'digital-river-global-commerce')
+			'loading_msg'                    => __('Loading...', 'digital-river-global-commerce'),
+			'buy_now'                        => __('Buy Now', 'digital-river-global-commerce'),
+			'add_to_cart'                    => __('Add to Cart', 'digital-river-global-commerce'),
+			'out_of_stock'                   => __('Out of Stock', 'digital-river-global-commerce'),
 		);
 
 		// transfer drgc options from PHP to JS

@@ -1,6 +1,7 @@
 /* global drgc_params, iFrameResize */
 /* eslint-disable no-alert, no-console */
 import CheckoutUtils from './checkout-utils';
+import DRCommerceApi from './commerce-api';
 
 const CartModule = {};
 
@@ -28,28 +29,14 @@ jQuery(document).ready(($) => {
         e.preventDefault();
 
         const $this = $(e.target);
-        const lineItemId = $this.closest('.dr-product').data('line-item-id');
+        const lineItemID = $this.closest('.dr-product').data('line-item-id');
 
-        $.ajax({
-            type: 'DELETE',
-            headers: {
-                "Accept": "application/json",
-                "Content-Type":"application/json",
-                "Authorization": `Bearer ${drgc_params.accessToken}`
-            },
-            url: `${apiBaseUrl}/me/carts/active/line-items/${lineItemId}`,
-            success: (data, textStatus, xhr) => {
-                if ( xhr.status === 204 ) {
-                    $(`.dr-product[data-line-item-id="${lineItemId}"]`).remove();
-                    fetchFreshCart();
-                }
-                // TODO: On Error give feedback
-            },
-            error: (jqXHR) => {
-                console.log(jqXHR);
-                 // On Error give feedback
-            }
-        });
+        DRCommerceApi.removeLineItem(lineItemID)
+            .then(() => {
+                $(`.dr-product[data-line-item-id="${lineItemID}"]`).remove();
+                fetchFreshCart();
+            })
+            .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
     });
 
     $('body').on('click', 'span.dr-pd-cart-qty-plus, span.dr-pd-cart-qty-minus', throttle(setProductQty, 200));
@@ -111,8 +98,8 @@ jQuery(document).ready(($) => {
                 }
             },
             error: (jqXHR) => {
-                // TODO: Handle errors gracefully | revery back
-                console.log(jqXHR);
+                CheckoutUtils.apiErrorHandler(jqXHR);
+                $qty.val(val); // reset to original qty
             }
         });
     }
@@ -146,7 +133,7 @@ jQuery(document).ready(($) => {
                 renderCartProduct(data);
             },
             error: (jqXHR) => {
-                console.log(jqXHR);
+                CheckoutUtils.apiErrorHandler(jqXHR);
             }
         });
     }
@@ -217,11 +204,17 @@ jQuery(document).ready(($) => {
         success: (candyRackData, textStatus, xhr) => {
           $.each(candyRackData.offers.offer, function( index, offer ) {
             let promoText = offer.salesPitch[0].length > 0 ? offer.salesPitch[0]   : "";
-            let buyButtonText = (offer.type == "Up-sell") ? drgc_params.translations.upgrade_label : drgc_params.translations.add_label;
             $.each(offer.productOffers.productOffer, function( index, productOffer ) {
               const salePrice = productOffer.pricing.formattedSalePriceWithQuantity;
               const listPrice = productOffer.pricing.formattedListPriceWithQuantity;
+              const purchasable = productOffer.product.inventoryStatus.productIsInStock === 'true';
+              let buyButtonText = '';
 
+              if (purchasable) {
+                buyButtonText = (offer.type === 'Up-sell') ? drgc_params.translations.upgrade_label : drgc_params.translations.add_label;
+              } else {
+                buyButtonText = drgc_params.translations.out_of_stock;
+              }
               let candyRackProductHTML = `
               <div  class="dr-product dr-candyRackProduct" data-product-id="${productOffer.product.id}" data-parent-product-id="${productID}">
                 <div class="dr-product-content">
@@ -238,7 +231,9 @@ jQuery(document).ready(($) => {
                     </div>
                 </div>
                 <div class="dr-product__price">
-                    <button type="button" class="dr-btn dr-buy-candyRack" data-buy-uri="${productOffer.addProductToCart.uri}">${buyButtonText}</button>
+                    <button type="button" class="dr-btn dr-buy-candyRack"
+                      data-buy-uri="${productOffer.addProductToCart.uri}"
+                      ${purchasable ? '' : 'disabled="disabled"'}>${buyButtonText}</button>
                     <span class="sale-price">${salePrice}</span>
                     <span class="regular-price dr-strike-price ${salePrice === listPrice ? 'd-none' : ''}">${listPrice}</span>
                 </div>
@@ -274,35 +269,10 @@ jQuery(document).ready(($) => {
             fetchFreshCart();
           },
           error: (jqXHR) => {
-            console.log(jqXHR);
-               // On Error give feedback
+            CheckoutUtils.apiErrorHandler(jqXHR);
           }
       });
     });
-
-    function updateCart(queryParams = {}, cartRequest = {}) {
-        const queryStr = $.param(queryParams);
-        return new Promise((resolve, reject) => {
-            $.ajax({
-                type: 'POST',
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type":"application/json",
-                    "Authorization": `Bearer ${drgc_params.accessToken}`,
-                },
-                url:  `${apiBaseUrl}/me/carts/active?&${queryStr}`,
-                data: JSON.stringify({
-                    cart: cartRequest
-                }),
-                success: (data) => {
-                    resolve(data);
-                },
-                error: (jqXHR) => {
-                    reject(jqXHR);
-                }
-            });
-        });
-    }
 
     function getpermalink(permalinkProductId){
       return new Promise((resolve, reject) => {
@@ -384,6 +354,7 @@ jQuery(document).ready(($) => {
           </div>
           `;
           $('#tempCartProducts').append(lineItemHTML);
+          $(".dr-cart__products").html($("#tempCartProducts").html());
         }).then(() => {
           lineItemCount++;
           if(lineItemCount === data.cart.lineItems.lineItem.length){
@@ -391,12 +362,7 @@ jQuery(document).ready(($) => {
             reOrderCartAndMerchandising(data);
           }
         }).catch((jqXHR) => {
-          if (jqXHR.responseJSON.errors) {
-            const errMsgs = jqXHR.responseJSON.errors.error.map((err) => {
-              return err.description;
-            });
-            console.log(errMsgs);
-          }
+          CheckoutUtils.apiErrorHandler(jqXHR);
         });
       });
     }
@@ -472,7 +438,7 @@ jQuery(document).ready(($) => {
         }
 
         $(e.target).addClass('sending').blur();
-        updateCart({ promoCode }).then(() => {
+        DRCommerceApi.updateCart({ promoCode }).then(() => {
             $(e.target).removeClass('sending');
             $('#dr-promo-code-err-field').text('').hide();
             fetchFreshCart();

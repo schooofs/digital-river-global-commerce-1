@@ -2,6 +2,9 @@
 import BSModal from './modal';
 
 // maintained by DR
+import drToast from './dr-toast';
+window.drToast = drToast;
+
 import CartModule from './public-cart';
 import CheckoutModule from './public-checkout';
 import CommonModule from './public-common';

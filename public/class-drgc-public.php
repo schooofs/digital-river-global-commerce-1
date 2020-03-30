@@ -162,6 +162,7 @@ class DRGC_Public {
 			'ajaxNonce'         =>  wp_create_nonce( 'drgc_ajax' ),
 			'cartUrl'           =>  drgc_get_page_link( 'cart' ),
 			'checkoutUrl'       =>  drgc_get_page_link( 'checkout' ),
+			'mySubsUrl'         =>  drgc_get_page_link( 'my-subscriptions' ),
 			'siteID'            =>  get_option( 'drgc_site_id' ),
 			'domain'            =>  get_option( 'drgc_domain' ),
 			'digitalRiverKey'   =>  get_option( 'drgc_digitalRiver_key' ),
@@ -503,6 +504,7 @@ class DRGC_Public {
 	public function insert_login_menu_items( $items, $args ) {
 		$customer = DRGC()->shopper->retrieve_shopper();
 		$is_logged_in = $customer && 'Anonymous' !== $customer['id'];
+		$subs = DRGC()->shopper->retrieve_subscriptions();
 
 		$new_item = array(
 			'title'            => $is_logged_in ? __( 'Hi, ', 'digital-river-global-commerce' ) . $customer['firstName'] : __( 'Login' ),
@@ -530,6 +532,21 @@ class DRGC_Public {
 				'current'          => null // for preventing warning in debug mode
 			);
 			$items[] = (object) $new_sub_item;
+		}
+
+		if ( $subs ) {
+			$new_sub_item_2 = array(
+				'title'            => __( 'My Subscriptions', 'digital-river-global-commerce' ),
+				'menu_item_parent' => 'login',
+				'ID'               => 'my-subscriptions',
+				'db_id'            => 'my-subscriptions',
+				'url'              => get_site_url() . '/my-subscriptions',
+				'classes'          => array( 'menu-item' ),
+				'target'           => null,
+				'xfn'              => null,
+				'current'          => null // for preventing warning in debug mode
+			);
+			$items[] = (object) $new_sub_item_2;
 		}
 
 		return $items;

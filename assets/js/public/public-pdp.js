@@ -104,6 +104,7 @@ jQuery(document).ready(($) => {
             const miniCartSubtotal = `<p class="dr-minicart-subtotal"><label>${drgc_params.translations.subtotal_label}</label><span>${cart.pricing.formattedSubtotal}</span></p>`;
             const miniCartViewCartBtn = `<a class="dr-btn" id="dr-minicart-view-cart-btn" href="${drgc_params.cartUrl}">${drgc_params.translations.view_cart_label}</a>`;
             const miniCartCheckoutBtn = `<a class="dr-btn" id="dr-minicart-checkout-btn" href="${drgc_params.checkoutUrl}">${drgc_params.translations.checkout_label}</a>`;
+            let isAuto = false;
 
             lineItems.forEach((li) => {
                 const productId = li.product.uri.replace(`${DRCommerceApi.apiBaseUrl}/me/products/`, '');
@@ -111,6 +112,7 @@ jQuery(document).ready(($) => {
                 const salePrice = Number(li.pricing.salePriceWithQuantity.value);
                 const formattedSalePrice = li.pricing.formattedSalePriceWithQuantity;
                 let priceContent = '';
+                let attrs = [];
 
                 if (listPrice > salePrice) {
                     priceContent = `<del class="dr-strike-price">${listPrice}</del><span class="dr-sale-price">${formattedSalePrice}</span>`;
@@ -131,11 +133,21 @@ jQuery(document).ready(($) => {
                     <a href="#" class="dr-minicart-item-remove-btn" aria-label="Remove" data-line-item-id="${li.id}">${drgc_params.translations.remove_label}</a>
                 </li>`;
                 miniCartLineItems += miniCartLineItem;
+
+                attrs = li.product.customAttributes && li.product.customAttributes.attribute ? li.product.customAttributes.attribute : [];
+
+                if (attrs.some(element => element.name === 'isAutomatic' && element.value === 'true')) {
+                    isAuto = true;
+                }
             });
             miniCartLineItems += '</ul>';
             $body.append(miniCartLineItems, miniCartSubtotal);
             $footer.append(miniCartViewCartBtn, miniCartCheckoutBtn);
             $display.append($body, $footer);
+
+            if (isAuto) {
+                $('#dr-minicart-checkout-btn').prop('href', drgc_params.cartUrl);
+            }
         }
     }
 
@@ -183,7 +195,8 @@ jQuery(document).ready(($) => {
             const queryObj = {
                 productId: productID,
                 quantity,
-                testOrder: drgc_params.testOrder
+                testOrder: drgc_params.testOrder,
+                expand: 'all'
             };
             DRCommerceApi.updateCart(queryObj)
                 .then(res => {

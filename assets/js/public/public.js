@@ -11,3 +11,4 @@ import CommonModule from './public-common';
 import LoginModule from './public-login';
 import PdpModule from './public-pdp';
 import ThankYouModule from './public-thank-you';
+import SubsModule from './public-subs';

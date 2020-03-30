@@ -3,7 +3,56 @@
 import CheckoutUtils from './checkout-utils';
 import DRCommerceApi from './commerce-api';
 
-const CartModule = {};
+const CartModule = (($) => {
+  const initAutoRenewalTerms = (digitalriverjs) => {
+    const $checkoutBtn = $('a.dr-summary__proceed-checkout');
+    const $termsCheckbox = $('#autoRenewOptedInOnCheckout');
+
+    if (sessionStorage.getItem('isTermsChecked')) {
+      const isTermsChecked = sessionStorage.getItem('isTermsChecked') === 'true' ? true : false;      
+      $termsCheckbox.prop('checked', isTermsChecked);
+    }
+
+    $termsCheckbox.change((e) => {
+      if ($(e.target).is(':checked')) {
+        $('#dr-TAndC-err-msg').text('').hide();
+        $checkoutBtn.prop('href', drgc_params.checkoutUrl);
+        sessionStorage.setItem('isTermsChecked', 'true');
+      } else {
+        $checkoutBtn.prop('href', '#dr-autoRenewTermsContainer');
+        sessionStorage.setItem('isTermsChecked', 'false');
+      }
+    });
+
+    $checkoutBtn.click(() => {
+      if (!$termsCheckbox.is(':checked')) {
+        $('#dr-TAndC-err-msg').text(drgc_params.translations.required_tandc_msg).show();
+      }
+    });
+
+    $termsCheckbox.trigger('change');
+    
+    appendAutoRenewalTerms(digitalriverjs);   
+  };
+
+  const appendAutoRenewalTerms = (digitalriverjs) => {
+    const entityCode = CheckoutUtils.getEntityCode();
+    const locale = drgc_params.drLocale || 'en_US';
+    const compliance = CheckoutUtils.getCompliance(digitalriverjs, entityCode, locale);
+
+    if (Object.keys(compliance).length) {
+      const terms = compliance.autorenewalPlanTerms.localizedText;
+
+      $('#dr-optInAutoRenew > .dr-optInAutoRenewTerms > p').append(terms);
+      $('#dr-autoRenewTermsContainer').show();
+    }
+  };
+
+  return {
+    initAutoRenewalTerms,
+    appendAutoRenewalTerms
+  };
+})(jQuery);
 
 jQuery(document).ready(($) => {
     const apiBaseUrl = 'https://' + drgc_params.domain + '/v1/shoppers';
@@ -466,6 +515,10 @@ jQuery(document).ready(($) => {
 
       const digitalriverjs = new DigitalRiver(drgc_params.digitalRiverKey);
       CheckoutUtils.applyLegalLinks(digitalriverjs);
+
+      if ($('#dr-autoRenewTermsContainer').length) {
+        CartModule.initAutoRenewalTerms(digitalriverjs);
+      }
     }
 });
 

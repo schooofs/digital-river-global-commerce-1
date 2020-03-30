@@ -597,4 +597,89 @@ class DRGC_Public {
 			}
 		}
 	}
+
+	/**
+	 * Switch auto renewal type AJAX
+	 * 
+	 * @since  1.3.0
+	 */
+	public function switch_renewal_type_ajax() {
+		check_ajax_referer( 'drgc_ajax', 'nonce' );
+
+		if ( isset( $_POST['subscriptionId'] ) && isset( $_POST['renewalType'] ) ) {
+			$plugin = DRGC();
+			$subscription_id = sanitize_text_field( $_POST['subscriptionId'] );
+			$renewal_type = sanitize_text_field( $_POST['renewalType'] );
+			$params = array(
+				'id' => $subscription_id,
+				'renewal_type' => $renewal_type
+			);
+
+			$response = $plugin->user_management->send_request( 'SWITCH_RENEWAL_TYPE', $params );
+
+			if ( $response ) {
+				$plugin->user_management->send_json_response( $response );
+			} else {
+				wp_send_json_error();
+			}
+		} else {
+			wp_send_json_error();
+		}
+	}
+
+	/**
+	 * Change the next renewal quantity AJAX
+	 * 
+	 * @since  1.3.0
+	 */
+	public function change_renewal_qty_ajax() {
+		check_ajax_referer( 'drgc_ajax', 'nonce' );
+
+		if ( isset( $_POST['subscriptionId'] ) && isset( $_POST['renewalQty'] ) ) {
+			$plugin = DRGC();
+			$subscription_id = sanitize_text_field( $_POST['subscriptionId'] );
+			$renewal_qty = sanitize_text_field( $_POST['renewalQty'] );
+			$params = array(
+				'id' => $subscription_id,
+				'renewal_qty' => $renewal_qty
+			);
+
+			$response = $plugin->user_management->send_request( 'CHANGE_RENEWAL_QTY', $params );
+
+			if ( $response ) {
+				$plugin->user_management->send_json_response( $response );
+			} else {
+				wp_send_json_error();
+			}
+		} else {
+			wp_send_json_error();
+		}
+	}
+
+	/**
+	 * Cancel the subscription AJAX
+	 * 
+	 * @since  1.3.0
+	 */
+	public function cancel_subscription_ajax() {
+		check_ajax_referer( 'drgc_ajax', 'nonce' );
+
+		if ( isset( $_POST['subscriptionId'] ) ) {
+			$plugin = DRGC();
+			$subscription_id = sanitize_text_field( $_POST['subscriptionId'] );
+			$params = array(
+				'id' => $subscription_id
+			);
+
+			$response = $plugin->user_management->send_request( 'CANCEL_SUBS', $params );
+
+			if ( $response ) {
+				$plugin->user_management->send_json_response( $response );
+			} else {
+				wp_send_json_error();
+			}
+		} else {
+			wp_send_json_error();
+		}
+	}
 }

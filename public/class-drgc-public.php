@@ -152,6 +152,8 @@ class DRGC_Public {
 			'buy_now'                        => __('Buy Now', 'digital-river-global-commerce'),
 			'add_to_cart'                    => __('Add to Cart', 'digital-river-global-commerce'),
 			'out_of_stock'                   => __('Out of Stock', 'digital-river-global-commerce'),
+			'cancel_subs_confirm'            => __('Are you sure you want to immediately unsubscribe this subscription?', 'digital-river-global-commerce'),
+			'change_renewal_qty_prompt'      => __('Please enter the required quantity:', 'digital-river-global-commerce'),
 		);
 
 		// transfer drgc options from PHP to JS

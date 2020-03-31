@@ -59,7 +59,7 @@ jQuery(document).ready(($) => {
 
   if ($('#dr-subs-details-page-wrapper').length) {
     $(document).on('click', '#subs-cancel-link', () => {
-      if (confirm('Are you sure you want to immediately unsubscribe this subscription?')) {
+      if (confirm(drgc_params.translations.cancel_subs_confirm)) {
         $('body').css({'pointer-events': 'none', 'opacity': 0.5});
 
         const subsId = $('#subs-cancel-link').attr('data-id');
@@ -114,7 +114,7 @@ jQuery(document).ready(($) => {
     });
 
     $(document).on('click', '#subs-change-qty-btn', () => {
-      const qtyInput = prompt('Please enter the required quantity:', '');
+      const qtyInput = prompt(drgc_params.translations.change_renewal_qty_prompt, '');
 
       if (isNaN(Number(qtyInput)) || qtyInput === '') {
         alert('Please enter a number!');

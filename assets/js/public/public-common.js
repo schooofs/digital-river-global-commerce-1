@@ -22,16 +22,6 @@ window.onpageshow = function(event) {
   }
 };
 
-// Bypass CORS issue, please see https://github.com/Rob--W/cors-anywhere for more details
-jQuery.ajaxPrefilter(function(options) {
-  const host = new URL(options.url).host;
-  const corsAnywhereEnabled = (host !== 'api.digitalriver.com' && host !== 'drh-fonts.img.digitalrivercontent.net');
-
-  if (options.crossDomain && jQuery.support.cors && corsAnywhereEnabled) {
-    options.url = 'https://cors-anywhere.herokuapp.com/' + options.url;
-  }
-});
-
 jQuery(document).ready(($) => {
   $('input[type=text]:required').on('input', (e) => {
     const elem = e.target;

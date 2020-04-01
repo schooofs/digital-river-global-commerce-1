@@ -140,4 +140,10 @@ if($billing_city !== '' && $billing_code !== '') {
 
     </div>
 
+    <div class="dr-thank-you-wrapper__button">
+
+        <?php include_once DRGC_PLUGIN_DIR . 'public/templates/thank-you/thank-you-my-subs.php'; ?>
+
+    </div>
+
 </div>

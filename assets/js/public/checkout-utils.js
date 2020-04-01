@@ -115,13 +115,22 @@ const CheckoutUtils = (($, params) => {
     $('div.dr-summary__total > .total-value').text(formattedOrderTotal);
   };
 
-  const applyLegalLinks = (digitalriverjs) => {
-    const entityCode = drgc_params.order && drgc_params.order.order ?
+  const getEntityCode = () => {
+    return drgc_params.order && drgc_params.order.order ?
       drgc_params.order.order.businessEntityCode :
       (drgc_params.cart && drgc_params.cart.cart ? drgc_params.cart.cart.businessEntityCode : '');
+  };
 
-    if (entityCode) {
-      const complianceData = digitalriverjs.Compliance.getDetails(entityCode, drgc_params.drLocale).disclosure;
+  const getCompliance = (digitalriverjs, entityCode, locale) => {
+    return entityCode && locale ? digitalriverjs.Compliance.getDetails(entityCode, locale).disclosure : {};
+  };
+
+  const applyLegalLinks = (digitalriverjs) => {
+    const entityCode = getEntityCode();
+    const locale = drgc_params.drLocale;
+    const complianceData = getCompliance(digitalriverjs, entityCode, locale);
+
+    if (Object.keys(complianceData).length) {
       $('.dr-resellerDisclosure').prop('href', complianceData.resellerDisclosure.url);
       $('.dr-termsOfSale').prop('href', complianceData.termsOfSale.url);
       $('.dr-privacyPolicy').prop('href', complianceData.privacyPolicy.url);
@@ -164,7 +173,9 @@ const CheckoutUtils = (($, params) => {
     displayPreTAndC,
     displayAlertMessage,
     apiErrorHandler,
-    resetBodyOpacity
+    resetBodyOpacity,
+    getEntityCode,
+    getCompliance
   };
 })(jQuery, drgc_params);
 

@@ -152,6 +152,8 @@ class DRGC_Public {
 			'buy_now'                        => __('Buy Now', 'digital-river-global-commerce'),
 			'add_to_cart'                    => __('Add to Cart', 'digital-river-global-commerce'),
 			'out_of_stock'                   => __('Out of Stock', 'digital-river-global-commerce'),
+			'cancel_subs_confirm'            => __('Are you sure you want to immediately unsubscribe this subscription?', 'digital-river-global-commerce'),
+			'change_renewal_qty_prompt'      => __('Please enter the required quantity:', 'digital-river-global-commerce'),
 		);
 
 		// transfer drgc options from PHP to JS
@@ -162,6 +164,7 @@ class DRGC_Public {
 			'ajaxNonce'         =>  wp_create_nonce( 'drgc_ajax' ),
 			'cartUrl'           =>  drgc_get_page_link( 'cart' ),
 			'checkoutUrl'       =>  drgc_get_page_link( 'checkout' ),
+			'mySubsUrl'         =>  drgc_get_page_link( 'my-subscriptions' ),
 			'siteID'            =>  get_option( 'drgc_site_id' ),
 			'domain'            =>  get_option( 'drgc_domain' ),
 			'digitalRiverKey'   =>  get_option( 'drgc_digitalRiver_key' ),
@@ -503,6 +506,7 @@ class DRGC_Public {
 	public function insert_login_menu_items( $items, $args ) {
 		$customer = DRGC()->shopper->retrieve_shopper();
 		$is_logged_in = $customer && 'Anonymous' !== $customer['id'];
+		$subs = DRGC()->shopper->retrieve_subscriptions();
 
 		$new_item = array(
 			'title'            => $is_logged_in ? __( 'Hi, ', 'digital-river-global-commerce' ) . $customer['firstName'] : __( 'Login' ),
@@ -530,6 +534,21 @@ class DRGC_Public {
 				'current'          => null // for preventing warning in debug mode
 			);
 			$items[] = (object) $new_sub_item;
+		}
+
+		if ( $subs ) {
+			$new_sub_item_2 = array(
+				'title'            => __( 'My Subscriptions', 'digital-river-global-commerce' ),
+				'menu_item_parent' => 'login',
+				'ID'               => 'my-subscriptions',
+				'db_id'            => 'my-subscriptions',
+				'url'              => get_site_url() . '/my-subscriptions',
+				'classes'          => array( 'menu-item' ),
+				'target'           => null,
+				'xfn'              => null,
+				'current'          => null // for preventing warning in debug mode
+			);
+			$items[] = (object) $new_sub_item_2;
 		}
 
 		return $items;
@@ -595,6 +614,91 @@ class DRGC_Public {
 				wp_redirect( get_permalink( get_page_by_path( 'login' ) ) );
 				exit;
 			}
+		}
+	}
+
+	/**
+	 * Switch auto renewal type AJAX
+	 * 
+	 * @since  1.3.0
+	 */
+	public function switch_renewal_type_ajax() {
+		check_ajax_referer( 'drgc_ajax', 'nonce' );
+
+		if ( isset( $_POST['subscriptionId'] ) && isset( $_POST['renewalType'] ) ) {
+			$plugin = DRGC();
+			$subscription_id = sanitize_text_field( $_POST['subscriptionId'] );
+			$renewal_type = sanitize_text_field( $_POST['renewalType'] );
+			$params = array(
+				'id' => $subscription_id,
+				'renewal_type' => $renewal_type
+			);
+
+			$response = $plugin->user_management->send_request( 'SWITCH_RENEWAL_TYPE', $params );
+
+			if ( $response ) {
+				$plugin->user_management->send_json_response( $response );
+			} else {
+				wp_send_json_error();
+			}
+		} else {
+			wp_send_json_error();
+		}
+	}
+
+	/**
+	 * Change the next renewal quantity AJAX
+	 * 
+	 * @since  1.3.0
+	 */
+	public function change_renewal_qty_ajax() {
+		check_ajax_referer( 'drgc_ajax', 'nonce' );
+
+		if ( isset( $_POST['subscriptionId'] ) && isset( $_POST['renewalQty'] ) ) {
+			$plugin = DRGC();
+			$subscription_id = sanitize_text_field( $_POST['subscriptionId'] );
+			$renewal_qty = sanitize_text_field( $_POST['renewalQty'] );
+			$params = array(
+				'id' => $subscription_id,
+				'renewal_qty' => $renewal_qty
+			);
+
+			$response = $plugin->user_management->send_request( 'CHANGE_RENEWAL_QTY', $params );
+
+			if ( $response ) {
+				$plugin->user_management->send_json_response( $response );
+			} else {
+				wp_send_json_error();
+			}
+		} else {
+			wp_send_json_error();
+		}
+	}
+
+	/**
+	 * Cancel the subscription AJAX
+	 * 
+	 * @since  1.3.0
+	 */
+	public function cancel_subscription_ajax() {
+		check_ajax_referer( 'drgc_ajax', 'nonce' );
+
+		if ( isset( $_POST['subscriptionId'] ) ) {
+			$plugin = DRGC();
+			$subscription_id = sanitize_text_field( $_POST['subscriptionId'] );
+			$params = array(
+				'id' => $subscription_id
+			);
+
+			$response = $plugin->user_management->send_request( 'CANCEL_SUBS', $params );
+
+			if ( $response ) {
+				$plugin->user_management->send_json_response( $response );
+			} else {
+				wp_send_json_error();
+			}
+		} else {
+			wp_send_json_error();
 		}
 	}
 }

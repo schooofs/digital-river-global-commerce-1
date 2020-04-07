@@ -135,7 +135,6 @@ class DRGC_Admin {
 			'manage_options',
 			'digital-river-global-commerce',
 			array( $this, 'display_settings_page' ),
-			'dashicons-screenoptions',
 			100
 		);
 	}
@@ -465,7 +464,7 @@ class DRGC_Admin {
 
 		echo '<label class="switch"><input type="checkbox" class="regular-text" name="' . $this->option_name . '_googlepay_handler[checkbox]" id="' . $this->option_name . '_googlepay_handler" value="1" ' . $checked . ' /><span class="slider round"></span></label>';
   }
-  
+
   /**
 	 * Render input text field for X-Stream username.
 	 *

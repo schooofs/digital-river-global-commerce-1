@@ -230,7 +230,6 @@ gulp.task('adminJS', () => {
         }
       }
     }))
-    .pipe(lineec()) // Consistent Line Endings for non UNIX systems.
     .pipe(gulp.dest(config.jsVendorDestination)) // Unminified JS has been compiled
     .pipe(
       rename({
@@ -239,7 +238,6 @@ gulp.task('adminJS', () => {
       })
     )
     .pipe(uglify())
-    .pipe(lineec()) // Consistent Line Endings for non UNIX systems.
     .pipe(gulp.dest(config.jsVendorDestination)) // Minified JS has been compiled
     .pipe(notify({ message: '\n\n✅  ===> ADMIN JS — completed!\n', onLast: true }));
 });
@@ -280,7 +278,6 @@ gulp.task('publicJS', () => {
         }
       }
     }))
-    .pipe(lineec()) // Consistent Line Endings for non UNIX systems.
     .pipe(gulp.dest(config.jsCustomDestination)) // Unminified JS has been compiled
     .pipe(
       rename({
@@ -289,7 +286,6 @@ gulp.task('publicJS', () => {
       })
     )
     .pipe(uglify())
-    .pipe(lineec()) // Consistent Line Endings for non UNIX systems.
     .pipe(gulp.dest(config.jsCustomDestination)) // Minified JS has been compiled
     .pipe(notify({ message: '\n\n✅  ===> PUBLIC JS — completed!\n', onLast: true }));
 });

@@ -255,27 +255,35 @@ function drgc_get_product_meta_filters( $term = null ) {
 				}
 			}
 
-			if ( ! empty( get_post_meta( get_the_ID(), 'color', true ) ) ) {
-				if ( ! empty( $attributes['color'] ) && is_array($attributes['color'])) {
+			if ( ! empty( get_post_meta( get_the_ID(), 'color', true ) ) && is_array( get_post_meta( get_the_ID(), 'color', true ) ) ) {
+				if ( ! empty( $attributes['color'] ) && is_array( $attributes['color'] ) ) {
 					$attributes['color'] = array_unique( array_merge( $attributes['color'], get_post_meta( get_the_ID(), 'color', true ) ) );
 				} else {
 					$attributes['color'] = get_post_meta( get_the_ID(), 'color', true );
 				}
 			}
 
-			if ( ! empty( get_post_meta( get_the_ID(), 'sizes', true ) ) ) {
-				if ( ! empty( $attributes['sizes'] ) && is_array($attributes['sizes'])) {
+			if ( ! empty( get_post_meta( get_the_ID(), 'sizes', true ) ) && is_array( get_post_meta( get_the_ID(), 'sizes', true ) ) ) {
+				if ( ! empty( $attributes['sizes'] ) && is_array( $attributes['sizes'] ) ) {
 					$attributes['sizes'] = array_unique( array_merge( $attributes['sizes'], get_post_meta( get_the_ID(), 'sizes', true ) ) );
 				} else {
 					$attributes['sizes'] = get_post_meta( get_the_ID(), 'sizes', true );
 				}
 			}
 
-			if ( ! empty( get_post_meta( get_the_ID(), 'duration', true ) ) ) {
-				if ( ! empty( $attributes['duration'] ) && is_array($attributes['duration'])) {
+			if ( ! empty( get_post_meta( get_the_ID(), 'duration', true ) ) && is_array( get_post_meta( get_the_ID(), 'duration', true ) ) ) {
+				if ( ! empty( $attributes['duration'] ) && is_array( $attributes['duration'] ) ) {
 					$attributes['duration'] = array_unique( array_merge( $attributes['duration'], get_post_meta( get_the_ID(), 'duration', true ) ) );
 				} else {
 					$attributes['duration'] = get_post_meta( get_the_ID(), 'duration', true );
+				}
+			}
+
+			if ( ! empty( get_post_meta( get_the_ID(), 'wrap_type', true ) ) && is_array( get_post_meta( get_the_ID(), 'wrap_type', true ) ) ) {
+				if ( ! empty( $attributes['wrap_type'] ) && is_array( $attributes['wrap_type'] ) ) {
+					$attributes['wrap_type'] = array_unique( array_merge( $attributes['wrap_type'], get_post_meta( get_the_ID(), 'wrap_type', true ) ) );
+				} else {
+					$attributes['wrap_type'] = get_post_meta( get_the_ID(), 'wrap_type', true );
 				}
 			}
 		}

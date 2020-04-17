@@ -40,6 +40,11 @@ const LoginModule = (($) => {
 
     const checkoutAsGuest = (e) => {
         e.preventDefault();
+
+        const $btn = $(e.target);
+        if ($btn.hasClass('sending')) return;
+        $btn.toggleClass('sending').blur();
+
         const data = {
             action: 'drgc_checkout_as_guest',
             nonce: drgc_params.ajaxNonce,
@@ -49,7 +54,7 @@ const LoginModule = (($) => {
             url: drgc_params.ajaxUrl,
             data,
             success: () => {
-                window.location.href = drgc_params.checkoutUrl;
+                window.location.href = drgc_params.cartUrl;
             }
         });
     };
@@ -109,7 +114,7 @@ jQuery(document).ready(($) => {
 
         $.post(ajaxUrl, data, function(response) {
             if ( response.success ) {
-                window.location.href = drgc_params.checkoutUrl;
+                window.location.href = drgc_params.cartUrl;
             } else {
                 $form.data('processing', false);
                 but.removeClass('sending').blur();
@@ -194,7 +199,7 @@ jQuery(document).ready(($) => {
 
         $.post(ajaxUrl, data, function(response) {
             if (response.success) {
-                window.location.href = drgc_params.checkoutUrl;
+                window.location.href = drgc_params.cartUrl;
             } else {
                 $form.data('processing', false);
                 $button.removeClass('sending').blur();

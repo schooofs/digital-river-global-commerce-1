@@ -102,7 +102,7 @@ html {
     thead > tr > th, tbody > tr > th, thead > tr > td, tbody > tr > td {
         border: 1px solid #ddd;
     }
-    
+
     th {
         background-color: #F9F9F9;
         color: rgb(0, 0, 0);
@@ -111,7 +111,7 @@ html {
         font-weight: bold;
         padding: 8px 10px 8px 5px;
     }
-    
+
     td {
         background-color: rgb(255, 255, 255);
         text-align: left;
@@ -192,6 +192,11 @@ html {
                 &:hover {
                     background: green;
                 }
+            }
+            &:first-child:last-child {
+              width: 100%;
+              margin: 0;
+              border: none;
             }
         }
         &-title {

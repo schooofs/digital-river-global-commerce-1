@@ -3444,6 +3444,9 @@ var LoginModule = function ($) {
 
   var checkoutAsGuest = function checkoutAsGuest(e) {
     e.preventDefault();
+    var $btn = $(e.target);
+    if ($btn.hasClass('sending')) return;
+    $btn.toggleClass('sending').blur();
     var data = {
       action: 'drgc_checkout_as_guest',
       nonce: drgc_params.ajaxNonce
@@ -3453,7 +3456,7 @@ var LoginModule = function ($) {
       url: drgc_params.ajaxUrl,
       data: data,
       success: function success() {
-        window.location.href = drgc_params.checkoutUrl;
+        window.location.href = drgc_params.cartUrl;
       }
     });
   };
@@ -3508,7 +3511,7 @@ jQuery(document).ready(function ($) {
     };
     $.post(ajaxUrl, data, function (response) {
       if (response.success) {
-        window.location.href = drgc_params.checkoutUrl;
+        window.location.href = drgc_params.cartUrl;
       } else {
         $form.data('processing', false);
         but.removeClass('sending').blur();
@@ -3582,7 +3585,7 @@ jQuery(document).ready(function ($) {
     };
     $.post(ajaxUrl, data, function (response) {
       if (response.success) {
-        window.location.href = drgc_params.checkoutUrl;
+        window.location.href = drgc_params.cartUrl;
       } else {
         $form.data('processing', false);
         $button.removeClass('sending').blur();
@@ -3790,15 +3793,12 @@ jQuery(document).ready(function ($) {
       var miniCartLineItems = '<ul class="dr-minicart-list">';
       var miniCartSubtotal = "<p class=\"dr-minicart-subtotal\"><label>".concat(drgc_params.translations.subtotal_label, "</label><span>").concat(cart.pricing.formattedSubtotal, "</span></p>");
       var miniCartViewCartBtn = "<a class=\"dr-btn\" id=\"dr-minicart-view-cart-btn\" href=\"".concat(drgc_params.cartUrl, "\">").concat(drgc_params.translations.view_cart_label, "</a>");
-      var miniCartCheckoutBtn = "<a class=\"dr-btn\" id=\"dr-minicart-checkout-btn\" href=\"".concat(drgc_params.checkoutUrl, "\">").concat(drgc_params.translations.checkout_label, "</a>");
-      var isAuto = false;
       lineItems.forEach(function (li) {
         var productId = li.product.uri.replace("".concat(commerce_api.apiBaseUrl, "/me/products/"), '');
         var listPrice = Number(li.pricing.listPriceWithQuantity.value);
         var salePrice = Number(li.pricing.salePriceWithQuantity.value);
         var formattedSalePrice = li.pricing.formattedSalePriceWithQuantity;
         var priceContent = '';
-        var attrs = [];
 
         if (listPrice > salePrice) {
           priceContent = "<del class=\"dr-strike-price\">".concat(listPrice, "</del><span class=\"dr-sale-price\">").concat(formattedSalePrice, "</span>");
@@ -3808,22 +3808,11 @@ jQuery(document).ready(function ($) {
 
         var miniCartLineItem = "\n                <li class=\"dr-minicart-item clearfix\">\n                    <div class=\"dr-minicart-item-thumbnail\">\n                        <img src=\"".concat(li.product.thumbnailImage, "\" alt=\"").concat(li.product.displayName, "\" />\n                    </div>\n                    <div class=\"dr-minicart-item-info\" data-product-id=\"").concat(productId, "\">\n                        <span class=\"dr-minicart-item-title\">").concat(li.product.displayName, "</span>\n                        <span class=\"dr-minicart-item-qty\">").concat(drgc_params.translations.qty_label, ".").concat(li.quantity, "</span>\n                        <p class=\"dr-pd-price dr-minicart-item-price\">").concat(priceContent, "</p>\n                    </div>\n                    <a href=\"#\" class=\"dr-minicart-item-remove-btn\" aria-label=\"Remove\" data-line-item-id=\"").concat(li.id, "\">").concat(drgc_params.translations.remove_label, "</a>\n                </li>");
         miniCartLineItems += miniCartLineItem;
-        attrs = li.product.customAttributes && li.product.customAttributes.attribute ? li.product.customAttributes.attribute : [];
-
-        if (attrs.some(function (element) {
-          return element.name === 'isAutomatic' && element.value === 'true';
-        })) {
-          isAuto = true;
-        }
       });
       miniCartLineItems += '</ul>';
       $body.append(miniCartLineItems, miniCartSubtotal);
-      $footer.append(miniCartViewCartBtn, miniCartCheckoutBtn);
+      $footer.append(miniCartViewCartBtn);
       $display.append($body, $footer);
-
-      if (isAuto) {
-        $('#dr-minicart-checkout-btn').prop('href', drgc_params.cartUrl);
-      }
     }
   }
 

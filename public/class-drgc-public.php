@@ -162,6 +162,7 @@ class DRGC_Public {
 			'drLocale'          =>  get_dr_locale( get_locale() ),
 			'ajaxUrl'           =>  admin_url( 'admin-ajax.php' ),
 			'ajaxNonce'         =>  wp_create_nonce( 'drgc_ajax' ),
+			'homeUrl'           =>  get_home_url(),
 			'cartUrl'           =>  drgc_get_page_link( 'cart' ),
 			'checkoutUrl'       =>  drgc_get_page_link( 'checkout' ),
 			'mySubsUrl'         =>  drgc_get_page_link( 'my-subscriptions' ),
@@ -619,7 +620,7 @@ class DRGC_Public {
 
 	/**
 	 * Switch auto renewal type AJAX
-	 * 
+	 *
 	 * @since  1.3.0
 	 */
 	public function switch_renewal_type_ajax() {
@@ -648,7 +649,7 @@ class DRGC_Public {
 
 	/**
 	 * Change the next renewal quantity AJAX
-	 * 
+	 *
 	 * @since  1.3.0
 	 */
 	public function change_renewal_qty_ajax() {
@@ -677,7 +678,7 @@ class DRGC_Public {
 
 	/**
 	 * Cancel the subscription AJAX
-	 * 
+	 *
 	 * @since  1.3.0
 	 */
 	public function cancel_subscription_ajax() {

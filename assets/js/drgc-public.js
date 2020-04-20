@@ -3456,7 +3456,7 @@ var LoginModule = function ($) {
       url: drgc_params.ajaxUrl,
       data: data,
       success: function success() {
-        window.location.href = drgc_params.cartUrl;
+        LoginModule.redirectAfterAuth();
       }
     });
   };
@@ -3478,10 +3478,21 @@ var LoginModule = function ($) {
     });
   };
 
+  var redirectAfterAuth = function redirectAfterAuth() {
+    if (!document.referrer) {
+      window.location.href = drgc_params.homeUrl;
+    } else if (document.referrer === drgc_params.cartUrl) {
+      window.location.href = drgc_params.checkoutUrl;
+    } else {
+      window.location.href = document.referrer;
+    }
+  };
+
   return {
     validatePassword: validatePassword,
     checkoutAsGuest: checkoutAsGuest,
-    logout: logout
+    logout: logout,
+    redirectAfterAuth: redirectAfterAuth
   };
 }(jQuery);
 
@@ -3511,7 +3522,7 @@ jQuery(document).ready(function ($) {
     };
     $.post(ajaxUrl, data, function (response) {
       if (response.success) {
-        window.location.href = drgc_params.cartUrl;
+        LoginModule.redirectAfterAuth();
       } else {
         $form.data('processing', false);
         but.removeClass('sending').blur();
@@ -3585,7 +3596,7 @@ jQuery(document).ready(function ($) {
     };
     $.post(ajaxUrl, data, function (response) {
       if (response.success) {
-        window.location.href = drgc_params.cartUrl;
+        LoginModule.redirectAfterAuth();
       } else {
         $form.data('processing', false);
         $button.removeClass('sending').blur();

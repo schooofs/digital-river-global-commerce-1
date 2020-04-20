@@ -54,7 +54,7 @@ const LoginModule = (($) => {
             url: drgc_params.ajaxUrl,
             data,
             success: () => {
-                window.location.href = drgc_params.cartUrl;
+                LoginModule.redirectAfterAuth();
             }
         });
     };
@@ -76,10 +76,21 @@ const LoginModule = (($) => {
         });
     };
 
+    const redirectAfterAuth = () => {
+        if (!document.referrer) {
+            window.location.href = drgc_params.homeUrl;
+        } else if (document.referrer === drgc_params.cartUrl) {
+            window.location.href = drgc_params.checkoutUrl;
+        } else {
+            window.location.href = document.referrer;
+        }
+    };
+
     return {
         validatePassword,
         checkoutAsGuest,
-        logout
+        logout,
+        redirectAfterAuth
     };
 })(jQuery);
 
@@ -114,7 +125,7 @@ jQuery(document).ready(($) => {
 
         $.post(ajaxUrl, data, function(response) {
             if ( response.success ) {
-                window.location.href = drgc_params.cartUrl;
+                LoginModule.redirectAfterAuth();
             } else {
                 $form.data('processing', false);
                 but.removeClass('sending').blur();
@@ -199,7 +210,7 @@ jQuery(document).ready(($) => {
 
         $.post(ajaxUrl, data, function(response) {
             if (response.success) {
-                window.location.href = drgc_params.cartUrl;
+                LoginModule.redirectAfterAuth();
             } else {
                 $form.data('processing', false);
                 $button.removeClass('sending').blur();

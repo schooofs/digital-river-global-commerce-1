@@ -161,6 +161,14 @@ const CheckoutUtils = (($, params) => {
     $('body').css({'pointer-events': 'auto', 'opacity': 1});
   };
 
+  const resetFormSubmitButton = ($form) => {
+    $form.find('button[type="submit"]').removeClass('sending').blur();
+  };
+
+  const getAjaxErrorMessage = (jqXHR) => {
+    return (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.errors) ? jqXHR.responseJSON.errors.error[0].description : '';
+  };
+
   return {
     createDisplayItems,
     createShippingOptions,
@@ -175,7 +183,9 @@ const CheckoutUtils = (($, params) => {
     apiErrorHandler,
     resetBodyOpacity,
     getEntityCode,
-    getCompliance
+    getCompliance,
+    resetFormSubmitButton,
+    getAjaxErrorMessage
   };
 })(jQuery, drgc_params);
 

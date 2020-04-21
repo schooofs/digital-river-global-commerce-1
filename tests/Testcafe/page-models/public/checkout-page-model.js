@@ -66,7 +66,6 @@ export default class CheckoutPage {
     const shippingStateOption = this.shippingState.find('option');
     const shippingCountryOption = this.shippingCountry.find('option');
 
-    console.log("state: ",shippingInfo.state);
     await t
       .typeText(this.shippingFirstName, shippingInfo.firstName, { replace: true })
       .typeText(this.shippingLastName, shippingInfo.lastName, { replace: true })

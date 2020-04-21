@@ -66,6 +66,7 @@ export default class CheckoutPage {
     const shippingStateOption = this.shippingState.find('option');
     const shippingCountryOption = this.shippingCountry.find('option');
 
+    console.log("state: ",shippingInfo.state);
     await t
       .typeText(this.shippingFirstName, shippingInfo.firstName, { replace: true })
       .typeText(this.shippingLastName, shippingInfo.lastName, { replace: true })
@@ -74,6 +75,7 @@ export default class CheckoutPage {
       .click(this.shippingCountry)
       .click(shippingCountryOption.withText(shippingInfo.country))
       .expect(this.shippingCountry.value).eql(shippingInfo.countryValue)
+      .hover(this.shippingState)
       .click(this.shippingState)
       .click(shippingStateOption.withText(shippingInfo.state))
       .expect(this.shippingState.value).eql(shippingInfo.stateValue)

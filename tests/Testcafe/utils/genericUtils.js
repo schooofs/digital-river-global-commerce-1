@@ -26,6 +26,7 @@ export default class GenericUtils {
   async clickItem(target) {
     await t
       .expect(target.exists).ok()
+      .wait(500)
       .hover(target)
       .click(target);
   }

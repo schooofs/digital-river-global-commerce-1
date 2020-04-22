@@ -25,6 +25,7 @@ html{scroll-behavior:smooth}
 #dr-minicart .dr-minicart-footer a:first-child{margin-right:2%;background:#fff;color:#222;border:1px solid #222}
 #dr-minicart .dr-minicart-footer a:last-child{color:#fff;background:#50b033;margin-left:2%}
 #dr-minicart .dr-minicart-footer a:last-child:hover{background:green}
+#dr-minicart .dr-minicart-footer a:first-child:last-child{width:100%;margin:0;border:0}
 #dr-minicart .dr-minicart-title{font-size:21px;font-weight:700;text-transform:uppercase;margin:0}
 #dr-minicart .dr-minicart-close-btn{position:absolute;top:10px;right:10px;font-weight:400;font-size:26px;line-height:26px;padding:5px;color:#303030;background:0;border:0;outline:0}
 #dr-minicart .dr-minicart-empty-msg{color:#aaa;margin-top:30%;text-align:center}
@@ -655,6 +656,7 @@ input[type=number]{-webkit-appearance:textfield;-moz-appearance:textfield;appear
 .dr-login .dr-login-sections__section.logged-in{width:66.6%;border:0}
 .dr-login .dr-login-sections__section.section-new .dr-btn{width:170px;padding-left:5px;padding-right:5px}
 .dr-login .dr-login-sections__section.section-new .dr-btn.dr-signup{width:160px}
+.dr-login .dr-login-sections__section.section-new #dr-guest-btn{width:200px}
 .dr-login .dr-login-sections__section.section-paypal .section-paypal-img{margin-left:0}
 .dr-login .dr-login-sections__section h2{font-size:24px}
 .dr-login .dr-login-sections__section p{font-size:18px}

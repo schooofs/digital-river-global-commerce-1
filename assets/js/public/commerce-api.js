@@ -1,6 +1,28 @@
 const DRCommerceApi = (($, params) => {
   const apiBaseUrl = `https://${params.domain}/v1/shoppers`;
 
+  const updateShopper = (queryStrings = {}) => {
+    const queryStr = $.param(queryStrings);
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${params.accessToken}`
+        },
+        url: `${apiBaseUrl}/me?${queryStr}`,
+        success: (data) => {
+          resolve(data);
+        },
+        error: (jqXHR) => {
+          reject(jqXHR);
+        }
+      });
+    });
+  };
+
   const getCart = (queryStrings = {}) => {
     const queryStr = $.param(queryStrings);
 
@@ -82,6 +104,28 @@ const DRCommerceApi = (($, params) => {
         },
         url: `${apiBaseUrl}/me/carts/active/billing-address?${queryStr}`,
         data: !$.isEmptyObject(requestPayload) ? JSON.stringify(requestPayload) : null,
+        success: (data) => {
+          resolve(data);
+        },
+        error: (jqXHR) => {
+          reject(jqXHR);
+        }
+      });
+    });
+  };
+
+  const updateLineItem = (lineItemID, queryStrings = {}) => {
+    const queryStr = $.param(queryStrings);
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${params.accessToken}`
+        },
+        url: `${apiBaseUrl}/me/carts/active/line-items/${lineItemID}?${queryStr}`,
         success: (data) => {
           resolve(data);
         },
@@ -226,6 +270,73 @@ const DRCommerceApi = (($, params) => {
     });
   };
 
+  const getOffersByProduct = (productID, queryStrings = {}) => {
+    const queryStr = $.param(queryStrings);
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${params.accessToken}`
+        },
+        url: `${apiBaseUrl}/me/products/${productID}/offers?${queryStr}`,
+        success: (data) => {
+          resolve(data);
+        },
+        error: (jqXHR) => {
+          reject(jqXHR);
+        }
+      });
+    });
+  };
+
+  const getOffersByPoP = (popType, queryStrings = {}, productID) => {
+    const queryStr = $.param(queryStrings);
+    const productUri = productID ? `products/${productID}/` : '';
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${params.accessToken}`
+        },
+        url: `${apiBaseUrl}/me/${productUri}point-of-promotions/${popType}/offers?${queryStr}`,
+        success: (data) => {
+          resolve(data);
+        },
+        error: (jqXHR) => {
+          reject(jqXHR);
+        }
+      });
+    });
+  };
+
+  const postByUrl = (buyUri, queryStrings = {}) => {
+    const queryStr = $.param(queryStrings);
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${params.accessToken}`
+        },
+        url: `${buyUri}?${queryStr}`,
+        success: (data) => {
+          resolve(data);
+        },
+        error: (jqXHR) => {
+          reject(jqXHR);
+        }
+      });
+    });
+  };
+
   const updateShopperAddress = (address) => {
     if (!address) return;
 
@@ -271,15 +382,20 @@ const DRCommerceApi = (($, params) => {
 
   return {
     apiBaseUrl,
+    updateShopper,
     getCart,
     updateCart,
     submitCart,
+    updateLineItem,
     removeLineItem,
     applyShippingOption,
     applyPaymentMethod,
     getProduct,
     getProductPricing,
     getProductInventoryStatus,
+    getOffersByProduct,
+    getOffersByPoP,
+    postByUrl,
     updateCartShippingAddress,
     updateCartBillingAddress,
     updateShopperAddress,

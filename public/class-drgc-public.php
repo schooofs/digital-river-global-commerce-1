@@ -128,6 +128,7 @@ class DRGC_Public {
 			'shipping_and_handling_label'	=> __('Shipping and Handling', 'digital-river-global-commerce'),
 			'discount_label'		          => __('Discount', 'digital-river-global-commerce'),
 			'order_total_label'		        => __('Order Total', 'digital-river-global-commerce'),
+			'product_label'               => __('Product', 'digital-river-global-commerce'),
 			'password_reset_title'        => __('Password reset email sent', 'digital-river-global-commerce'),
 			'password_saved_title'        => __('Password saved', 'digital-river-global-commerce'),
 			'password_reset_msg'          => __('You will be receiving an email soon with instructions on resetting your login password.', 'digital-river-global-commerce'),

@@ -161,6 +161,25 @@ const CheckoutUtils = (($, params) => {
     $('body').css({'pointer-events': 'auto', 'opacity': 1});
   };
 
+  const getPermalink = (productID) => {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        url: drgc_params.ajaxUrl,
+        data: {
+          action: 'get_permalink',
+          productID
+        },
+        success: (data) => {
+          resolve(data);
+        },
+        error: (jqXHR) => {
+          reject(jqXHR);
+        }
+      });
+    });
+  };
+
   const resetFormSubmitButton = ($form) => {
     $form.find('button[type="submit"]').removeClass('sending').blur();
   };
@@ -182,6 +201,7 @@ const CheckoutUtils = (($, params) => {
     displayAlertMessage,
     apiErrorHandler,
     resetBodyOpacity,
+    getPermalink,
     getEntityCode,
     getCompliance,
     resetFormSubmitButton,

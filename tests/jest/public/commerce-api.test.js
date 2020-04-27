@@ -83,11 +83,11 @@ describe('DRCommerceApi', () => {
     });
   });
 
-  test('applyPaymentAndSubmitCart should make $.ajax call depends on params exist or not', () => {
-    DRCommerceApi.applyPaymentAndSubmitCart();
+  test('applyPaymentMethod should make $.ajax call depends on params exist or not', () => {
+    DRCommerceApi.applyPaymentMethod();
     expect($.ajax).not.toBeCalled();
 
-    DRCommerceApi.applyPaymentAndSubmitCart(123456);
+    DRCommerceApi.applyPaymentMethod(123456);
     expect($.ajax).toBeCalledWith({
       type: 'POST',
       headers: defaultHeaders,

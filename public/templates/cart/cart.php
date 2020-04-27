@@ -17,7 +17,7 @@ $is_auto_renewal = false;
 <div class="dr-cart-wrapper" id="dr-cart-page-wrapper">
     <form class="dr-cart-wrapper__content dr-cart">
 
-        <section class="dr-cart__content">
+        <section class="dr-cart__content dr-loading">
 
             <div class="dr-cart__products">
 
@@ -29,7 +29,7 @@ $is_auto_renewal = false;
                                     $is_auto_renewal = true;
                                     break;
                                 }
-                            } 
+                            }
                         ?>
                         <?php include DRGC_PLUGIN_DIR . 'public/templates/cart/cart-product.php'; ?>
                     <?php endforeach; ?>
@@ -50,7 +50,7 @@ $is_auto_renewal = false;
         </section>
 
         <?php if ( $is_auto_renewal) : ?>
-            
+
             <?php include_once DRGC_PLUGIN_DIR . 'public/templates/cart/cart-auto-renewal-terms.php'; ?>
 
         <?php endif; ?>

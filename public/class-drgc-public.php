@@ -128,6 +128,7 @@ class DRGC_Public {
 			'shipping_and_handling_label'	=> __('Shipping and Handling', 'digital-river-global-commerce'),
 			'discount_label'		          => __('Discount', 'digital-river-global-commerce'),
 			'order_total_label'		        => __('Order Total', 'digital-river-global-commerce'),
+			'product_label'               => __('Product', 'digital-river-global-commerce'),
 			'password_reset_title'        => __('Password reset email sent', 'digital-river-global-commerce'),
 			'password_saved_title'        => __('Password saved', 'digital-river-global-commerce'),
 			'password_reset_msg'          => __('You will be receiving an email soon with instructions on resetting your login password.', 'digital-river-global-commerce'),
@@ -154,6 +155,7 @@ class DRGC_Public {
 			'out_of_stock'                   => __('Out of Stock', 'digital-river-global-commerce'),
 			'cancel_subs_confirm'            => __('Are you sure you want to immediately unsubscribe this subscription?', 'digital-river-global-commerce'),
 			'change_renewal_qty_prompt'      => __('Please enter the required quantity:', 'digital-river-global-commerce'),
+			'shipping_options_error_msg'	   => __('There are no delivery options available for your cart or destination.', 'digital-river-global-commerce'),
 		);
 
 		// transfer drgc options from PHP to JS

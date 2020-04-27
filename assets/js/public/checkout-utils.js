@@ -161,6 +161,33 @@ const CheckoutUtils = (($, params) => {
     $('body').css({'pointer-events': 'auto', 'opacity': 1});
   };
 
+  const getPermalink = (productID) => {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        type: 'POST',
+        url: drgc_params.ajaxUrl,
+        data: {
+          action: 'get_permalink',
+          productID
+        },
+        success: (data) => {
+          resolve(data);
+        },
+        error: (jqXHR) => {
+          reject(jqXHR);
+        }
+      });
+    });
+  };
+
+  const resetFormSubmitButton = ($form) => {
+    $form.find('button[type="submit"]').removeClass('sending').blur();
+  };
+
+  const getAjaxErrorMessage = (jqXHR) => {
+    return (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.errors) ? jqXHR.responseJSON.errors.error[0].description : '';
+  };
+
   return {
     createDisplayItems,
     createShippingOptions,
@@ -174,8 +201,11 @@ const CheckoutUtils = (($, params) => {
     displayAlertMessage,
     apiErrorHandler,
     resetBodyOpacity,
+    getPermalink,
     getEntityCode,
-    getCompliance
+    getCompliance,
+    resetFormSubmitButton,
+    getAjaxErrorMessage
   };
 })(jQuery, drgc_params);
 

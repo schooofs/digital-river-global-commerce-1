@@ -368,6 +368,7 @@ jQuery(document).ready(($) => {
     };
 
     if ($('.dr-cart__content').length) $('.dr-cart__content').addClass('dr-loading');
+    else $('body').addClass('dr-loading');
     DRCommerceApi.updateShopper(queryParams)
       .then(() => location.reload(true))
       .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));;

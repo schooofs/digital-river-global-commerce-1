@@ -2095,7 +2095,7 @@ jQuery(document).ready(function ($) {
       currency: e.target.value,
       locale: $this.find('option:selected').data('locale')
     };
-    if ($('.dr-cart__content').length) $('.dr-cart__content').addClass('dr-loading');
+    if ($('.dr-cart__content').length) $('.dr-cart__content').addClass('dr-loading');else $('body').addClass('dr-loading');
     commerce_api.updateShopper(queryParams).then(function () {
       return location.reload(true);
     })["catch"](function (jqXHR) {

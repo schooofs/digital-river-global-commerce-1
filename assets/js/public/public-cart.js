@@ -83,7 +83,11 @@ const CartModule = (($) => {
         renderSummary(res.cart.pricing, hasPhysicalProduct);
         $('.dr-summary').removeClass('dr-loading');
       })
-      .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
+      .catch((jqXHR) => {
+        CheckoutUtils.apiErrorHandler(jqXHR);
+        $lineItem.removeClass('dr-loading');
+        $('.dr-summary').removeClass('dr-loading');
+      });
   };
 
   const renderOffers = (lineItems) => {
@@ -294,7 +298,10 @@ const CartModule = (($) => {
         if (lineItems && lineItems.length) renderOffers(lineItems);
         $('.dr-cart__content').removeClass('dr-loading'); // Main cart is ready, loading can be ended
       })
-      .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
+      .catch((jqXHR) => {
+        CheckoutUtils.apiErrorHandler(jqXHR);
+        $('.dr-cart__content').removeClass('dr-loading');
+      });
   };
 
   return {
@@ -345,7 +352,10 @@ jQuery(document).ready(($) => {
         $lineItem.remove();
         CartModule.fetchFreshCart();
       })
-      .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
+      .catch((jqXHR) => {
+        CheckoutUtils.apiErrorHandler(jqXHR);
+        $('.dr-cart__content').removeClass('dr-loading');
+      });
   });
 
   $('body').on('click', '.dr-buy-candyRack', (e) => {
@@ -356,7 +366,10 @@ jQuery(document).ready(($) => {
     $('.dr-cart__content').addClass('dr-loading');
     DRCommerceApi.postByUrl(`${buyUri}&testOrder=${drgc_params.testOrder}`)
       .then(() => CartModule.fetchFreshCart())
-      .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
+      .catch((jqXHR) => {
+        CheckoutUtils.apiErrorHandler(jqXHR);
+        $('.dr-cart__content').removeClass('dr-loading');
+      });
   });
 
   $('body').on('change', '.dr-currency-select', (e) => {
@@ -371,7 +384,10 @@ jQuery(document).ready(($) => {
     else $('body').addClass('dr-loading');
     DRCommerceApi.updateShopper(queryParams)
       .then(() => location.reload(true))
-      .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));;
+      .catch((jqXHR) => {
+        CheckoutUtils.apiErrorHandler(jqXHR);
+        $('.dr-cart__content, body').removeClass('dr-loading');
+      });
   });
 
   $('.promo-code-toggle').click(() => {

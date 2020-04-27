@@ -1866,7 +1866,9 @@ var CartModule = function ($) {
       renderSummary(res.cart.pricing, hasPhysicalProduct);
       $('.dr-summary').removeClass('dr-loading');
     })["catch"](function (jqXHR) {
-      return checkout_utils.apiErrorHandler(jqXHR);
+      checkout_utils.apiErrorHandler(jqXHR);
+      $lineItem.removeClass('dr-loading');
+      $('.dr-summary').removeClass('dr-loading');
     });
   };
 
@@ -2024,7 +2026,8 @@ var CartModule = function ($) {
       if (lineItems && lineItems.length) renderOffers(lineItems);
       $('.dr-cart__content').removeClass('dr-loading'); // Main cart is ready, loading can be ended
     })["catch"](function (jqXHR) {
-      return checkout_utils.apiErrorHandler(jqXHR);
+      checkout_utils.apiErrorHandler(jqXHR);
+      $('.dr-cart__content').removeClass('dr-loading');
     });
   };
 
@@ -2074,7 +2077,8 @@ jQuery(document).ready(function ($) {
       $lineItem.remove();
       CartModule.fetchFreshCart();
     })["catch"](function (jqXHR) {
-      return checkout_utils.apiErrorHandler(jqXHR);
+      checkout_utils.apiErrorHandler(jqXHR);
+      $('.dr-cart__content').removeClass('dr-loading');
     });
   });
   $('body').on('click', '.dr-buy-candyRack', function (e) {
@@ -2085,7 +2089,8 @@ jQuery(document).ready(function ($) {
     commerce_api.postByUrl("".concat(buyUri, "&testOrder=").concat(drgc_params.testOrder)).then(function () {
       return CartModule.fetchFreshCart();
     })["catch"](function (jqXHR) {
-      return checkout_utils.apiErrorHandler(jqXHR);
+      checkout_utils.apiErrorHandler(jqXHR);
+      $('.dr-cart__content').removeClass('dr-loading');
     });
   });
   $('body').on('change', '.dr-currency-select', function (e) {
@@ -2099,9 +2104,9 @@ jQuery(document).ready(function ($) {
     commerce_api.updateShopper(queryParams).then(function () {
       return location.reload(true);
     })["catch"](function (jqXHR) {
-      return checkout_utils.apiErrorHandler(jqXHR);
+      checkout_utils.apiErrorHandler(jqXHR);
+      $('.dr-cart__content, body').removeClass('dr-loading');
     });
-    ;
   });
   $('.promo-code-toggle').click(function () {
     $('.promo-code-wrapper').toggle();

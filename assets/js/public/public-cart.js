@@ -352,10 +352,9 @@ jQuery(document).ready(($) => {
     e.preventDefault();
     const $this = $(e.target);
     const buyUri = $this.attr('data-buy-uri');
-    const isTestOrder = drgc_params.testOrder === 'true';
 
     $('.dr-cart__content').addClass('dr-loading');
-    DRCommerceApi.postByUrl(buyUri, { testOrder: isTestOrder })
+    DRCommerceApi.postByUrl(`${buyUri}&testOrder=${drgc_params.testOrder}`)
       .then(() => CartModule.fetchFreshCart())
       .catch(jqXHR => CheckoutUtils.apiErrorHandler(jqXHR));
   });

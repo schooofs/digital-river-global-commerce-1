@@ -1693,9 +1693,7 @@ var DRCommerceApi = function ($, params) {
     });
   };
 
-  var postByUrl = function postByUrl(buyUri) {
-    var queryStrings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var queryStr = $.param(queryStrings);
+  var postByUrl = function postByUrl(requestUrl) {
     return new Promise(function (resolve, reject) {
       $.ajax({
         type: 'POST',
@@ -1704,7 +1702,7 @@ var DRCommerceApi = function ($, params) {
           'Content-Type': 'application/json',
           Authorization: "Bearer ".concat(params.accessToken)
         },
-        url: "".concat(buyUri, "?").concat(queryStr),
+        url: requestUrl,
         success: function success(data) {
           resolve(data);
         },
@@ -2083,11 +2081,8 @@ jQuery(document).ready(function ($) {
     e.preventDefault();
     var $this = $(e.target);
     var buyUri = $this.attr('data-buy-uri');
-    var isTestOrder = drgc_params.testOrder === 'true';
     $('.dr-cart__content').addClass('dr-loading');
-    commerce_api.postByUrl(buyUri, {
-      testOrder: isTestOrder
-    }).then(function () {
+    commerce_api.postByUrl("".concat(buyUri, "&testOrder=").concat(drgc_params.testOrder)).then(function () {
       return CartModule.fetchFreshCart();
     })["catch"](function (jqXHR) {
       return checkout_utils.apiErrorHandler(jqXHR);

@@ -86,11 +86,36 @@ const LoginModule = (($) => {
         }
     };
 
+    const autoLogout = (url) => {
+        const data = {
+            action: 'drgc_logout',
+            nonce: drgc_params.ajaxNonce
+        };
+
+        $('body').css({'pointer-events': 'none', 'opacity': 0.5});
+        $.post(drgc_params.ajaxUrl, data, () => {
+            window.location.href = url;
+        });
+    };
+
+    const resetCookie = () => {
+        const data = {
+            action: 'drgc_reset_cookie',
+            nonce: drgc_params.ajaxNonce
+        };
+
+        $.post(drgc_params.ajaxUrl, data, (res) => {
+            if (!res.success) throw new Error('Cookie reset failed.');
+        });
+    };
+
     return {
         validatePassword,
         checkoutAsGuest,
         logout,
-        redirectAfterAuth
+        redirectAfterAuth,
+        autoLogout,
+        resetCookie
     };
 })(jQuery);
 

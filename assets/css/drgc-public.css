@@ -438,6 +438,8 @@ input[type=radio] { position: relative; opacity: 1; width: auto; height: auto; }
 
 @media (min-width: 1200px) { .drgc-wrapper .modal-xl { max-width: 1140px; } }
 
+#dr-autoLogoutModalTitle { color: #00a7e1; }
+
 .container { width: 100%; padding-right: 15px; padding-left: 15px; margin-right: auto; margin-left: auto; }
 
 @media (min-width: 576px) { .container { max-width: 540px; } }

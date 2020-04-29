@@ -732,50 +732,51 @@ class DRGC_Public {
 				</div>
 			</div>
 		</div>
-
-		<div class="modal fade" id="drResetPassword" tabindex="-1" role="dialog" aria-labelledby="drResetPasswordTitle" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<form id="dr-pass-reset-form" novalidate>
-						<div class="modal-header">
-							<h5 class="modal-title">
-								<?php echo __( 'Forgot Password', 'digital-river-global-commerce' ); ?>
-							</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body" id="drResetPasswordModalBody">
-							<p>
-								<?php echo __('To reset your password, please enter your email 
-								address below and an email with instructions on
-								resetting your password will be sent to you.', 'digital-river-global-commerce'); ?>
-							</p>
-							<div class="form-group">
-								<label for="email-address" class="col-form-label"><?php echo __( 'Email Address:', 'digital-river-global-commerce' ); ?></label>
-								<input name="email" type="email" class="form-control" id="email-address" required>
-								<div class="invalid-feedback">
-									<?php echo __( 'This field is required email.', 'digital-river-global-commerce' ); ?>
-								</div>
+		<?php if ( is_page( 'login' ) && ( drgc_get_user_status() === 'false' ) ) : ?>
+			<div class="modal fade" id="drResetPassword" tabindex="-1" role="dialog" aria-labelledby="drResetPasswordTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<form id="dr-pass-reset-form" novalidate>
+							<div class="modal-header">
+								<h5 class="modal-title">
+									<?php echo __( 'Forgot Password', 'digital-river-global-commerce' ); ?>
+								</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
 							</div>
-							<div class="form-group">
-								<label for="email-address-confirm" class="col-form-label"><?php echo __( 'Verify Email Address:', 'digital-river-global-commerce' ); ?></label>
-								<input name="email-confirm" type="email" class="form-control" id="email-address-confirm" required>
-								<div class="invalid-feedback">
-									<?php echo __( 'This field is required email.', 'digital-river-global-commerce' ); ?>
+							<div class="modal-body" id="drResetPasswordModalBody">
+								<p>
+									<?php echo __('To reset your password, please enter your email 
+									address below and an email with instructions on
+									resetting your password will be sent to you.', 'digital-river-global-commerce'); ?>
+								</p>
+								<div class="form-group">
+									<label for="email-address" class="col-form-label"><?php echo __( 'Email Address:', 'digital-river-global-commerce' ); ?></label>
+									<input name="email" type="email" class="form-control" id="email-address" required>
+									<div class="invalid-feedback">
+										<?php echo __( 'This field is required email.', 'digital-river-global-commerce' ); ?>
+									</div>
 								</div>
+								<div class="form-group">
+									<label for="email-address-confirm" class="col-form-label"><?php echo __( 'Verify Email Address:', 'digital-river-global-commerce' ); ?></label>
+									<input name="email-confirm" type="email" class="form-control" id="email-address-confirm" required>
+									<div class="invalid-feedback">
+										<?php echo __( 'This field is required email.', 'digital-river-global-commerce' ); ?>
+									</div>
+								</div>
+								<div id="dr-reset-pass-error" class="invalid-feedback"></div>
 							</div>
-							<div id="dr-reset-pass-error" class="invalid-feedback"></div>
-						</div>
-						<div class="modal-footer">
-							<button id="dr-pass-reset-submit" type="submit" class="dr-btn w-100">
-								<?php echo __( 'Reset Password', 'digital-river-global-commerce' ); ?>
-							</button>
-						</div>
-					</form>
+							<div class="modal-footer">
+								<button id="dr-pass-reset-submit" type="submit" class="dr-btn w-100">
+									<?php echo __( 'Reset Password', 'digital-river-global-commerce' ); ?>
+								</button>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
-		</div>
+		<?php endif; ?>
 	<?php	
 	}
 

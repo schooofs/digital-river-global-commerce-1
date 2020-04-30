@@ -88,16 +88,16 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
-
 function _typeof(obj) {
-  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
+  "@babel/helpers - typeof";
+
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
     module.exports = _typeof = function _typeof(obj) {
-      return _typeof2(obj);
+      return typeof obj;
     };
   } else {
     module.exports = _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
     };
   }
 
@@ -179,7 +179,7 @@ module.exports = _defineProperty;
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+/* WEBPACK VAR INJECTION */(function(module) {function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
@@ -3625,11 +3625,37 @@ var LoginModule = function ($) {
     }
   };
 
+  var autoLogout = function autoLogout(url) {
+    var data = {
+      action: 'drgc_logout',
+      nonce: drgc_params.ajaxNonce
+    };
+    $('body').css({
+      'pointer-events': 'none',
+      'opacity': 0.5
+    });
+    $.post(drgc_params.ajaxUrl, data, function () {
+      window.location.href = url;
+    });
+  };
+
+  var resetCookie = function resetCookie() {
+    var data = {
+      action: 'drgc_reset_cookie',
+      nonce: drgc_params.ajaxNonce
+    };
+    $.post(drgc_params.ajaxUrl, data, function (res) {
+      if (!res.success) throw new Error('Cookie reset failed.');
+    });
+  };
+
   return {
     validatePassword: validatePassword,
     checkoutAsGuest: checkoutAsGuest,
     logout: logout,
-    redirectAfterAuth: redirectAfterAuth
+    redirectAfterAuth: redirectAfterAuth,
+    autoLogout: autoLogout,
+    resetCookie: resetCookie
   };
 }(jQuery);
 
@@ -4388,12 +4414,147 @@ jQuery(document).ready(function ($) {
   }
 });
 /* harmony default export */ var public_subs = (SubsModule);
+// CONCATENATED MODULE: ./assets/js/public/user-activity-watcher.js
+
+
+var DrgcUserWatcher = function (w, d, p, $) {
+  var watcher = {
+    interval: 3510,
+    debug: false,
+    eventTypes: ['mousedown', 'mousemove', 'click', 'keydown', 'scroll', 'touchstart'],
+    pathname: null,
+    redirectPath: p.loginPath,
+    escapeUrls: [],
+    timerId: null,
+    callback: null,
+    closeModalInterval: 30,
+    countDowninterval: null,
+    init: function init() {
+      var isLoggedin = p.isLogin === 'true';
+
+      if (!isLoggedin) {
+        this.log('Watcher is disabled for the anonymous user.');
+        return false;
+      }
+
+      this.initPathname();
+
+      if (!this.callback) {
+        if (!this.redirectPath) {
+          this.log('The redirect url is undefined.');
+          return false;
+        }
+
+        if (this.redirectPath === this.pathname && this.pathname !== p.loginPath) {
+          this.log('The redirect page is the same as the current page and it is not the login page.');
+          return false;
+        }
+
+        this.callback = this.redirect;
+      }
+
+      if (this.escapeUrls.indexOf(this.pathname) > -1) {
+        this.log('Watcher is disabled for this page.');
+        return false;
+      }
+
+      this.eventTypes.forEach(this.listen);
+      this.tick();
+    },
+    listen: function listen(eventType) {
+      d.addEventListener(eventType, watcher.tick);
+    },
+    unlisten: function unlisten(eventType) {
+      d.removeEventListener(eventType, watcher.tick);
+    },
+    tick: function tick() {
+      w.clearTimeout(watcher.timerId);
+      watcher.timerId = w.setTimeout(watcher.act, watcher.interval * 1000);
+      watcher.log('Watcher is restarted.');
+    },
+    act: function act() {
+      var closeInterval = watcher.closeModalInterval;
+      var $currentSec = $('#dr-autoLogoutModalBody > p > strong');
+      $('#dr-autoLogoutModal').modal('show');
+      $currentSec.html(closeInterval);
+      watcher.countDowninterval = w.setInterval(function () {
+        $currentSec.html(closeInterval);
+        closeInterval--;
+
+        if (closeInterval < 0) {
+          $('#dr-autoLogoutModal').on('shown').modal('hide');
+          watcher.callback();
+        }
+      }, 1000);
+      watcher.log('Timeout!');
+      w.clearTimeout(watcher.timerId);
+      watcher.eventTypes.forEach(watcher.unlisten);
+      watcher.log('Watcher is disarmed.');
+    },
+    redirect: function redirect() {
+      w.clearInterval(this.countDowninterval);
+      public_login.autoLogout(this.redirectPath);
+    },
+    initPathname: function initPathname() {
+      var parser = d.createElement('a');
+      parser.href = '';
+      this.pathname = parser.pathname;
+      this.log('Pathname: ' + this.pathname);
+    },
+    closeModal: function closeModal() {
+      w.clearInterval(this.countDowninterval);
+      $('#dr-autoLogoutModal').modal('hide');
+    },
+    log: function log(msg) {
+      if (this.debug) w.console.log(msg);
+    }
+  };
+
+  w.DrgcUserWatcherConfig = function () {
+    var args = arguments.length === 1 ? [arguments[0]] : Array.apply(null, arguments);
+    if (!args[0]) return false;
+
+    if (['url', 'escapeUrls', 'interval', 'callback', 'debug', 'closeModalInterval'].indexOf(args[0]) > -1) {
+      watcher[args[0]] = args[1];
+      watcher.init();
+    } else {
+      throw new Error('Unsupported parameter: ' + args[0]);
+    }
+  };
+
+  $(function () {
+    watcher.init();
+    $('#dr-modalContinueBtn, #dr-modalLogoutBtn').on('click', function (event) {
+      var target = event.target || event.srcElement;
+
+      switch (target.id) {
+        case 'dr-modalContinueBtn':
+          watcher.closeModal();
+          watcher.eventTypes.forEach(watcher.listen);
+          watcher.tick();
+          public_login.resetCookie();
+          break;
+
+        case 'dr-modalLogoutBtn':
+          watcher.closeModal();
+          watcher.callback();
+          break;
+      }
+    });
+  });
+  return {
+    watcher: watcher
+  };
+}(window, document, drgc_params, jQuery);
+
+/* harmony default export */ var user_activity_watcher = (DrgcUserWatcher);
 // CONCATENATED MODULE: ./assets/js/public/public.js
 // 3rd-party plugins
  // maintained by DR
 
 
 window.drToast = dr_toast;
+
 
 
 

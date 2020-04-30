@@ -7,6 +7,8 @@ global.drgc_params = {
   drLocale: 'en_US',
   domain: 'api.digitalriver.com',
   accessToken: 'mockedAccessToken',
+  isLogin: 'false',
+  loginPath: null,
   translations: {
     subtotal_label: 'Sub-total',
     vat_label: 'VAT',

@@ -168,6 +168,7 @@ class DRGC_Public {
 			'cartUrl'           =>  drgc_get_page_link( 'cart' ),
 			'checkoutUrl'       =>  drgc_get_page_link( 'checkout' ),
 			'mySubsUrl'         =>  drgc_get_page_link( 'my-subscriptions' ),
+			'loginPath'         =>  parse_url( drgc_get_page_link( 'login' ) )['path'],
 			'siteID'            =>  get_option( 'drgc_site_id' ),
 			'domain'            =>  get_option( 'drgc_domain' ),
 			'digitalRiverKey'   =>  get_option( 'drgc_digitalRiver_key' ),
@@ -700,6 +701,90 @@ class DRGC_Public {
 			} else {
 				wp_send_json_error();
 			}
+		} else {
+			wp_send_json_error();
+		}
+	}
+
+	public function add_modal_html() {
+	?>
+		<div class="modal fade" id="dr-autoLogoutModal" tabindex="-1" role="dialog" aria-labelledby="dr-autoLogoutModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="dr-autoLogoutModalTitle">
+							<?php echo __( 'You\'re about to be logged out!', 'digital-river-global-commerce' ); ?>
+						</h5>
+					</div>
+					<div class="modal-body" id="dr-autoLogoutModalBody">
+						<p>
+							<?php echo __('For security reasons, your connection times out after you\'ve been inactive for a while. You will be logged out in <strong>n</strong> seconds.<br>Click Continue if you\'d like to stay logged in.', 'digital-river-global-commerce'); ?>
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button id="dr-modalContinueBtn" type="button" class="dr-btn w-100">
+							<?php echo __( 'Continue', 'digital-river-global-commerce' ); ?>
+						</button>
+						<button id="dr-modalLogoutBtn" type="button" class="dr-btn w-100 btn-secondary">
+							<?php echo __( 'Logout', 'digital-river-global-commerce' ); ?>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php if ( is_page( 'login' ) && ( drgc_get_user_status() === 'false' ) ) : ?>
+			<div class="modal fade" id="drResetPassword" tabindex="-1" role="dialog" aria-labelledby="drResetPasswordTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<form id="dr-pass-reset-form" novalidate>
+							<div class="modal-header">
+								<h5 class="modal-title">
+									<?php echo __( 'Forgot Password', 'digital-river-global-commerce' ); ?>
+								</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body" id="drResetPasswordModalBody">
+								<p>
+									<?php echo __('To reset your password, please enter your email 
+									address below and an email with instructions on
+									resetting your password will be sent to you.', 'digital-river-global-commerce'); ?>
+								</p>
+								<div class="form-group">
+									<label for="email-address" class="col-form-label"><?php echo __( 'Email Address:', 'digital-river-global-commerce' ); ?></label>
+									<input name="email" type="email" class="form-control" id="email-address" required>
+									<div class="invalid-feedback">
+										<?php echo __( 'This field is required email.', 'digital-river-global-commerce' ); ?>
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="email-address-confirm" class="col-form-label"><?php echo __( 'Verify Email Address:', 'digital-river-global-commerce' ); ?></label>
+									<input name="email-confirm" type="email" class="form-control" id="email-address-confirm" required>
+									<div class="invalid-feedback">
+										<?php echo __( 'This field is required email.', 'digital-river-global-commerce' ); ?>
+									</div>
+								</div>
+								<div id="dr-reset-pass-error" class="invalid-feedback"></div>
+							</div>
+							<div class="modal-footer">
+								<button id="dr-pass-reset-submit" type="submit" class="dr-btn w-100">
+									<?php echo __( 'Reset Password', 'digital-river-global-commerce' ); ?>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		<?php endif; ?>
+	<?php	
+	}
+
+	public function reset_cookie_ajax() {
+		check_ajax_referer( 'drgc_ajax', 'nonce' );
+
+		if ( DRGC()->session->reset_cookie() ) {
+			wp_send_json_success();
 		} else {
 			wp_send_json_error();
 		}

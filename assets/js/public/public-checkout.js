@@ -703,7 +703,7 @@ jQuery(document).ready(($) => {
                     'Content-Type':'application/json',
                     Authorization: `Bearer ${drgc_params.accessToken}`
                 },
-                url: `${apiBaseUrl}/me/carts/active/submit-cart?expand=all`,
+                url: `${apiBaseUrl}/me/carts/active/submit-cart?expand=all&ipAddress=${drgc_params.client_ip}`,
                 success: (data) => {
                     $('#checkout-confirmation-form input[name="order_id"]').val(data.submitCart.order.id);
                     $('#checkout-confirmation-form').submit();

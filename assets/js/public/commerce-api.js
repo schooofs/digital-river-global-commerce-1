@@ -358,7 +358,9 @@ const DRCommerceApi = (($, params) => {
     });
   };
 
-  const submitCart = () => {
+  const submitCart = (queryStrings = {}) => {
+    const queryStr = $.param(queryStrings);
+
     return new Promise((resolve, reject) => {
       $.ajax({
         type: 'POST',
@@ -367,7 +369,7 @@ const DRCommerceApi = (($, params) => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${params.accessToken}`
         },
-        url: `${apiBaseUrl}/me/carts/active/submit-cart?expand=all`,
+        url: `${apiBaseUrl}/me/carts/active/submit-cart?${queryStr}`,
         success: (data) => {
           resolve(data);
         },

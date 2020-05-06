@@ -88,16 +88,16 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-function _typeof(obj) {
-  "@babel/helpers - typeof";
+function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
 
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+function _typeof(obj) {
+  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
     module.exports = _typeof = function _typeof(obj) {
-      return typeof obj;
+      return _typeof2(obj);
     };
   } else {
     module.exports = _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
     };
   }
 
@@ -179,7 +179,7 @@ module.exports = _defineProperty;
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+/* WEBPACK VAR INJECTION */(function(module) {function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
@@ -1736,6 +1736,8 @@ var DRCommerceApi = function ($, params) {
   };
 
   var submitCart = function submitCart() {
+    var queryStrings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var queryStr = $.param(queryStrings);
     return new Promise(function (resolve, reject) {
       $.ajax({
         type: 'POST',
@@ -1744,7 +1746,7 @@ var DRCommerceApi = function ($, params) {
           'Content-Type': 'application/json',
           Authorization: "Bearer ".concat(params.accessToken)
         },
-        url: "".concat(apiBaseUrl, "/me/carts/active/submit-cart?expand=all"),
+        url: "".concat(apiBaseUrl, "/me/carts/active/submit-cart?").concat(queryStr),
         success: function success(data) {
           resolve(data);
         },
@@ -2954,7 +2956,9 @@ var CheckoutModule = function ($) {
     var $form = $('#checkout-confirmation-form');
     var $errorMsgElem = $('#dr-checkout-err-field');
     commerce_api.applyPaymentMethod(sourceId).then(function () {
-      return commerce_api.submitCart();
+      return commerce_api.submitCart({
+        ipAddress: drgc_params.client_ip
+      });
     }).then(function (data) {
       $('#checkout-confirmation-form > input[name="order_id"]').val(data.submitCart.order.id);
       $form.submit();

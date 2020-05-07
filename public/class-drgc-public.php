@@ -185,7 +185,8 @@ class DRGC_Public {
 			'testOrder'          => $testOrder_enable,
 			'translations'       => $translation_array,
 			'isApplePayEnabled'  => $applepay_enabled,
-			'isGooglePayEnabled' => $googlepay_enabled
+			'isGooglePayEnabled' => $googlepay_enabled,
+			'client_ip'          => $_SERVER['REMOTE_ADDR']
 		);
 
 		wp_localize_script( $this->drgc, 'drgc_params', $options );

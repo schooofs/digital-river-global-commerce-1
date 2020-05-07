@@ -269,7 +269,9 @@ const CheckoutModule = (($) => {
         const $form = $('#checkout-confirmation-form');
         const $errorMsgElem = $('#dr-checkout-err-field');
 
-        DRCommerceApi.applyPaymentMethod(sourceId).then(() => DRCommerceApi.submitCart()).then((data) => {
+        DRCommerceApi.applyPaymentMethod(sourceId)
+        .then(() => DRCommerceApi.submitCart({ ipAddress: drgc_params.client_ip }))
+        .then((data) => {
             $('#checkout-confirmation-form > input[name="order_id"]').val(data.submitCart.order.id);
             $form.submit();
         }).catch((jqXHR) => {

@@ -73,11 +73,11 @@ describe('DRCommerceApi', () => {
   });
 
   test('submitCart should make $.ajax call', () => {
-    DRCommerceApi.submitCart();
+    DRCommerceApi.submitCart({ ipAddress: '127.0.0.1' });
     expect($.ajax).toBeCalledWith({
       type: 'POST',
       headers: defaultHeaders,
-      url: 'https://api.digitalriver.com/v1/shoppers/me/carts/active/submit-cart?expand=all',
+      url: 'https://api.digitalriver.com/v1/shoppers/me/carts/active/submit-cart?ipAddress=127.0.0.1',
       success: expect.any(Function),
       error: expect.any(Function)
     });

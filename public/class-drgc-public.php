@@ -541,21 +541,6 @@ class DRGC_Public {
 			$items[] = (object) $new_sub_item;
 		}
 
-		if ( $subs ) {
-			$new_sub_item_2 = array(
-				'title'            => __( 'My Subscriptions', 'digital-river-global-commerce' ),
-				'menu_item_parent' => 'login',
-				'ID'               => 'my-subscriptions',
-				'db_id'            => 'my-subscriptions',
-				'url'              => get_site_url() . '/my-subscriptions',
-				'classes'          => array( 'menu-item' ),
-				'target'           => null,
-				'xfn'              => null,
-				'current'          => null // for preventing warning in debug mode
-			);
-			$items[] = (object) $new_sub_item_2;
-		}
-
 		return $items;
 	}
 

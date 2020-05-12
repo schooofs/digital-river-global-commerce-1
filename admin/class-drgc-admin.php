@@ -211,24 +211,6 @@ class DRGC_Admin {
 			array( 'label_for' => $this->option_name . '_digitalRiver_key' )
 		);
 
-    add_settings_field(
-			$this->option_name . '_big_blue_username',
-			__( 'X-Stream Username', 'digital-river-global-commerce' ),
-			array( $this, $this->option_name . '_big_blue_username_cb' ),
-			$this->plugin_name,
-			$this->option_name . '_general',
-			array( 'label_for' => $this->option_name . '_big_blue_username' )
-		);
-
-		add_settings_field(
-			$this->option_name . '_big_blue_password',
-			__( 'X-Stream Password', 'digital-river-global-commerce' ),
-			array( $this, $this->option_name . '_big_blue_password_cb' ),
-			$this->plugin_name,
-			$this->option_name . '_general',
-			array( 'label_for' => $this->option_name . '_big_blue_password' )
-    );
-
 		add_settings_field(
 			$this->option_name . '_cron_handler',
 			__( 'Scheduled Products Import', 'digital-river-global-commerce' ),
@@ -288,8 +270,6 @@ class DRGC_Admin {
 		register_setting( $this->plugin_name, $this->option_name . '_testOrder_handler', array( 'sanitize_callback' => array( $this, 'dr_sanitize_checkbox' ), 'default' => '' ) );
 		register_setting( $this->plugin_name, $this->option_name . '_applepay_handler', array( 'sanitize_callback' => array( $this, 'dr_sanitize_checkbox' ), 'default' => '' ) );
     register_setting( $this->plugin_name, $this->option_name . '_googlepay_handler', array( 'sanitize_callback' => array( $this, 'dr_sanitize_checkbox' ), 'default' => '' ) );
-    register_setting( $this->plugin_name, $this->option_name . '_big_blue_username', array( 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ) );
-		register_setting( $this->plugin_name, $this->option_name . '_big_blue_password', array( 'type' => 'string', 'sanitize_callback' => null ) );
 	}
 
 	/**

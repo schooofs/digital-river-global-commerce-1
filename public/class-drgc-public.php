@@ -393,13 +393,13 @@ class DRGC_Public {
 			$site_name = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 		}
 
-		$message = __( '<p> Someone has requested a password reset for the following account:', 'digital-river-global-commerce' ) . "</p><br>";
-		$message .= sprintf( __( '<p> Site Name: %s', 'digital-river-global-commerce' ), $site_name ) . "<br>";
-		$message .= sprintf( __( 'Username: %s', 'digital-river-global-commerce' ), $user_login ) . "</p><br>";
-		$message .= __( '<p> If this was a mistake, just ignore this email and nothing will happen.', 'digital-river-global-commerce' ) . "<br>";
-		$message .= __( 'To reset your password, visit the following address:', 'digital-river-global-commerce' ) . "</p><br>";
-		$message .= '<a href="' . drgc_get_page_link( 'login'  ) . "?action=rp&key=$key&login=" . rawurlencode( $user_login ) . "\">\r\n";
-		$message .=  __( 'Reset Password</a>', 'digital-river-global-commerce' );
+		$message = '<p>' . __( 'Someone has requested a password reset for the following account:', 'digital-river-global-commerce' ) . '</p><br>';
+		$message .= '<p>' . sprintf( __( 'Site Name: %s', 'digital-river-global-commerce' ), $site_name ) . '<br>';
+		$message .= sprintf( __( 'Username: %s', 'digital-river-global-commerce' ), $user_login ) . '</p><br>';
+		$message .= '<p>' . __( 'If this was a mistake, just ignore this email and nothing will happen.', 'digital-river-global-commerce' ) . '<br>';
+		$message .= __( 'To reset your password, visit the following address:', 'digital-river-global-commerce' ) . '</p><br>';
+		$message .= '<a href="' . drgc_get_page_link( 'login'  ) . "?action=rp&key=$key&login=" . rawurlencode( $user_login ) . '">';
+		$message .=  __( 'Reset Password', 'digital-river-global-commerce' ) . '</a>';
 
 		$title = sprintf( __( '[%s] Password Reset', 'digital-river-global-commerce' ), $site_name );
 

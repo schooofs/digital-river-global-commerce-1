@@ -44,7 +44,7 @@ if ( $cart['cart']['shippingAddress']['line1'] != '') {
 
                 <label for="shipping-field-first-name" class="float-label ">
 
-                    <?php echo __( 'First Name *', 'digital-river-global-commerce' ); ?>
+                    <?php echo __( 'First Name', 'digital-river-global-commerce' ); ?> *
 
                 </label>
 
@@ -66,7 +66,7 @@ if ( $cart['cart']['shippingAddress']['line1'] != '') {
 
                 <label for="shipping-field-last-name" class="float-label ">
 
-                    <?php echo __( 'Last Name *', 'digital-river-global-commerce' ); ?>
+                    <?php echo __( 'Last Name', 'digital-river-global-commerce' ); ?> *
 
                 </label>
 
@@ -88,7 +88,7 @@ if ( $cart['cart']['shippingAddress']['line1'] != '') {
 
                 <label for="shipping-field-address1" class="float-label ">
 
-                    <?php echo __( 'Address line 1 *', 'digital-river-global-commerce' ); ?>
+                    <?php echo __( 'Address line 1', 'digital-river-global-commerce' ); ?> *
 
                 </label>
 
@@ -126,7 +126,7 @@ if ( $cart['cart']['shippingAddress']['line1'] != '') {
 
                 <label for="shipping-field-city" class="float-label">
 
-                    <?php echo __( 'City *', 'digital-river-global-commerce' ); ?>
+                    <?php echo __( 'City', 'digital-river-global-commerce' ); ?> *
 
                 </label>
 
@@ -146,7 +146,7 @@ if ( $cart['cart']['shippingAddress']['line1'] != '') {
 
             <select class="form-control custom-select" name="shipping-country" id="shipping-field-country" required>
                 <option value="">
-                    <?php echo __( 'Select Country *', 'digital-river-global-commerce' ); ?>
+                    <?php echo __( 'Select Country', 'digital-river-global-commerce' ); ?> *
                 </option>
 
                 <?php foreach ( $locales['locales'] as $locale => $currency ): ?>
@@ -176,7 +176,7 @@ if ( $cart['cart']['shippingAddress']['line1'] != '') {
             <select class="form-control custom-select" name="shipping-countrySubdivision" id="shipping-field-state" required>
 
                 <option value="">
-                    <?php echo __( 'Select State *', 'digital-river-global-commerce' ); ?>
+                    <?php echo __( 'Select State', 'digital-river-global-commerce' ); ?> *
                 </option>
 
                 <?php foreach ($usa_states as $key => $state): ?>
@@ -204,7 +204,7 @@ if ( $cart['cart']['shippingAddress']['line1'] != '') {
 
                 <label for="shipping-field-zip" class="float-label">
 
-                    <?php echo __( 'Zipcode *', 'digital-river-global-commerce' ); ?>
+                    <?php echo __( 'Zipcode', 'digital-river-global-commerce' ); ?> *
 
                 </label>
 

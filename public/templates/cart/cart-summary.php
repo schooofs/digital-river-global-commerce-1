@@ -51,7 +51,7 @@ $delivery_info = 'Delivery in 2-5 working days and extended 30 days return perio
     </div>
 
     <div class="dr-summary__promo-code">
-        <a class="promo-code-toggle" href="javascript:void(0);"><?php echo __( 'Add Promo Code +', 'digital-river-global-commerce' ) ?></a>
+        <a class="promo-code-toggle" href="javascript:void(0);"><?php echo __( 'Add Promo Code', 'digital-river-global-commerce' ) ?> +</a>
         <div class="promo-code-wrapper" style="display: none;">
             <input type="text" class="form-control" id="promo-code" name="promo_code" placeholder="<?php echo __( 'Promo Code', 'digital-river-global-commerce' ) ?>">
             <button type="button" class="dr-btn" id="apply-promo-code-btn"><?php echo __( 'Apply', 'digital-river-global-commerce' ) ?></button>

@@ -345,7 +345,7 @@ gulp.task('checkTextDomain', () => {
   return gulp
     .src('**/*.php')
     .pipe(checkTextDomain({
-      text_domain: 'digital-river-global-commerce', // Specify allowed domain(s)
+      text_domain: config.textDomain, // Specify allowed domain(s)
       keywords: [ // List keyword specifications
         '__:1,2d',
         '_e:1,2d',

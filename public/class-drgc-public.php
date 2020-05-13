@@ -204,7 +204,7 @@ class DRGC_Public {
 			$user = wp_authenticate( $username, $password );
 
 			if ( is_wp_error( $user ) ) {
-				wp_send_json_error( __( 'Authorization failed for specified credentials' ) );
+				wp_send_json_error( __( 'Authorization failed for specified credentials', 'digital-river-global-commerce' ) );
 			}
 
 			$current_user = get_user_by( 'login', $username );
@@ -228,31 +228,31 @@ class DRGC_Public {
 		$error_msgs = array();
 
 		if ( $password !== $confirm_password ) {
-			array_push( $error_msgs, __( 'Passwords do not match.' ) );
+			array_push( $error_msgs, __( 'Passwords do not match.', 'digital-river-global-commerce' ) );
 		}
 
 		if ( 8 > strlen( $password ) || 32 < strlen( $password ) ) {
-			array_push( $error_msgs, __( 'Password must be between 8 - 32 characters.' ) );
+			array_push( $error_msgs, __( 'Password must be between 8 - 32 characters.', 'digital-river-global-commerce' ) );
 		}
 
 		if ( ! preg_match( '/[A-Z]/', $password ) ) {
-			array_push( $error_msgs, __( 'Must use at least one upper case letter.' ) );
+			array_push( $error_msgs, __( 'Must use at least one upper case letter.', 'digital-river-global-commerce' ) );
 		}
 
 		if ( ! preg_match( '/[a-z]/', $password ) ) {
-			array_push( $error_msgs, __( 'Must use at least one lower case letter.' ) );
+			array_push( $error_msgs, __( 'Must use at least one lower case letter.', 'digital-river-global-commerce' ) );
 		}
 
 		if ( ! preg_match( '/[0-9]/', $password ) ) {
-			array_push( $error_msgs, __( 'Must use at least one number.' ) );
+			array_push( $error_msgs, __( 'Must use at least one number.', 'digital-river-global-commerce' ) );
 		}
 
 		if ( ! preg_match( '/[!_@]/', $password ) ) {
-			array_push( $error_msgs, __( 'Must use at least one special character (! _ @).' ) );
+			array_push( $error_msgs, __( 'Must use at least one special character (! _ @).', 'digital-river-global-commerce' ) );
 		}
 
 		if ( ! preg_match( '/^[a-zA-Z0-9!_@]+$/', $password ) ) {
-			array_push( $error_msgs, __( 'Contains non-allowable special characters (only ! _ @ are allowed).' ) );
+			array_push( $error_msgs, __( 'Contains non-allowable special characters (only ! _ @ are allowed).', 'digital-river-global-commerce' ) );
 		}
 
 		return $error_msgs;
@@ -275,7 +275,7 @@ class DRGC_Public {
 			$error_msgs = array();
 
 			if ( ! is_email( $email ) ) {
-				array_push( $error_msgs, __( 'Please enter a valid email address.' ) );
+				array_push( $error_msgs, __( 'Please enter a valid email address.', 'digital-river-global-commerce' ) );
 			}
 
 			$error_msgs = array_merge( $error_msgs, $this->get_password_error_msgs( $password, $confirm_password ) );
@@ -353,11 +353,11 @@ class DRGC_Public {
 
 		$email = sanitize_text_field( $_POST['email'] );
 		if ( empty( $email ) || ! is_string( $email ) ) {
-			$errors->add( 'empty_username', __( 'Enter a username or email address.' ) );
+			$errors->add( 'empty_username', __( 'Enter a username or email address.', 'digital-river-global-commerce' ) );
 		} elseif ( strpos( $email, '@' ) ) {
 			$user_data = get_user_by( 'email', wp_unslash( $email ) );
 			if ( empty( $user_data ) ) {
-				$errors->add( 'invalid_email', __( 'There is no account with that username or email address.' ) );
+				$errors->add( 'invalid_email', __( 'There is no account with that username or email address.', 'digital-river-global-commerce' ) );
 			}
 		} else {
 			$user_data = get_user_by( 'login', $email );
@@ -371,7 +371,7 @@ class DRGC_Public {
 			wp_send_json_error($errors);
 		}
 		if ( ! $user_data ) {
-			$errors->add( 'invalidcombo', __( 'There is no account with that username or email address.' ) );
+			$errors->add( 'invalidcombo', __( 'There is no account with that username or email address.', 'digital-river-global-commerce' ) );
 			wp_send_json_error($errors);
 		}
 
@@ -393,15 +393,15 @@ class DRGC_Public {
 			$site_name = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 		}
 
-		$message = __( '<p> Someone has requested a password reset for the following account:' ) . "</p><br>";
-		$message .= sprintf( __( '<p> Site Name: %s' ), $site_name ) . "<br>";
-		$message .= sprintf( __( 'Username: %s' ), $user_login ) . "</p><br>";
-		$message .= __( '<p> If this was a mistake, just ignore this email and nothing will happen.' ) . "<br>";
-		$message .= __( 'To reset your password, visit the following address:' ) . "</p><br>";
+		$message = __( '<p> Someone has requested a password reset for the following account:', 'digital-river-global-commerce' ) . "</p><br>";
+		$message .= sprintf( __( '<p> Site Name: %s', 'digital-river-global-commerce' ), $site_name ) . "<br>";
+		$message .= sprintf( __( 'Username: %s', 'digital-river-global-commerce' ), $user_login ) . "</p><br>";
+		$message .= __( '<p> If this was a mistake, just ignore this email and nothing will happen.', 'digital-river-global-commerce' ) . "<br>";
+		$message .= __( 'To reset your password, visit the following address:', 'digital-river-global-commerce' ) . "</p><br>";
 		$message .= '<a href="' . drgc_get_page_link( 'login'  ) . "?action=rp&key=$key&login=" . rawurlencode( $user_login ) . "\">\r\n";
-		$message .=  __( 'Reset Password</a>');
+		$message .=  __( 'Reset Password</a>', 'digital-river-global-commerce' );
 
-		$title = sprintf( __( '[%s] Password Reset' ), $site_name );
+		$title = sprintf( __( '[%s] Password Reset', 'digital-river-global-commerce' ), $site_name );
 
 		/**
 		 * Filters the subject of the password reset email.
@@ -416,7 +416,7 @@ class DRGC_Public {
 		add_filter( 'wp_mail_content_type', function( $content_type ) { return 'text/html'; });
 
 		if ( $message && ! wp_mail( $user_email, wp_specialchars_decode( $title ), $message ) ) {
-			wp_die( __( 'The email could not be sent. Possible reason: your host may have disabled the mail() function.' ) );
+			wp_die( __( 'The email could not be sent. Possible reason: your host may have disabled the mail() function.', 'digital-river-global-commerce' ) );
 		}
 
 		wp_send_json_success();
@@ -438,7 +438,7 @@ class DRGC_Public {
 			empty( $key ) || ! is_string( $key ) ||
 			empty( $login ) || ! is_string( $login )
 		) {
-			wp_send_json_error( __( 'Something went wrong.' ) );
+			wp_send_json_error( __( 'Something went wrong.', 'digital-river-global-commerce' ) );
 			return;
 		}
 
@@ -454,9 +454,9 @@ class DRGC_Public {
 
 		if ( is_wp_error( $user ) ) {
 			if ( $user->get_error_code() === 'expired_key' ){
-				wp_send_json_error( __( 'Expired key' ) );
+				wp_send_json_error( __( 'Expired key', 'digital-river-global-commerce' ) );
 			} else {
-				wp_send_json_error( __( 'Invalid key' ) );
+				wp_send_json_error( __( 'Invalid key', 'digital-river-global-commerce' ) );
 			}
 		}
 
@@ -514,7 +514,7 @@ class DRGC_Public {
 		$subs = DRGC()->shopper->retrieve_subscriptions();
 
 		$new_item = array(
-			'title'            => $is_logged_in ? __( 'Hi, ', 'digital-river-global-commerce' ) . $customer['firstName'] : __( 'Login' ),
+			'title'            => $is_logged_in ? __( 'Hi, ', 'digital-river-global-commerce' ) . $customer['firstName'] : __( 'Login', 'digital-river-global-commerce' ),
 			'menu_item_parent' => 0,
 			'ID'               => 'login',
 			'db_id'            => 'login',
@@ -733,9 +733,7 @@ class DRGC_Public {
 							</div>
 							<div class="modal-body" id="drResetPasswordModalBody">
 								<p>
-									<?php echo __('To reset your password, please enter your email 
-									address below and an email with instructions on
-									resetting your password will be sent to you.', 'digital-river-global-commerce'); ?>
+									<?php echo __( 'To reset your password, please enter your email address below and an email with instructions on resetting your password will be sent to you.', 'digital-river-global-commerce' ); ?>
 								</p>
 								<div class="form-group">
 									<label for="email-address" class="col-form-label"><?php echo __( 'Email Address:', 'digital-river-global-commerce' ); ?></label>
@@ -763,7 +761,7 @@ class DRGC_Public {
 				</div>
 			</div>
 		<?php endif; ?>
-	<?php	
+	<?php
 	}
 
 	public function reset_cookie_ajax() {

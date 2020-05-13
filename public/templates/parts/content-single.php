@@ -74,7 +74,7 @@ $regular_price = isset( $pricing['regular_price'] ) ? $pricing['regular_price'] 
 					    $var_type = 'duration';
 				    }
 				    ?>
-                    <h6><?php echo __( 'Select ', 'digital-river' ) . ucfirst( $var_type ) . ':'; ?></h6>
+                    <h6><?php echo __( 'Select ', 'digital-river-global-commerce' ) . ucfirst( $var_type ) . ':'; ?></h6>
 
                     <div class="dr_prod-variations">
 

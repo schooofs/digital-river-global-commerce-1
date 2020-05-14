@@ -143,7 +143,7 @@ function drgc_currency_toggler() {
 
 	if ( ! empty( $locales['locales'] ) && count( $locales['locales'] ) > 1 ) {
 		$output = '<div class="dr-currency-toggler">';
-		$output .= sprintf("<span>%s</span>", __( 'Currency: ' ) );
+		$output .= sprintf("<span>%s</span>", __( 'Currency: ', 'digital-river-global-commerce' ) );
 		$output .= '<select class="custom-select dr-currency-select">';
 
 		foreach ( $locales['locales'] as $locale => $currency ) {
@@ -347,7 +347,7 @@ function drgc_code_to_counry( $code, $abriviated = false ) {
  */
 function drgc_get_product_pricing( $post_id = 0 ) {
 	if ( ! $post_id ) return false;
-	
+
 	$store_currencies = get_option( 'drgc_store_locales' );
 	$product_pricing = get_post_meta( absint( $post_id ), 'loc_pricing', true );
 	$current_locale = DRGC()->shopper->get_locale();

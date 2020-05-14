@@ -58,22 +58,6 @@ class DRGC_Activator {
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 			),
-			'my-subscriptions' => array(
-				'post_name'     => __( 'my-subscriptions', 'digital-river-global-commerce' ),
-				'post_title'    => __( 'My Subscriptions', 'digital-river-global-commerce' ),
-				'post_content'  => '<!-- wp:shortcode -->[dr-my-subs]<!-- /wp:shortcode -->',
-				'post_type'      => 'page',
-				'post_status'    => 'publish',
-				'post_author'    => 1,
-			),
-			'subscription-details' => array(
-				'post_name'     => __( 'subscription-details', 'digital-river-global-commerce' ),
-				'post_title'    => __( 'Subscription Details', 'digital-river-global-commerce' ),
-				'post_content'  => '<!-- wp:shortcode -->[dr-subs-details]<!-- /wp:shortcode -->',
-				'post_type'      => 'page',
-				'post_status'    => 'publish',
-				'post_author'    => 1,
-			),
 		);
 
 		foreach ( $pages as $key => $page ) {

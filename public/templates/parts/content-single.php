@@ -65,6 +65,7 @@ $regular_price = isset( $pricing['regular_price'] ) ? $pricing['regular_price'] 
 
                 <?php if ( $variations ) :
                     $vars_count = count( $variations );
+                    $var_type_label = '';
                     $var_type = '';
                     $color_vars = [];
                     $sizes_vars = [];
@@ -100,23 +101,29 @@ $regular_price = isset( $pricing['regular_price'] ) ? $pricing['regular_price'] 
                     }
 
                     if ( count( array_unique( $color_vars ) ) === $vars_count ) {
-                        $var_type = __( 'color', 'digital-river-global-commerce' );
+                        $var_type_label = __( 'color', 'digital-river-global-commerce' );
+                        $var_type = 'color';
                     } elseif ( count( array_unique( $sizes_vars ) ) === $vars_count ) {
-                        $var_type = __( 'sizes', 'digital-river-global-commerce' );
+                        $var_type_label = __( 'sizes', 'digital-river-global-commerce' );
+                        $var_type = 'sizes';
                     } elseif ( count( array_unique( $platform_vars ) ) === $vars_count ) {
-                        $var_type = __( 'platform', 'digital-river-global-commerce' );
+                        $var_type_label = __( 'platform', 'digital-river-global-commerce' );
+                        $var_type = 'platform';
                     } elseif ( count( array_unique( $product_type_vars ) ) === $vars_count ) {
-                        $var_type = __( 'product type', 'digital-river-global-commerce' );
+                        $var_type_label = __( 'product type', 'digital-river-global-commerce' );
+                        $var_type = 'variation_types';
                     } elseif ( count( array_unique( $wrap_type_vars ) ) === $vars_count ) {
-                        $var_type = __( 'wrap type', 'digital-river-global-commerce' );
+                        $var_type_label = __( 'wrap type', 'digital-river-global-commerce' );
+                        $var_type = 'wrap_type';
                     } elseif ( count( array_unique( $duration_vars ) ) === $vars_count ) {
-                        $var_type = __( 'duration', 'digital-river-global-commerce' );
+                        $var_type_label = __( 'duration', 'digital-river-global-commerce' );
+                        $var_type = 'duration';
                     } else {
-                        $var_type = __( 'undefined', 'digital-river-global-commerce' );
+                        $var_type_label = __( 'undefined', 'digital-river-global-commerce' );
                     }
 
 				?>
-                    <h6><?php echo __( 'Select ', 'digital-river-global-commerce' ) . ucwords( $var_type ) . ':'; ?></h6>
+                    <h6><?php echo __( 'Select ', 'digital-river-global-commerce' ) . ucwords( $var_type_label ) . ':'; ?></h6>
 
                     <div class="dr_prod-variations">
 

@@ -110,7 +110,7 @@ No, you are responsible for hosting your own site.
 * Enhance checkout flow.
 * Improve Loading animation in checkout flow.
 * Fixed minor issues with shipping options and product variation.
-* Product Upsell ?
+
 
 
 

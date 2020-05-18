@@ -103,3 +103,15 @@ No, you are responsible for hosting your own site.
 * Added default legal links in the footer and Terms Of Sale checkbox during checkout.
 * Updated text label of locale dropdown during checkout from "Locale" to "Currency" for ease of use by shoppers.
 * Added support for dynamic naming tax field as "Tax" or "VAT" based on geographic region of sale.
+
+= [1.3] - 2020-05-27 =
+* Add IP address detection for fraud detection.
+* WordPress V5.4 supported.
+* Enhance checkout flow.
+* Improve Loading animation in checkout flow.
+* Fixed minor issues with shipping options and product variation.
+* Product Upsell ?
+
+
+
+

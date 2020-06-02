@@ -16,7 +16,7 @@
         echo __( 'Your cart is empty!', 'digital-river-global-commerce' );
         $display = 'style="display:none;"';
     }
-    
+
     $customerEmail = '';
     if ( $customer && $customer['id'] != 'Anonymous' ) {
         $customerEmail = $customer['emailAddress'];
@@ -29,7 +29,6 @@
 
             <a href="" onclick="history.back(); return false;">&#60; Back</a>
 
-        </div>
 
     </div>
 

@@ -166,7 +166,30 @@ class DRGC_Shopper extends AbstractHttpService {
 			return "Error: # {$e->getMessage()}";
 		}
 	}
+	/**
+	 * Create or Update Customer Tax Registration for the current shopper.
+	 *
+	 * @param array $params
+	 *
+	 * @return array|bool
+	 */
+	/*public function update_tax_registration( $params = array() ) {
+		$default = array(
+			'expand'            => 'all'
+		);
 
+		$params = array_merge(
+			$default,
+			array_intersect_key( $params, $default )
+		);
+
+		try {
+			$this->post( "/v1/customers/customerId/tax-registration?" . http_build_query( $params ) );
+			return true;
+		} catch (\Exception $e) {
+			return "Error: # {$e->getMessage()}";
+		}
+	}*/
 	/**
 	 * Get access token data
 	 */
@@ -321,94 +344,5 @@ class DRGC_Shopper extends AbstractHttpService {
 	 */
 	public function get_locale() {
 		return $this->locale;
-	}
-
-	/**
-	 * Retrieve all scriptions for the current authenticated shopper.
-	 *
-	 * @param array $params
-	 * 
-	 * @return array|bool
-	 */
-	public function retrieve_subscriptions( $params = array() ) {
-		$default = array(
-			'expand' => 'all'
-		);
-
-		$params = array_merge(
-			$default,
-			array_intersect_key( $params, $default )
-		);
-
-		$url = "/v1/shoppers/me/subscriptions?" . http_build_query( $params );
-
-		try {
-			$res = $this->get($url);
-
-			return isset( $res['subscriptions']['subscription'] ) ? $res['subscriptions']['subscription'] : '';
-		} catch (\Exception $e) {
-			return false;
-		}
-	}
-
-	/**
-	 * Retrieve the scription details by a subscription ID.
-	 *
-	 * @param array $params
-	 * 
-	 * @return array|bool
-	 */
-	public function get_subscription_details( $params = array() ) {
-		if ( is_null ( $id = $_POST[ 'subscription_id' ] ?? null ) ) {
-			return;
-		}
-
-		$default = array(
-			'expand' => 'all'
-		);
-
-		$params = array_merge(
-			$default,
-			array_intersect_key( $params, $default )
-		);
-
-		$url = "/v1/shoppers/me/subscriptions/{$id}?" . http_build_query( $params );
-
-		try {
-			$res = $this->get($url);
-
-			return isset( $res['subscription'] ) ? $res['subscription'] : '';
-		} catch (\Exception $e) {
-			return false;
-		}
-	}
-
-	/**
-	 * Retrieve a shopper order.
-	 * 
-	 * @param string $order_id
-	 * @param array  $params
-	 * 
-	 * @return array|bool
-	 */
-	public function retrieve_order( $order_id, $params = array() ) {
-		$default = array(
-			'expand' => 'all'
-		);
-
-		$params = array_merge(
-			$default,
-			array_intersect_key( $params, $default )
-		);
-
-		$url = "/v1/shoppers/me/orders/{$order_id}?" . http_build_query( $params );
-
-		try {
-			$res = $this->get($url);
-
-			return $res['order'];
-		} catch (\Exception $e) {
-			return false;
-		}
 	}
 }

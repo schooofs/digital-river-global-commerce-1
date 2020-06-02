@@ -48,7 +48,7 @@ class DRGC_Cart extends AbstractHttpService {
 
         $this->init();
     }
-    
+
     /**
      * Initialize the shopper object
      */
@@ -114,8 +114,8 @@ class DRGC_Cart extends AbstractHttpService {
     }
 
     /**
-     * Retrieve a shopper order. Supply a full 
-     * access token as well as an order ID and Digital 
+     * Retrieve a shopper order. Supply a full
+     * access token as well as an order ID and Digital
      * River will provide all corresponding order information.
      */
     public function retrieve_order() {
@@ -152,7 +152,7 @@ class DRGC_Cart extends AbstractHttpService {
     }
 
     /**
-     * Returns a list of all site 
+     * Returns a list of all site
      * supported currencies and locales.
      */
     public function retrieve_currencies() {
@@ -182,7 +182,7 @@ class DRGC_Cart extends AbstractHttpService {
      * ID's or your system's product ID's (external reference ID)
      * and Digital River will add those products to the shopper's cart.
      */
-    public function update_line_items( $params = array() ) {    
+    public function update_line_items( $params = array() ) {
         try {
             $this->post( "/v1/shoppers/me/carts/active/line-items".http_build_query( $params ));
             return true;

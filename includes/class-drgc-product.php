@@ -220,9 +220,6 @@ class DRGC_Product {
 					case 'operating_system':
 						$_product_meta['operating_system'] = $attribute['value'];
 						break;
-					case 'wrapType':
-						$_product_meta['wrap_type'] = $attribute['value'];
-						break;
 					default:
 						//
 						break;
@@ -249,9 +246,6 @@ class DRGC_Product {
 						break;
 					case 'duration':
 						$_product_meta['duration'] = $attribute['domainValues'];
-						break;
-					case 'wrapType':
-						$_product_meta['wrap_type'] = $attribute['domainValues'];
 						break;
 					default:
 						//

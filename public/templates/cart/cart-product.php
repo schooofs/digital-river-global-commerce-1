@@ -21,8 +21,6 @@ $sale_price = $line_item['pricing']['formattedSalePriceWithQuantity'];
 $price = $line_item['pricing']['formattedListPriceWithQuantity'];
 $product_qty = $line_item['quantity'];
 $is_variation = isset( $line_item['product']['parentProduct'] );
-
-
 ?>
 
 <div data-line-item-id="<?php echo $line_item['id']; ?>" class="dr-product">

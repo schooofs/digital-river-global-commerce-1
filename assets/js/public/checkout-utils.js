@@ -115,22 +115,13 @@ const CheckoutUtils = (($, params) => {
     $('div.dr-summary__total > .total-value').text(formattedOrderTotal);
   };
 
-  const getEntityCode = () => {
-    return drgc_params.order && drgc_params.order.order ?
+  const applyLegalLinks = (digitalriverjs) => {
+    const entityCode = drgc_params.order && drgc_params.order.order ?
       drgc_params.order.order.businessEntityCode :
       (drgc_params.cart && drgc_params.cart.cart ? drgc_params.cart.cart.businessEntityCode : '');
-  };
 
-  const getCompliance = (digitalriverjs, entityCode, locale) => {
-    return entityCode && locale ? digitalriverjs.Compliance.getDetails(entityCode, locale).disclosure : {};
-  };
-
-  const applyLegalLinks = (digitalriverjs) => {
-    const entityCode = getEntityCode();
-    const locale = drgc_params.drLocale;
-    const complianceData = getCompliance(digitalriverjs, entityCode, locale);
-
-    if (Object.keys(complianceData).length) {
+    if (entityCode) {
+      const complianceData = digitalriverjs.Compliance.getDetails(entityCode, drgc_params.drLocale).disclosure;
       $('.dr-resellerDisclosure').prop('href', complianceData.resellerDisclosure.url);
       $('.dr-termsOfSale').prop('href', complianceData.termsOfSale.url);
       $('.dr-privacyPolicy').prop('href', complianceData.privacyPolicy.url);
@@ -148,44 +139,10 @@ const CheckoutUtils = (($, params) => {
 
   const displayAlertMessage = (message) => {
     alert('ERROR! ' + message);
-  };
-
-  const apiErrorHandler = (jqXHR) => {
-    if (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.errors) {
-      const currentError = jqXHR.responseJSON.errors.error[0];
-      drToast.displayMessage(currentError.description, 'error');
-    }
-  };
+  }
 
   const resetBodyOpacity = () => {
     $('body').css({'pointer-events': 'auto', 'opacity': 1});
-  };
-
-  const getPermalink = (productID) => {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        type: 'POST',
-        url: drgc_params.ajaxUrl,
-        data: {
-          action: 'get_permalink',
-          productID
-        },
-        success: (data) => {
-          resolve(data);
-        },
-        error: (jqXHR) => {
-          reject(jqXHR);
-        }
-      });
-    });
-  };
-
-  const resetFormSubmitButton = ($form) => {
-    $form.find('button[type="submit"]').removeClass('sending').blur();
-  };
-
-  const getAjaxErrorMessage = (jqXHR) => {
-    return (jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.errors) ? jqXHR.responseJSON.errors.error[0].description : '';
   };
 
   return {
@@ -199,13 +156,7 @@ const CheckoutUtils = (($, params) => {
     applyLegalLinks,
     displayPreTAndC,
     displayAlertMessage,
-    apiErrorHandler,
-    resetBodyOpacity,
-    getPermalink,
-    getEntityCode,
-    getCompliance,
-    resetFormSubmitButton,
-    getAjaxErrorMessage
+    resetBodyOpacity
   };
 })(jQuery, drgc_params);
 

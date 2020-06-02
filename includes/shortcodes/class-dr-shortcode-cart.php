@@ -28,7 +28,6 @@ class DR_Shortcode_Cart {
 	public static function output( $atts ) {
 		$cart = DRGC()->cart->retrieve_cart();
 		$locales = get_option( 'drgc_store_locales' );
-
 		drgc_get_template(
 			'cart/cart.php',
 			compact('cart', 'locales')

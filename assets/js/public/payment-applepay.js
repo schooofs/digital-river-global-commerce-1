@@ -47,24 +47,20 @@ const DRApplePay = (($, translations) => {
         });
       } else {
         if (requestShipping) {
-          const cartRequest = {
-            cart: {
-              shippingAddress: {
-                id: 'shippingAddress',
-                city: shippingAddress.address.city,
-                countrySubdivision: shippingAddress.address.state,
-                postalCode: shippingAddress.address.postalCode,
-                country: shippingAddress.address.country
-              }
-            }
+          const shippingAddressObj = {
+            id: 'shippingAddress',
+            city: shippingAddress.address.city,
+            countrySubdivision: shippingAddress.address.state,
+            postalCode: shippingAddress.address.postalCode,
+            country: shippingAddress.address.country
           };
 
-          DRCommerceApi.updateCart({ expand: 'all' }, cartRequest).then((data) => {
+          DRCommerceApi.updateCart({expand: 'all'}, {shippingAddress: shippingAddressObj}).then((data) => {
             const displayItems = CheckoutUtils.createDisplayItems(data.cart);
             const shippingOptions = CheckoutUtils.createShippingOptions(data.cart);
-
+  
             CheckoutUtils.updateShippingOptions(shippingOptions, data.cart.shippingMethod.code);
-
+  
             const requestUpdateObject = {
               total: {
                 label: translations.order_total_label,
@@ -73,7 +69,7 @@ const DRApplePay = (($, translations) => {
               displayItems: displayItems,
               shippingOptions: shippingOptions
             };
-
+  
             requestUpdateObject.status = 'success';
             event.updateWith(requestUpdateObject);
           }).catch((jqXHR) => {
@@ -95,7 +91,7 @@ const DRApplePay = (($, translations) => {
               },
               displayItems: displayItems
             };
-
+  
             requestUpdateObject.status = 'success';
             event.updateWith(requestUpdateObject);
           }).catch((jqXHR) => {
@@ -142,7 +138,7 @@ const DRApplePay = (($, translations) => {
     });
 
     applepay.on('source', (event) => {
-      const cartRequest = { cart: {} };
+      const cartRequest = {};
       const sourceId = event.source.id;
       const billingAddressObj = {
         id: 'billingAddress',
@@ -158,7 +154,7 @@ const DRApplePay = (($, translations) => {
         emailAddress: event.billingAddress.email
       };
 
-      cartRequest.cart.billingAddress = billingAddressObj;
+      cartRequest.billingAddress = billingAddressObj;
 
       if (requestShipping) {
         const shippingAddressObj = {
@@ -175,7 +171,7 @@ const DRApplePay = (($, translations) => {
           emailAddress: event.shippingAddress.email
         };
 
-        cartRequest.cart.shippingAddress = shippingAddressObj;
+        cartRequest.shippingAddress = shippingAddressObj;
       }
 
       sessionStorage.setItem('paymentSourceId', sourceId);

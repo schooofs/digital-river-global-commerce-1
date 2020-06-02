@@ -15,10 +15,6 @@ jQuery(document).ready(($) => {
 
         const digitalriverjs = new DigitalRiver(drgc_params.digitalRiverKey);
         CheckoutUtils.applyLegalLinks(digitalriverjs);
-
-        $(document).on('click', '#my-subs-btn', () => {
-            window.location.href = drgc_params.mySubsUrl;
-        });
     }
 });
 
